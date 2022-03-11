@@ -61,8 +61,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //      .antMatchers("/api/test/**").permitAll()
 //      .anyRequest().authenticated();
 
-    http.authorizeRequests().antMatchers("/swagger-ui/**","/api/auth/**").permitAll();
-
+//    http.authorizeRequests().antMatchers("/swagger-ui/**","/api/**").permitAll();
+//
 //    http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+
+    http.authorizeRequests()
+            .antMatchers("/api/**").permitAll().and().httpBasic().and().csrf().disable();
+//            .antMatchers("/api/auth/**").permitAll()
+//            .antMatchers("/api/staff/**").hasAnyAuthority("Staff")
+//            .anyRequest().authenticated()
+//            .and().exceptionHandling().accessDeniedPage("/403");
   }
 }
