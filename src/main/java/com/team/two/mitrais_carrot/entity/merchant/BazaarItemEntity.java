@@ -1,6 +1,6 @@
 package com.team.two.mitrais_carrot.entity.merchant;
-import lombok.*;
 
+import lombok.*;
 import javax.persistence.*;
 
 @Entity

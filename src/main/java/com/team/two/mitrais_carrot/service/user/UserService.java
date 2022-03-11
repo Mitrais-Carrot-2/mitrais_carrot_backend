@@ -17,9 +17,9 @@ public class UserService {
 
     public UserService(UserRepository userRepository) {this.userRepository = userRepository;}
 
-    public UserEntity addUser(UserDto user){
+    // public UserEntity addUser(UserDto user){
 
-    }
+    // }
 
     public UserEntity fetchById(int id){
         return userRepository.findById(id).orElse(null);
