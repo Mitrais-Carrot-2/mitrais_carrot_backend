@@ -1,6 +1,6 @@
 package com.team.two.mitrais_carrot.entity.employee;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -27,10 +27,10 @@ public class BasketEntity {
     private long carrotAmount;
 
     @Column(name = "startDate")
-    private LocalDateTime startDate;
+    private LocalDate startDate;
 
     @Column(name = "expiryDate")
-    private LocalDateTime expiryDate;
+    private LocalDate expiryDate;
 
     @Column(name = "isActive")
     private boolean isActive;

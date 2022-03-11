@@ -1,20 +1,11 @@
 package com.team.two.mitrais_carrot.entity.transferHistory;
 
-import java.util.Date;
+import java.util.LocalDate;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 
-
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Getter
@@ -30,9 +21,9 @@ public class TransferHistoryEntity {
 
     @Column(name = "time")
     @NotBlank
-    private Date time;
+    private LocalDate time;
 
-    @Column (name = "type")
+    @Column(name = "type")
     @NotBlank
     private String type;
 

@@ -5,6 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface BarnRepository extends JpaRepository <BarnEntity, Long > {
+public interface BarnRepository extends JpaRepository <BarnEntity, Integer> {
    
 }

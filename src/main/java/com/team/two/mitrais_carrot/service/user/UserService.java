@@ -1,25 +1,28 @@
 package com.team.two.mitrais_carrot.service.user;
 
+import com.team.two.mitrais_carrot.dto.auth.UserDto;
+import com.team.two.mitrais_carrot.entity.auth.UserEntity;
+import com.team.two.mitrais_carrot.entity.merchant.BazaarItemEntity;
 import com.team.two.mitrais_carrot.repository.BazaarItemRepository;
+import com.team.two.mitrais_carrot.repository.UserRepository;
+import com.team.two.mitrais_carrot.service.merchant.BazaarItemService;
 
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserService {
-    private BazaarItemRepository bazaarItemRepository;
+    private UserRepository userRepository;
+    
     private int status;
 
-    public UserService(BazaarItemRepository bazaarItemRepository) {this.bazaarItemRepository = bazaarItemRepository;}
+    public UserService(UserRepository userRepository) {this.userRepository = userRepository;}
 
-    public BazaarItemEntity fetchById(long id){
-        return bazaarItemRepository.findById(id).orElse(null);
+    public UserEntity addUser(UserDto user){
+
     }
 
-    public int buyBazaarItem(long id){
-        BazaarItemEntity item = fetchById(id);
-        if (item == null) return 404;
-        else return 200;
+    public UserEntity fetchById(int id){
+        return userRepository.findById(id).orElse(null);
     }
     
-
 }

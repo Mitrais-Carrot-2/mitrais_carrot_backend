@@ -8,8 +8,8 @@ import lombok.Setter;
 @Setter
 public class BazaarItemDto{
     private String name;
-    private Long price;
-    private String desc;
-    private Long quantity;.
-    private Long bazaar_id;
+    private int price;
+    //private String desc;
+    private int quantity;
+    //private Long bazaar_id;
 }

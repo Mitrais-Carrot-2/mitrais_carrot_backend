@@ -20,8 +20,8 @@ public class BazaarService {
         BazaarEntity bazaar = new BazaarEntity();
         bazaar.setBazaarName(request.getBazaarName());
         bazaar.setActive(true);
-        bazaar.setStartDate(LocalDate.now());
-        bazaar.setEndDate(LocalDate.of(2022,04,20));
+        bazaar.setStartDate(request.getStartDate());
+        bazaar.setEndDate(request.getEndDate());
 
         return bazaarRepository.save(bazaar);
     }

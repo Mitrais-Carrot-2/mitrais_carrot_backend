@@ -1,17 +1,8 @@
 package com.team.two.mitrais_carrot.entity.award;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.validation.constraints.NotBlank;
-
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import javax.persistence.*;
+// import javax.validation.constraints.NotBlank;
 
 @Entity
 @Getter
@@ -26,18 +17,18 @@ public class AwardEntity {
     private int id;
 
     @Column(name = "status")
-    @NotBlank
+    // @NotBlank
     private boolean status;
 
     @Column(name = "name")
-    @NotBlank
+    // @NotBlank
     private String name;
 
     @Column(name = "desc")
-    @NotBlank
+    // @NotBlank
     private String desc;
 
     @Column(name = "carrotAmount")
-    @NotBlank
+    // @NotBlank
     private int carrotAmount;
 }

@@ -11,19 +11,21 @@ import org.springframework.stereotype.Service;
 @Service
 public class BazaarItemService{
     BazaarItemRepository bazaarItemRepository;
-
+    public BazaarItemService(BazaarItemRepository bazaarItemRepository){
+        this.bazaarItemRepository = bazaarItemRepository;
+    }
 
     public BazaarItemEntity createBazaarItem(BazaarItemDto request){
         BazaarItemEntity item = new BazaarItemEntity();
-        item.setBazaar_id(request.getBazaar_id());
-        item.setActive(true);
         item.setName(request.getName());
         item.setPrice(request.getPrice());
         item.setQuantity(request.getQuantity());
-        item.setDesc(request.getDesc());
-        return null;
+        return bazaarItemRepository.save(item);
     }
 
+    public BazaarItemEntity fetchById(long id){
+        return bazaarItemRepository.findById(id).orElse(null);
+    }
 
 
 }
