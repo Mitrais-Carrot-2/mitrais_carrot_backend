@@ -24,14 +24,9 @@ public class UserEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
     private String username;
-    @NotBlank
     private String password;
-    @NotBlank
-    @Email
     private String email;
-    @NotBlank
     private boolean flag;
 
     @ManyToMany(fetch = FetchType.LAZY)

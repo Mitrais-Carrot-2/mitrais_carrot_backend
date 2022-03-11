@@ -52,7 +52,7 @@ public class AuthController {
     JwtUtils jwtUtils;
 
     @PostMapping("/login")
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginDto loginRequest) {
+    public JwtDto authenticateUser(@Valid @RequestBody LoginDto loginRequest) {
 
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
@@ -65,65 +65,76 @@ public class AuthController {
                 .map(item -> item.getAuthority())
                 .collect(Collectors.toList());
 
-        return ResponseEntity.ok(new JwtDto(jwt,
+        return new JwtDto(jwt,
                 userDetails.getId(),
                 userDetails.getUsername(),
                 userDetails.getEmail(),
-                roles));
+                roles);
+//        return ResponseEntity.ok(roles);
     }
 
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpDto signUpRequest) {
-        if (userRepository.existsByUsername(signUpRequest.getUsername())) {
-            return ResponseEntity
-                    .badRequest()
-                    .body(new MessageDto("Error: Username is already taken!"));
-        }
+         if (userRepository.existsByUsername(signUpRequest.getUsername())) {
+             return ResponseEntity
+                     .badRequest()
+                     .body(new MessageDto("Error: Username is already taken!"));
+         }
 
-        if (userRepository.existsByEmail(signUpRequest.getEmail())) {
-            return ResponseEntity
-                    .badRequest()
-                    .body(new MessageDto("Error: Email is already in use!"));
-        }
+         if (userRepository.existsByEmail(signUpRequest.getEmail())) {
+             return ResponseEntity
+                     .badRequest()
+                     .body(new MessageDto("Error: Email is already in use!"));
+         }
 
-        // Create new user's account
-        UserEntity user = new UserEntity(signUpRequest.getUsername(),
-                signUpRequest.getEmail(),
-                encoder.encode(signUpRequest.getPassword()));
+         // Create new user's account
+         UserEntity user = new UserEntity(signUpRequest.getUsername(),
+                 encoder.encode(signUpRequest.getPassword()),
+                 signUpRequest.getEmail());
 
-        Set<String> strRoles = signUpRequest.getRole();
-        Set<RoleEntity> roles = new HashSet<>();
+         Set<String> strRoles = signUpRequest.getRole();
+         Set<RoleEntity> roles = new HashSet<>();
 
-        if (strRoles == null) {
-            RoleEntity userRole = roleRepository.findByName(ERole.ROLE_STAFF)
-                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-            roles.add(userRole);
-        } else {
-            strRoles.forEach(role -> {
-                switch (role) {
-                    case "admin":
-                        RoleEntity adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        roles.add(adminRole);
+         if (strRoles == null) {
+             RoleEntity userRole = roleRepository.findByName(ERole.STAFF)
+                     .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+             roles.add(userRole);
+         } else {
+             strRoles.forEach(role -> {
+                 switch (role) {
+                     case "admin":
+                         RoleEntity adminRole = roleRepository.findByName(ERole.ADMIN)
+                                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                         roles.add(adminRole);
 
-                        break;
-                    case "farmer":
-                        RoleEntity farmerRole = roleRepository.findByName(ERole.ROLE_FARMER)
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        roles.add(farmerRole);
+                         break;
+                     case "farmer":
+                         RoleEntity farmerRole = roleRepository.findByName(ERole.FARMER)
+                                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                         roles.add(farmerRole);
+                         break;
+                     case "staff":
+                         RoleEntity staffRole = roleRepository.findByName(ERole.STAFF)
+                                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                         roles.add(staffRole);
+                         break;
+                     case "manager":
+                         RoleEntity managerRole = roleRepository.findByName(ERole.MANAGER)
+                                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                         roles.add(managerRole);
+                         break;
+                     case "merchant":
+                         RoleEntity merchantRole = roleRepository.findByName(ERole.MERCHANT)
+                                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                         roles.add(merchantRole);
+                         break;
+                 }
+             });
+         }
 
-                        break;
-                    default:
-                        RoleEntity userRole = roleRepository.findByName(ERole.ROLE_STAFF)
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        roles.add(userRole);
-                }
-            });
-        }
+         user.setRoles(roles);
+         userRepository.save(user);
 
-        user.setRoles(roles);
-        userRepository.save(user);
-
-        return ResponseEntity.ok(new MessageDto("User registered successfully!"));
+        return ResponseEntity.ok("Sign Up Successfully!");
     }
 }

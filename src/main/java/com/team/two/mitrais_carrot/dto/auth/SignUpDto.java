@@ -11,16 +11,12 @@ import java.util.Set;
 
 @Data
 public class SignUpDto {
-    @NotBlank
     private String username;
 
-    @NotBlank
-    @Email
     private String email;
 
     private Set<String> role;
 
-    @NotBlank
     private String password;
 
     public String getUsername() {
