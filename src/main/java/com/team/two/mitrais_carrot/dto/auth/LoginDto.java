@@ -1,4 +1,4 @@
-package com.team.two.mitrais_carrot.dto;
+package com.team.two.mitrais_carrot.dto.auth;
 
 import lombok.Data;
 import lombok.Getter;

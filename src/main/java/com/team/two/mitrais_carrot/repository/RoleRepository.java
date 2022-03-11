@@ -1,14 +1,13 @@
-package com.bezkoder.springjwt.repository;
+package com.team.two.mitrais_carrot.repository;
 
-import java.util.Optional;
-
+import com.team.two.mitrais_carrot.entity.auth.ERole;
+import com.team.two.mitrais_carrot.entity.auth.RoleEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.bezkoder.springjwt.models.ERole;
-import com.bezkoder.springjwt.models.Role;
+import java.util.Optional;
 
 @Repository
-public interface RoleRepository extends JpaRepository<Role, Long> {
-  Optional<Role> findByName(ERole name);
+public interface RoleRepository extends JpaRepository<RoleEntity, Long> {
+  Optional<RoleEntity> findByName(ERole name);
 }
