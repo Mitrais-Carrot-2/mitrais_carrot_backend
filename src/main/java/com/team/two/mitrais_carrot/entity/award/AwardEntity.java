@@ -17,18 +17,14 @@ public class AwardEntity {
     private int id;
 
     @Column(name = "status")
-    // @NotBlank
     private boolean status;
 
     @Column(name = "name")
-    // @NotBlank
     private String name;
 
     @Column(name = "desc")
-    // @NotBlank
     private String desc;
 
-    @Column(name = "carrotAmount")
-    // @NotBlank
+    @Column(name = "carrot_amount")
     private int carrotAmount;
 }

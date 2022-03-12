@@ -35,8 +35,9 @@ public class BasketEntity {
     @Column(name = "isActive")
     private boolean isActive;
 
-    @Column(name = "userBasket_id")
-    @ManyToOne
-    @JoinTable(name = "userBaskets", joinColumns = @JoinColumn(name = "baskets_id"), inverseJoinColumns = @JoinColumn(name = "userBasket_id"))
-    private UserEntity userBasket_id;
+//    @Column(name = "userBasket_id")
+//    @JoinColumn(name = "userBasket_id")
+//    @ManyToOne
+//    @JoinTable(name = "userBaskets", joinColumns = @JoinColumn(name = "baskets_id"), inverseJoinColumns = @JoinColumn(name = "userBasket_id"))
+//    private UserEntity userBasket_id;
 }

@@ -24,7 +24,7 @@ public class BazaarItemService{
     }
 
     public BazaarItemEntity fetchById(long id){
-        return bazaarItemRepository.findById(id).orElse(null);
+        return bazaarItemRepository.findById((int) id).orElse(null);
     }
 
 

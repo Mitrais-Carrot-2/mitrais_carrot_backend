@@ -26,12 +26,11 @@ public class ExchangeService {
     }
 
     public int buyBazaarItem(UserDto user, int itemId){
-        UserEntity user = fetchById(user.getId());
+        UserEntity users = fetchById(user.getId());
         BazaarItemEntity item = bazaarItemService.fetchById(itemId);
-        if (user != null){
+        if (users != null){
             if (item == null) status = 404;
             else {
-                
                 status = 200;
             }
         }

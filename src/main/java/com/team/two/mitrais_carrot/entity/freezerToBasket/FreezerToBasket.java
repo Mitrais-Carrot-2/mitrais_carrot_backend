@@ -33,30 +33,30 @@ public class FreezerToBasket {
   @Column(name = "type")
   public String type;
 
-  @Column(name = "user_id")
-  @OneToMany(mappedBy = "freezerToBasket")
-  @JoinTable(
-    name = "users",
-    joinColumns = @JoinColumn(name = "breezerToBasket_id"),
-    inverseJoinColumns = @JoinColumn(name = "user_id")
-  )
-  private UserEntity user_id;
+//  @Column(name = "user_id")
+//  @OneToMany(mappedBy = "freezerToBasket")
+//  @JoinTable(
+//    name = "users",
+//    joinColumns = @JoinColumn(name = "breezerToBasket_id"),
+//    inverseJoinColumns = @JoinColumn(name = "user_id")
+//  )
+//  private UserEntity user_id;
 
-  @Column(name = "freezer_id")
-  @OneToMany(mappedBy = "freezerToBasket")
-  @JoinTable(
-    name = "freezers",
-    joinColumns = @JoinColumn(name = "freezerToBasket_id"),
-    inverseJoinColumns = @JoinColumn(name = "freezer_id")
-  )
-  public FreezerEntity freezer_id;
+//  @Column(name = "freezer_id")
+//  @OneToMany(mappedBy = "freezerToBasket")
+//  @JoinTable(
+//    name = "freezers",
+//    joinColumns = @JoinColumn(name = "freezerToBasket_id"),
+//    inverseJoinColumns = @JoinColumn(name = "freezer_id")
+//  )
+//  public FreezerEntity freezer_id;
 
-  @Column(name = "basket_id")
-  @OneToMany(mappedBy = "freezerToBasket")
-  @JoinTable(
-    name = "baskets",
-    joinColumns = @JoinColumn(name = "freezerToBasket_id"),
-    inverseJoinColumns = @JoinColumn(name = "basket_id")
-  )
-  public BasketEntity basket_id;
+//  @Column(name = "basket_id")
+//  @OneToMany(mappedBy = "freezerToBasket")
+//  @JoinTable(
+//    name = "baskets",
+//    joinColumns = @JoinColumn(name = "freezerToBasket_id"),
+//    inverseJoinColumns = @JoinColumn(name = "basket_id")
+//  )
+//  public BasketEntity basket_id;
 }

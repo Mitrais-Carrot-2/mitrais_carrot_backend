@@ -19,13 +19,11 @@ public class BazaarService {
     public BazaarEntity createBazaar(CreateBazaarDto request){
         BazaarEntity bazaar = new BazaarEntity();
         bazaar.setBazaarName(request.getBazaarName());
-        bazaar.setActive(true);
+//        bazaar.setActive(true);
         bazaar.setStartDate(request.getStartDate());
         bazaar.setEndDate(request.getEndDate());
 
         return bazaarRepository.save(bazaar);
     }
-
-}       
 
 }

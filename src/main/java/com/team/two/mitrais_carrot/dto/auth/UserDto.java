@@ -15,4 +15,5 @@ public class UserDto {
     private LocalDate birthDate;
     private int supervisor_id;
     private int level;
+    private int id;
 }

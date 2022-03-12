@@ -24,8 +24,8 @@ public class BazaarItemEntity {
     @Column(name = "quantity")
     private int quantity;
 
-    @Column(name = "bazaar_id")
-    @ManyToOne
-    private BazaarEntity bazaarId;
+//    @Column(name = "bazaar_id")
+//    @ManyToOne
+//    private BazaarEntity bazaarId;
 
 }

@@ -30,21 +30,21 @@ public class ExchangeEntity {
     @Column(name = "exchangeDate")
     private LocalDate exchangeDate;
 
-    @Column(name = "user_id")
-    @OneToMany(mappedBy = "exchange")
-    @JoinTable(
-        name = "users",
-        joinColumns = @JoinColumn(name = "exchange_id"),
-        inverseJoinColumns = @JoinColumn(name = "user_id")
-    )
-    private UserEntity user_id;
+//    @Column(name = "user_id")
+//    @OneToMany(mappedBy = "exchange")
+//    @JoinTable(
+//        name = "users",
+//        joinColumns = @JoinColumn(name = "exchange_id"),
+//        inverseJoinColumns = @JoinColumn(name = "user_id")
+//    )
+//    private UserEntity user_id;
 
-    @Column(name = "bazaarItem_id")
-    @OneToMany(mappedBy = "exchange")
-    @JoinTable (
-        name = "bazaarItems",
-        joinColumns = @JoinColumn(name = "exchange_id"),
-        inverseJoinColumns = @JoinColumn(name = "bazaarItem_id")
-    )
-    private BazaarEntity bazaaritem_id;
+//    @Column(name = "bazaarItem_id")
+//    @OneToMany(mappedBy = "exchange")
+//    @JoinTable (
+//        name = "bazaarItems",
+//        joinColumns = @JoinColumn(name = "exchange_id"),
+//        inverseJoinColumns = @JoinColumn(name = "bazaarItem_id")
+//    )
+//    private BazaarEntity bazaaritem_id;
 }

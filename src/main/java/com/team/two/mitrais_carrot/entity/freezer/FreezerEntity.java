@@ -2,6 +2,8 @@ package com.team.two.mitrais_carrot.entity.freezer;
 
 import com.team.two.mitrais_carrot.entity.auth.UserEntity;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import lombok.*;
@@ -35,12 +37,11 @@ public class FreezerEntity {
   @NotBlank
   private boolean isActive;
 
-  @Column(name = "user_id")
-  @OneToMany(mappedBy = "freezer")
-  @JoinTable(
-    name = "users",
-    joinColumns = @JoinColumn(name = "freezer_id"),
-    inverseJoinColumns = @JoinColumn(name = "user_id")
-  )
-  private UserEntity user_id;
+//  @Column(name = "user_id")
+//  @OneToMany(cascade = CascadeType.ALL)
+//  @JoinColumn(
+//    name = "user_id",
+//    referencedColumnName = "user_id"
+//  )
+//  private Set<UserEntity> user = new HashSet<>();
 }

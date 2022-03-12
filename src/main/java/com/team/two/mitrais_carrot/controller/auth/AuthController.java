@@ -1,8 +1,6 @@
 package com.team.two.mitrais_carrot.controller.auth;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
@@ -14,8 +12,10 @@ import com.team.two.mitrais_carrot.dto.auth.SignUpDto;
 import com.team.two.mitrais_carrot.entity.auth.ERole;
 import com.team.two.mitrais_carrot.entity.auth.RoleEntity;
 import com.team.two.mitrais_carrot.entity.auth.UserEntity;
+import com.team.two.mitrais_carrot.entity.auth.UserRoleEntity;
 import com.team.two.mitrais_carrot.repository.RoleRepository;
 import com.team.two.mitrais_carrot.repository.UserRepository;
+import com.team.two.mitrais_carrot.repository.UserRoleRepository;
 import com.team.two.mitrais_carrot.security.jwt.JwtUtils;
 import com.team.two.mitrais_carrot.security.services.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +41,9 @@ public class AuthController {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    UserRoleRepository userRoleRepository;
 
     @Autowired
     RoleRepository roleRepository;
@@ -95,13 +98,12 @@ public class AuthController {
          Set<String> strRoles = signUpRequest.getRole();
          Set<RoleEntity> roles = new HashSet<>();
 
-         if (strRoles == null) {
-             RoleEntity userRole = roleRepository.findByName(ERole.STAFF)
-                     .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-             roles.add(userRole);
-         } else {
+//         RoleEntity userRole = roleRepository.findByName(ERole.STAFF)
+//                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+//         roles.add(userRole);
+
              strRoles.forEach(role -> {
-                 switch (role) {
+                 switch (role.toLowerCase()) {
                      case "admin":
                          RoleEntity adminRole = roleRepository.findByName(ERole.ADMIN)
                                  .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
@@ -130,10 +132,21 @@ public class AuthController {
                          break;
                  }
              });
-         }
 
+         if (roles.isEmpty()){
+             RoleEntity staffRole = roleRepository.findByName(ERole.STAFF)
+                     .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+             roles.add(staffRole);
+         }
          user.setRoles(roles);
          userRepository.save(user);
+
+         List<UserRoleEntity> userRoleEntity = new ArrayList<>();
+         roles.forEach(r -> {
+             userRoleEntity.add( new UserRoleEntity(user.getId(), r.getId()));
+         });
+
+         userRoleRepository.saveAll(userRoleEntity);
 
         return ResponseEntity.ok("Sign Up Successfully!");
     }

@@ -21,8 +21,8 @@ public class GroupEntity {
     private String name;
 
     //user_id disini tuh manager atau siapa yang ngemanage group nya
-    @Column(name = "user_id")
-    @OneToOne
-    @JoinTable(name = "users", joinColumns = @JoinColumn(name = "group_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
-    private UserEntity user_id;
+//    @Column(name = "user_id")
+//    @OneToOne
+//    @JoinTable(name = "users", joinColumns = @JoinColumn(name = "group_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
+//    private UserEntity user_id;
 }

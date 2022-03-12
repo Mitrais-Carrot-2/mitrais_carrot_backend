@@ -8,5 +8,4 @@ public class MitraisCarrotBackendApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(MitraisCarrotBackendApplication.class, args);
 	}
-
 }

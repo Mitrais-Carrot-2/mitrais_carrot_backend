@@ -29,5 +29,4 @@ public class BazaarEntity {
 
     @Column(name = "endDate")
     private LocalDate endDate;
-
 }

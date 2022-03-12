@@ -19,13 +19,13 @@ public class UserGroupEntity {
     private int id;
 
     //user_id disini tuh manager atau siapa yang ngemanage group nya
-    @Column(name = "user_id")
-    @OneToMany(mappedBy = "userGroups")
-    @JoinTable(name = "users", joinColumns = @JoinColumn(name = "userGroup_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
-    private UserEntity user_id;
+//    @Column(name = "user_id")
+//    @OneToMany(mappedBy = "userGroups")
+//    @JoinTable(name = "users", joinColumns = @JoinColumn(name = "userGroup_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
+//    private UserEntity user_id;
 
-    @Column(name = "group_id")
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinTable(name = "groups", joinColumns = @JoinColumn(name = "userGroup_id"), inverseJoinColumns = @JoinColumn(name = "group_id"))
-    private GroupEntity group_id;
+//    @Column(name = "group_id")
+//    @ManyToOne(cascade = CascadeType.ALL)
+//    @JoinTable(name = "groups", joinColumns = @JoinColumn(name = "userGroup_id"), inverseJoinColumns = @JoinColumn(name = "group_id"))
+//    private GroupEntity group_id;
 }
