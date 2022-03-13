@@ -25,11 +25,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -54,6 +50,11 @@ public class AuthController {
     @Autowired
     JwtUtils jwtUtils;
 
+    @GetMapping("/test")
+    public UserDetailsImpl test(){
+        UserDetailsImpl user = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return user;
+    }
     @PostMapping("/login")
     public JwtDto authenticateUser(@Valid @RequestBody LoginDto loginRequest) {
 
@@ -105,28 +106,28 @@ public class AuthController {
              strRoles.forEach(role -> {
                  switch (role.toLowerCase()) {
                      case "admin":
-                         RoleEntity adminRole = roleRepository.findByName(ERole.ADMIN)
+                         RoleEntity adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
                                  .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
                          roles.add(adminRole);
 
                          break;
                      case "farmer":
-                         RoleEntity farmerRole = roleRepository.findByName(ERole.FARMER)
+                         RoleEntity farmerRole = roleRepository.findByName(ERole.ROLE_FARMER)
                                  .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
                          roles.add(farmerRole);
                          break;
                      case "staff":
-                         RoleEntity staffRole = roleRepository.findByName(ERole.STAFF)
+                         RoleEntity staffRole = roleRepository.findByName(ERole.ROLE_STAFF)
                                  .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
                          roles.add(staffRole);
                          break;
                      case "manager":
-                         RoleEntity managerRole = roleRepository.findByName(ERole.MANAGER)
+                         RoleEntity managerRole = roleRepository.findByName(ERole.ROLE_MANAGER)
                                  .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
                          roles.add(managerRole);
                          break;
                      case "merchant":
-                         RoleEntity merchantRole = roleRepository.findByName(ERole.MERCHANT)
+                         RoleEntity merchantRole = roleRepository.findByName(ERole.ROLE_MERCHANT)
                                  .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
                          roles.add(merchantRole);
                          break;
@@ -134,7 +135,7 @@ public class AuthController {
              });
 
          if (roles.isEmpty()){
-             RoleEntity staffRole = roleRepository.findByName(ERole.STAFF)
+             RoleEntity staffRole = roleRepository.findByName(ERole.ROLE_STAFF)
                      .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
              roles.add(staffRole);
          }

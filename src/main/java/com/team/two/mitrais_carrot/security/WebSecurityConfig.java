@@ -54,10 +54,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   @Override
   protected void configure(HttpSecurity http) throws Exception {
     http.authorizeRequests()
-//            .antMatchers("/api/auth/**").permitAll()
-//            .antMatchers("/api/swagger-ui/**").permitAll()
+            .antMatchers("/api/auth/**").permitAll()
+            .antMatchers("/api/swagger-ui/**").permitAll()
 //            .antMatchers("/api/user/**").permitAll()
-            .antMatchers("/api/**").permitAll()
             .and().httpBasic().and().csrf().disable();
   }
 }

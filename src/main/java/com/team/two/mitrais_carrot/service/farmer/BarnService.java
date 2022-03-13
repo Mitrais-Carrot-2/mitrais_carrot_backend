@@ -1,36 +1,43 @@
-//package com.team.two.mitrais_carrot.service.farmer;
-//
-//import com.team.two.mitrais_carrot.dto.farmer.CreateBarnDto;
-//import com.team.two.mitrais_carrot.entity.farmer.BarnEntity;
-//import com.team.two.mitrais_carrot.repository.BarnRepository;
-//import java.time.LocalDate;
-//import org.springframework.stereotype.Service;
-//import lombok.*;
-//
-//@Service
-//public class BarnService {
-//
-//  private final BarnRepository barnRepo;
-//
-//  public BarnService(BarnRepository barnRepository) {
-//    this.barnRepo = barnRepository;
-//  }
-//
-//  public BarnEntity createBarn(CreateBarnDto request) {
-//    BarnEntity barn = new BarnEntity();
-//    barn.setBarnName(request.getBarnName());
-//    barn.setCarrotAmount(request.getCarrotAmount());
-//    barn.setStartDate(request.getStartDate());
-//    barn.setExpiredDate(request.getExpiredDate());
-//    barn.setIsActive(checkActive(barn.getStartDate(), barn.getExpiredDate()));
-//
-//    return barnRepo.save(barn);
-//  }
-//
-//  public Boolean checkActive(LocalDate startDate, LocalDate expiredDate) {
-//    return (
-//      LocalDate.now().isAfter(startDate) &&
-//      LocalDate.now().isBefore(expiredDate)
-//    );
-//  }
-//}
+package com.team.two.mitrais_carrot.service.farmer;
+
+import com.team.two.mitrais_carrot.dto.farmer.BarnDto;
+import com.team.two.mitrais_carrot.entity.farmer.BarnEntity;
+import com.team.two.mitrais_carrot.repository.farmer.BarnRepository;
+import java.time.LocalDate;
+import java.util.List;
+
+import com.team.two.mitrais_carrot.security.services.UserDetailsImpl;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
+
+@Service
+public class BarnService {
+  private final BarnRepository barnRepository;
+
+  public BarnService(BarnRepository barnRepository) {
+      this.barnRepository = barnRepository;
+  }
+
+  public List<BarnEntity> fetchAllBarn(){
+      return barnRepository.findAll();
+  }
+
+  public BarnEntity createBarn(BarnDto req) {
+      BarnEntity barnEntity = new BarnEntity();
+      UserDetailsImpl user = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+      barnEntity.setBarnName(req.getBarnName());
+      barnEntity.setIdUser(user.getId());
+      barnEntity.setStartDate(req.getStartDate());
+      barnEntity.setEndDate(req.getEndDate());
+      barnEntity.setCarrotAmount(req.getCarrotAmount());
+
+      return barnRepository.save(barnEntity);
+  }
+
+  public Boolean checkActive(LocalDate startDate, LocalDate expiredDate) {
+    return (
+      LocalDate.now().isAfter(startDate) &&
+      LocalDate.now().isBefore(expiredDate)
+    );
+  }
+}

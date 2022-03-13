@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
 // import javax.validation.constraints.NotBlank;
 
 import lombok.*;
@@ -25,26 +26,25 @@ public class BarnEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
+	@Column(name = "id_user")
+	private Long idUser;
 
-	@Column(name = "barnName")
-	// @NotBlank
+	@Column(name = "barn_name")
 	private String barnName;
 
-	@Column(name = "carrotAmount")
+	@Column(name = "carrot_amount")
 	private Long carrotAmount;
 
-	@Column(name = "startDate")
+	@Column(name = "start_date")
 	private LocalDate startDate;
 
-	@Column(name = "expiredDate")
-	private LocalDate expiredDate;
+	@Column(name = "end_date")
+	private LocalDate endDate;
 
-	@Column(name = "isActive")
+	@Column(name = "is_active")
 	private Boolean isActive;
 
 	@Column(name = "distributed_carrot")
 	@Value("${cp.barns.distributed_carrot: 0}")
 	private Long distributedCarrot;
-
-
 }
