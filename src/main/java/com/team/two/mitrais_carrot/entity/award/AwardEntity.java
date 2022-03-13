@@ -22,9 +22,9 @@ public class AwardEntity {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "desc")
-    private String desc;
+    @Column(name = "description")
+    private String description;
 
     @Column(name = "carrot_amount")
-    private int carrotAmount;
+    private Long carrotAmount;
 }

@@ -10,10 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 // import javax.validation.constraints.NotBlank;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.springframework.beans.factory.annotation.Value;
 
 @Entity
 @Getter
@@ -44,7 +42,8 @@ public class BarnEntity {
 	@Column(name = "isActive")
 	private Boolean isActive;
 
-	@Column(name = "distributedCarrot", columnDefinition = "0")
+	@Column(name = "distributed_carrot")
+	@Value("${cp.barns.distributed_carrot: 0}")
 	private Long distributedCarrot;
 
 

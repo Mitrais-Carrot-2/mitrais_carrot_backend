@@ -27,11 +27,11 @@ public class TransferHistoryEntity {
     @NotBlank
     private String type;
 
-    @Column(name = "desc")
+    @Column(name = "description")
     @NotBlank
-    private String desc;
+    private String description;
 
-    @Column(name = "carrotAmount")
+    @Column(name = "carrot_amount")
     @NotBlank
     private int carrotAmount;
 }
