@@ -1,4 +1,4 @@
-package com.team.two.mitrais_carrot.entity.employee;
+package com.team.two.mitrais_carrot.entity.basket;
 
 import lombok.*;
 
@@ -24,10 +24,10 @@ public class UserBasketEntity {
 //    @JoinColumn(name = "user_id")
 //    @OneToMany(mappedBy = "userBaskets")
 //    @JoinTable(name = "users", joinColumns = @JoinColumn(name = "userBasket_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
-//    private UserEntity user_id;
+//    private int user_id;
 
 //    @JoinColumn(name = "userBasket_id")
 //    @OneToMany(mappedBy = "userBaskets")
 //    @JoinTable(name = "baskets", joinColumns = @JoinColumn(name = "userBasket_id"), inverseJoinColumns = @JoinColumn(name = "basket_id"))
-//    private BasketEntity basket_id;
+    private BasketEntity basket = new BasketEntity();
 }

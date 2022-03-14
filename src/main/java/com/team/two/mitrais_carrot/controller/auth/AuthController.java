@@ -148,7 +148,6 @@ public class AuthController {
         });
 
         userRoleRepository.saveAll(userRoleEntity);
-
         return ResponseEntity.ok("Sign Up Successfully!");
     }
 }

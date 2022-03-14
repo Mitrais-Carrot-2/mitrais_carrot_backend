@@ -1,4 +1,4 @@
-package com.team.two.mitrais_carrot.entity.employee;
+package com.team.two.mitrais_carrot.entity.basket;
 
 import java.time.LocalDate;
 
@@ -34,6 +34,9 @@ public class BasketEntity {
 
     @Column(name = "isActive")
     private boolean isActive;
+
+//    public boolean getIsActive() {
+//    }
 
 //    @Column(name = "userBasket_id")
 //    @JoinColumn(name = "userBasket_id")

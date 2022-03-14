@@ -8,12 +8,13 @@ import lombok.Setter;
 @Getter
 @Setter
 public class UserDto {
-    private boolean status;
-    private String firstName;
-    private String lastName;
-    private String address;
-    private LocalDate birthDate;
-    private int supervisor_id;
-    private int level;
-    private int id;
+    private String username;
+    private String password;
+    private String email;
+//    private String firstName;
+//    private String lastName;
+//    private String address;
+//    private LocalDate birthDate;
+//    private int supervisorId;
+//    private int level;
 }

@@ -1,12 +1,11 @@
 package com.team.two.mitrais_carrot.controller.user;
 
+import com.team.two.mitrais_carrot.dto.auth.UserDto;
 import com.team.two.mitrais_carrot.entity.auth.UserEntity;
 import com.team.two.mitrais_carrot.repository.UserRepository;
+import com.team.two.mitrais_carrot.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -15,10 +14,21 @@ import java.util.List;
 @RequestMapping("/api/user")
 public class UserController {
     @Autowired
-    UserRepository userRepository;
+    UserService userService;
+
+    @PostMapping("")
+    public UserEntity addUser(@RequestBody UserDto userDto){
+        return userService.add(userDto);
+    }
 
     @GetMapping("/")
-    public List<UserEntity> getUser(){
-        return userRepository.findAll();
+    public List<UserEntity> getAllUsers(){
+        return userService.fetchAll();
     }
+
+    @GetMapping("{id}")
+    public UserEntity getUser(@PathVariable("id") String id){
+        return userService.fetchById(Long.parseLong(id));
+    }
+
 }
