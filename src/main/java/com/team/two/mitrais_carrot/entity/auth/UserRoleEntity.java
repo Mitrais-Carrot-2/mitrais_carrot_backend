@@ -13,17 +13,14 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 @Table(name = "user_roles")
+@IdClass(UserRoleId.class)
 public class UserRoleEntity {
     @Id
-    @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Long id;
-
     @Column(name = "user_id")
     private Long userId;
 
+    @Id
     @Column(name = "role_id")
     private Integer roleId;
 
