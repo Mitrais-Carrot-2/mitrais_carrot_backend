@@ -30,10 +30,6 @@ public class BarnEntity {
 	// TODO : Buat relasi ke user sebagai FK
 	private Long idUser;
 
-	@Column(name = "barn_setting_id")
-	// TODO : Buat relasi ke barn setting sebagai FK
-	private int barnSettingId;
-
 	@Column(name = "barn_name")
 	private String barnName;
 
@@ -51,5 +47,5 @@ public class BarnEntity {
 
 	@Column(name = "distributed_carrot")
 	@Value("${cp.barns.distributed_carrot: 0}")
-	private Long distributedCarrot;
+	private Long distributedCarrot = 0L;
 }

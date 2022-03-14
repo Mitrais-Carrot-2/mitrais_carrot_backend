@@ -24,10 +24,6 @@ public class BarnRewardEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "barn_id")
-    // TODO : Buat relasi ke Tabel Barn
-    private int barnId; // FK ke Barn, Many to one
-
     @Column(name = "reward_description")
     private String rewardDescription;
 

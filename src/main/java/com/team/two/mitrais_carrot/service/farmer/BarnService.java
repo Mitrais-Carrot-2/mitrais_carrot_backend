@@ -37,15 +37,20 @@ public class BarnService {
 
   public BarnEntity createBarn(BarnDto req) {
       BarnEntity barnEntity = new BarnEntity();
-      UserDetailsImpl user = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//      UserDetailsImpl user = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//      barnEntity.setIdUser(user.getId());
+      barnEntity.setIdUser(1L);
       barnEntity.setBarnName(req.getBarnName());
-      barnEntity.setIdUser(user.getId());
       barnEntity.setStartDate(req.getStartDate());
       barnEntity.setEndDate(req.getEndDate());
       barnEntity.setCarrotAmount(req.getCarrotAmount());
       barnEntity.setIsActive(this.checkActive(req.getStartDate(), req.getEndDate()));
 
       return barnRepository.save(barnEntity);
+  }
+
+  public BarnEntity isActiveBarn(boolean active){
+      return barnRepository.findByIsActive(active);
   }
 
   public Boolean checkActive(LocalDate startDate, LocalDate expiredDate) {

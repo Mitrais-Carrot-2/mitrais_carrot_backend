@@ -1,14 +1,10 @@
 package com.team.two.mitrais_carrot.entity.auth;
 
 import com.team.two.mitrais_carrot.entity.basket.BasketEntity;
-import com.team.two.mitrais_carrot.entity.basket.UserBasketEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
 
 import org.hibernate.annotations.Type;
 
@@ -16,8 +12,6 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
-
-import com.team.two.mitrais_carrot.entity.basket.UserBasketEntity;
 
 @Entity
 @Getter
