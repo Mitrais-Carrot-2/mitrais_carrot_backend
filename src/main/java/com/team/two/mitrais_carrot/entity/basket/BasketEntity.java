@@ -26,14 +26,19 @@ public class BasketEntity {
     @Column(name = "carrotAmount")
     private long carrotAmount;
 
-    @Column(name = "startDate")
-    private LocalDate startDate;
+    @Column(name = "rewardCarrot")
+    private long rewardCarrot;
 
-    @Column(name = "expiryDate")
-    private LocalDate expiryDate;
+    @Column(name = "sharedCarrot")
+    private long sharedCarrot;
 
-    @Column(name = "isActive")
-    private boolean isActive;
+    @Column(name = "bazaarCarrot")
+    private long bazaarCarrot;
+
+    @Column(name = "barn_id")
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "barns", joinColumns = @JoinColumn(name = "id"), inverseJoinColumns = @JoinColumn(name = "barn_id"))
+    private int barnId;
 
 //    public boolean getIsActive() {
 //    }
