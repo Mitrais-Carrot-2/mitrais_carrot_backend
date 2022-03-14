@@ -4,8 +4,11 @@ import com.team.two.mitrais_carrot.dto.auth.UserDto;
 import com.team.two.mitrais_carrot.entity.auth.UserEntity;
 import com.team.two.mitrais_carrot.entity.basket.BasketEntity;
 import com.team.two.mitrais_carrot.entity.merchant.BazaarItemEntity;
+import com.team.two.mitrais_carrot.repository.BasketRepository;
 import com.team.two.mitrais_carrot.repository.BazaarItemRepository;
 import com.team.two.mitrais_carrot.repository.UserRepository;
+import com.team.two.mitrais_carrot.service.basket.BasketService;
+import com.team.two.mitrais_carrot.service.farmer.BarnService;
 import com.team.two.mitrais_carrot.service.merchant.BazaarItemService;
 
 import org.springframework.stereotype.Service;
@@ -16,6 +19,9 @@ import java.util.List;
 public class UserService {
     private UserRepository userRepository;
 
+    private BasketRepository basketRepository;
+    private BasketService basketService;
+
     public UserService(UserRepository userRepository) {this.userRepository = userRepository;}
 
      public UserEntity add(UserDto req){
@@ -23,20 +29,18 @@ public class UserService {
         return userRepository.save(user);
      }
 
-    public List<UserEntity> fetchAll(){ return (List<UserEntity>) userRepository.findAll(); }
+    public List<UserEntity> getAll(){ return (List<UserEntity>) userRepository.findAll(); }
 
-    public UserEntity fetchById(long id){ return userRepository.findById(id).orElse(null);}
+    public UserEntity getById(long id){ return userRepository.findById(id).orElse(null);}
 
     public UserEntity updateCarrot(int userId, int addCarrot){
-        UserEntity user = fetchById(userId);
-        //TODO LIST STREAM GET ALL CARROT AMOUNT
-        BasketEntity basket = user.getBaskets().stream().findFirst().get();
-        if (basket.isActive()){
-            long newCarrot = basket.getCarrotAmount() + addCarrot;
-            if (newCarrot < 0) newCarrot = 0;
-            basket.setCarrotAmount(newCarrot);
-        }
-        else System.out.println("Basket Is Inactive");
+        UserEntity user = getById(userId);
+
+        BasketEntity basket = basketService.getActiveBasket(true);
+
+        long newCarrot = basket.getCarrotAmount() + addCarrot;
+        if (newCarrot < 0) newCarrot = 0;
+        basket.setCarrotAmount(newCarrot);
 
         return userRepository.save(user);
     }

@@ -22,11 +22,11 @@ public class BazaarItemController {
 
     @GetMapping("")
     public List<BazaarItemEntity> getAllBazaarItems(){
-        return bazaarItemService.fetchAll();
+        return bazaarItemService.getAll();
     }
 
     @GetMapping("{id}")
     public BazaarItemEntity getBazaarItem(@PathVariable("id") String id){
-        return bazaarItemService.fetchById(Integer.parseInt(id));
+        return bazaarItemService.getById(Integer.parseInt(id));
     }
 }

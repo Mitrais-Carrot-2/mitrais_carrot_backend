@@ -23,12 +23,12 @@ public class UserController {
 
     @GetMapping("/")
     public List<UserEntity> getAllUsers(){
-        return userService.fetchAll();
+        return userService.getAll();
     }
 
     @GetMapping("{id}")
     public UserEntity getUser(@PathVariable("id") String id){
-        return userService.fetchById(Long.parseLong(id));
+        return userService.getById(Long.parseLong(id));
     }
 
 }

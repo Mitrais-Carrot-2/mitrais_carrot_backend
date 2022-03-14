@@ -7,6 +7,7 @@ import com.team.two.mitrais_carrot.entity.merchant.BazaarItemEntity;
 import com.team.two.mitrais_carrot.repository.BazaarItemRepository;
 import com.team.two.mitrais_carrot.repository.ExchangeRepository;
 import com.team.two.mitrais_carrot.repository.UserRepository;
+import com.team.two.mitrais_carrot.service.basket.BasketService;
 import com.team.two.mitrais_carrot.service.merchant.BazaarItemService;
 import com.team.two.mitrais_carrot.service.user.UserService;
 
@@ -25,6 +26,7 @@ public class ExchangeService {
 
     private BazaarItemService bazaarItemService;
     private UserService userService;
+    private BasketService basketService;
 
     @Getter
     enum status{
@@ -56,16 +58,13 @@ public class ExchangeService {
     }
 
     public boolean isCarrotEnough(UserEntity buyer, BazaarItemEntity item){
-        //using stream get the user's basket carrotAmount
-        //TODO LIST STREAM GET ALL CARROT AMOUNT
-        BasketEntity basket = buyer.getBaskets().stream().findFirst().get();
-
+        BasketEntity basket = basketService.getActiveBasket(true);
         return (basket.getCarrotAmount() >= item.getPrice());
     }
 
     public status buyBazaarItem(int buyerId, int itemId){
-        UserEntity buyer = userService.fetchById(buyerId);
-        BazaarItemEntity item = bazaarItemService.fetchById(itemId);
+        UserEntity buyer = userService.getById(buyerId);
+        BazaarItemEntity item = bazaarItemService.getById(itemId);
         if (buyer != null){
             if (item == null) {
                 response = status.ItemNotFound;
