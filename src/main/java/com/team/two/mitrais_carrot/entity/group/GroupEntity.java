@@ -20,6 +20,10 @@ public class GroupEntity {
     @Column(name = "name")
     private String name;
 
+    // manager user_id
+    @Column(name = "user_id")
+    private int userId;
+
     //user_id disini tuh manager atau siapa yang ngemanage group nya
 //    @Column(name = "user_id")
 //    @OneToOne

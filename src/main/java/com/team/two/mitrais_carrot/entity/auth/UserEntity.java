@@ -1,14 +1,11 @@
 package com.team.two.mitrais_carrot.entity.auth;
 
+import com.team.two.mitrais_carrot.entity.basket.BasketEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-
-import com.team.two.mitrais_carrot.entity.employee.UserBasketEntity;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
@@ -92,8 +89,11 @@ public class UserEntity {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<RoleEntity> roles = new HashSet<>();
 
-    // @ManyToOne(cascade = CascadeType.ALL)
-    // private UserBasketEntity userBasket = new UserBasketEntity();
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @JoinTable(name = "user_baskets",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "basket_id"))
+    private Set<BasketEntity> baskets = new HashSet<>();
 
     public boolean isFlag() {
         return flag;

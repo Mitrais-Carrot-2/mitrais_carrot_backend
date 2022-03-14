@@ -14,17 +14,19 @@ import java.util.List;
 public class BazaarItemController {
     @Autowired
     BazaarItemService bazaarItemService;
-    public BazaarItemController(BazaarItemService bazaarItemService){
-        this.bazaarItemService = bazaarItemService;
+
+    @PostMapping("")
+    public BazaarItemEntity addBazaarItem(@RequestBody BazaarItemDto request){
+        return bazaarItemService.add(request);
     }
 
     @GetMapping("")
     public List<BazaarItemEntity> getAllBazaarItems(){
-        return bazaarItemService.getBazaarItems();
+        return bazaarItemService.fetchAll();
     }
 
-    @PostMapping("")
-    public BazaarItemEntity createBazaarItem(@RequestBody BazaarItemDto request){
-        return bazaarItemService.createBazaarItem(request);
+    @GetMapping("{id}")
+    public BazaarItemEntity getBazaarItem(@PathVariable("id") String id){
+        return bazaarItemService.fetchById(Integer.parseInt(id));
     }
 }

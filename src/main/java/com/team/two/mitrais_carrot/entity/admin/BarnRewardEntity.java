@@ -1,7 +1,5 @@
 package com.team.two.mitrais_carrot.entity.admin;
 
-import java.time.LocalDate;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -26,10 +24,6 @@ public class BarnRewardEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "barn_id")
-    // TODO : Buat relasi ke Tabel Barn
-    private int barnId; // FK ke Barn, Many to one
-
     @Column(name = "reward_description")
     private String rewardDescription;
 
@@ -37,6 +31,7 @@ public class BarnRewardEntity {
     private int carrotAmount;
 
     @Column(name = "giving_conditional")
+    // @Enumerated(EnumType.STRING)
     private String givingConditional; //Sebagai referensi Cron job untuk memberi carrot. Referensi ada 3: Birth Day, Join Date dan end of the year
 
 }

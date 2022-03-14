@@ -1,7 +1,5 @@
 package com.team.two.mitrais_carrot.dto.admin;
 
-import java.time.LocalDate;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
