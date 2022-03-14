@@ -29,7 +29,8 @@ public class UserService {
 
     public UserEntity updateCarrot(int userId, int addCarrot){
         UserEntity user = fetchById(userId);
-        BasketEntity basket = user.getUserBasket().getBasket();
+        //TODO LIST STREAM GET ALL CARROT AMOUNT
+        BasketEntity basket = user.getBaskets().stream().findFirst().get();
         if (basket.isActive()){
             long newCarrot = basket.getCarrotAmount() + addCarrot;
             if (newCarrot < 0) newCarrot = 0;

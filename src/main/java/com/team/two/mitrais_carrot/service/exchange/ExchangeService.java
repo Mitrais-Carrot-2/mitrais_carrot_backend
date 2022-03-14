@@ -15,6 +15,7 @@ import lombok.Getter;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.Set;
 
 @Service
 public class ExchangeService {
@@ -55,7 +56,9 @@ public class ExchangeService {
     }
 
     public boolean isCarrotEnough(UserEntity buyer, BazaarItemEntity item){
-        BasketEntity basket = buyer.getUserBasket().getBasket();
+        //using stream get the user's basket carrotAmount
+        //TODO LIST STREAM GET ALL CARROT AMOUNT
+        BasketEntity basket = buyer.getBaskets().stream().findFirst().get();
 
         return (basket.getCarrotAmount() >= item.getPrice());
     }
