@@ -22,7 +22,7 @@ public class UserController {
     }
 
     @GetMapping("/")
-    public List<UserEntity> getUsers(){
+    public List<UserEntity> getAllUsers(){
         return userService.fetchAll();
     }
 

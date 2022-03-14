@@ -7,6 +7,8 @@ import com.team.two.mitrais_carrot.service.merchant.BazaarService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/bazaar")
 public class BazaarController {
@@ -14,6 +16,11 @@ public class BazaarController {
     BazaarService bazaarService;
     public BazaarController(BazaarService bazaarService){
         this.bazaarService = bazaarService;
+    }
+
+    @GetMapping("")
+    public List<BazaarEntity> getBazaar(){
+        return bazaarService.getBazaar();
     }
 
     @PostMapping("")

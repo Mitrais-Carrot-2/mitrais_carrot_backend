@@ -30,13 +30,15 @@ public class BarnService {
       barnEntity.setStartDate(req.getStartDate());
       barnEntity.setEndDate(req.getEndDate());
       barnEntity.setCarrotAmount(req.getCarrotAmount());
+      barnEntity.setIsActive(this.checkActive(req.getStartDate(), req.getEndDate()));
 
       return barnRepository.save(barnEntity);
   }
 
   public Boolean checkActive(LocalDate startDate, LocalDate expiredDate) {
     return (
-      LocalDate.now().isAfter(startDate) &&
+      (LocalDate.now().isEqual(startDate) ||
+      LocalDate.now().isAfter(startDate)) &&
       LocalDate.now().isBefore(expiredDate)
     );
   }

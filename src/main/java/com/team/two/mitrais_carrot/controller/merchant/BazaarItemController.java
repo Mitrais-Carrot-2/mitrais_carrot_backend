@@ -21,7 +21,7 @@ public class BazaarItemController {
     }
 
     @GetMapping("")
-    public List<BazaarItemEntity> getBazaarItems(){
+    public List<BazaarItemEntity> getAllBazaarItems(){
         return bazaarItemService.fetchAll();
     }
 
