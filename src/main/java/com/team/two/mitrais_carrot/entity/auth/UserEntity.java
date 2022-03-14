@@ -9,8 +9,10 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
 import com.team.two.mitrais_carrot.entity.employee.UserBasketEntity;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -25,43 +27,68 @@ import java.util.Set;
 })
 public class UserEntity {
     @Id
-    @Column(name = "user_id")
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String username;
-    private String password;
-    private String email;
     private boolean flag;
 
+    @Column(name = "username", nullable = false)
+    @NotBlank(message = "Username is required")
+    private String username;
+
+    @Column(name = "password", nullable = false)
+    @NotBlank(message = "Password is required")
+    private String password;
+
+    @Column(name = "email", nullable = false)
+    @Email(message = "Please provide a valid email")
+    @NotBlank(message = "Email is required")
+    private String email;
+
+    @Column(name = "firstName", nullable = false)
+    @NotBlank(message = "First name is required")
+    private String firstName;
+
+    @Column(name = "lastName", nullable = false)
+    @NotBlank(message = "Last name is required")
+    private String lastName;
+
+    @Column(name = "address", nullable = false)
+    @NotBlank(message = "Address is required")
+    private String address;
+
+    //using LocalDate for birthdate
+    @Column(name = "birthDate", nullable = false)
+    @NotBlank(message = "Birthdate is required")
+    private LocalDate birthDate;
+
+    @Column(name = "supervisorId", nullable = false)
+    @NotBlank(message = "Supervisor ID is required")
+    private Long supervisorId;
+
+    @Lob
+    @Column( name = "image")
+    @Type(type = "org.hibernate.type.BinaryType")
+    private byte[] image;
+
+    @Column(name = "jobFamily")
+    private String jobFamily;
+
+    @Column(name = "jobGrade")
+    private String jobGrade;
+
+    @Column(name = "office")
+    private String office;
+
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    @JoinTable(name = "user_roles",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<RoleEntity> roles = new HashSet<>();
 
-//    @ManyToOne(cascade = CascadeType.ALL)
-//    private UserBasketEntity userBasket = new UserBasketEntity();
-
-    public UserEntity(String username, String password, String email) {
-        this.username = username;
-        this.password = password;
-        this.email = email;
-    }
+    // @ManyToOne(cascade = CascadeType.ALL)
+    // private UserBasketEntity userBasket = new UserBasketEntity();
 
     public boolean isFlag() {
         return flag;
     }
-
-    // public void setFlag(boolean flag) {
-    // this.flag = flag;
-    // }
-
-    // public Set<RoleEntity> getRoles() {
-    // return roles;
-    // }
-
-    // public void setRoles(Set<RoleEntity> roles) {
-    // this.roles = roles;
-    // }
 }
