@@ -1,9 +1,7 @@
 package com.team.two.mitrais_carrot.entity.freezer;
 
-import com.team.two.mitrais_carrot.entity.auth.UserEntity;
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
+import java.time.LocalDateTime;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import lombok.*;
@@ -15,33 +13,23 @@ import lombok.*;
 @AllArgsConstructor
 @Table(name = "freezers")
 public class FreezerEntity {
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
 
-  @Id
-  @Column(name = "id")
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private int id;
+    @Column(name = "barn_id")
+    private Integer barnId;
 
-  @Column(name = "carrotAmount")
-  @NotBlank
-  private int carrotAmount;
+    @Column(name = "manager_id")
+    private Long managerId;
 
-  @Column(name = "startDate")
-  @NotBlank
-  private LocalDate startDate;
+    @Column(name = "carrot_amount")
+    private Long carrotAmount;
 
-  @Column(name = "expiredDate")
-  @NotBlank
-  private LocalDate expiredDate;
+    @Column(name = "distributed_carrot")
+    private int distributedCarrot;
 
-  @Column(name = "isActive")
-  @NotBlank
-  private boolean isActive;
-
-//  @Column(name = "user_id")
-//  @OneToMany(cascade = CascadeType.ALL)
-//  @JoinColumn(
-//    name = "user_id",
-//    referencedColumnName = "user_id"
-//  )
-//  private Set<UserEntity> user = new HashSet<>();
+    @Column(name = "share_at")
+    private LocalDateTime shareAt;
 }

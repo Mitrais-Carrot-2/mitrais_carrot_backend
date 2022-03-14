@@ -1,16 +1,10 @@
 package com.team.two.mitrais_carrot.entity.freezerToBasket;
 
-import com.team.two.mitrais_carrot.entity.auth.UserEntity;
-import com.team.two.mitrais_carrot.entity.employee.BasketEntity;
-import com.team.two.mitrais_carrot.entity.freezer.FreezerEntity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
