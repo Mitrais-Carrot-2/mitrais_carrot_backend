@@ -64,7 +64,7 @@ public class UserEntity {
     @NotBlank(message = "Address is required")
     private String address;
 
-    //using LocalDate for birthdate
+    // using LocalDate for birthdate
     @Column(name = "birthDate", nullable = false)
     @NotBlank(message = "Birthdate is required")
     private LocalDate birthDate;
@@ -74,7 +74,7 @@ public class UserEntity {
     private Long supervisorId;
 
     @Lob
-    @Column( name = "image")
+    @Column(name = "image")
     @Type(type = "org.hibernate.type.BinaryType")
     private byte[] image;
 
