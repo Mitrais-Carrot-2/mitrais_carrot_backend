@@ -7,6 +7,7 @@ import org.apache.tomcat.jni.Local;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Service
 public class BazaarService {
@@ -14,6 +15,12 @@ public class BazaarService {
 
     public BazaarService(BazaarRepository bazaarRepository){
         this.bazaarRepository = bazaarRepository;
+    }
+
+
+    public List<BazaarEntity> getBazaar(){
+
+        return (List<BazaarEntity>) bazaarRepository.findAll();
     }
 
     public BazaarEntity createBazaar(CreateBazaarDto request){
