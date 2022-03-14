@@ -26,7 +26,7 @@ public class BazaarItemService{
     }
 
     public List<BazaarItemEntity> fetchAll(){
-        return (List<BazaarItemEntity>) bazaarItemRepository.findAll();
+        return bazaarItemRepository.findAll();
     }
 
     public BazaarItemEntity fetchById(int id){
