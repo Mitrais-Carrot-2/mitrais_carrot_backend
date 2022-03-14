@@ -1,14 +1,10 @@
 package com.team.two.mitrais_carrot.entity.auth;
 
+import com.team.two.mitrais_carrot.entity.basket.UserBasketEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-
-import com.team.two.mitrais_carrot.entity.employee.UserBasketEntity;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -41,7 +37,7 @@ public class UserEntity {
     private Set<RoleEntity> roles = new HashSet<>();
 
 //    @ManyToOne(cascade = CascadeType.ALL)
-//    private UserBasketEntity userBasket = new UserBasketEntity();
+    private UserBasketEntity userBasket = new UserBasketEntity();
 
     public UserEntity(String username, String password, String email) {
         this.username = username;

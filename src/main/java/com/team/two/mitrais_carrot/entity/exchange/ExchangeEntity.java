@@ -1,5 +1,6 @@
 package com.team.two.mitrais_carrot.entity.exchange;
 
+import com.team.two.mitrais_carrot.entity.merchant.BazaarItemEntity;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -29,6 +30,12 @@ public class ExchangeEntity {
 
     @Column(name = "exchangeDate")
     private LocalDate exchangeDate;
+
+    @Column(name="user_id")
+    private long userId;
+
+    @Column(name="bazaarItem_id")
+    private int bazaarItemId;
 
 //    @Column(name = "user_id")
 //    @OneToMany(mappedBy = "exchange")

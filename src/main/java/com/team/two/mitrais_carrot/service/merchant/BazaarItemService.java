@@ -7,6 +7,8 @@ import com.team.two.mitrais_carrot.repository.BazaarItemRepository;
 
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 
 @Service
 public class BazaarItemService{
@@ -15,7 +17,7 @@ public class BazaarItemService{
         this.bazaarItemRepository = bazaarItemRepository;
     }
 
-    public BazaarItemEntity createBazaarItem(BazaarItemDto request){
+    public BazaarItemEntity add(BazaarItemDto request){
         BazaarItemEntity item = new BazaarItemEntity();
         item.setName(request.getName());
         item.setPrice(request.getPrice());
@@ -23,9 +25,21 @@ public class BazaarItemService{
         return bazaarItemRepository.save(item);
     }
 
-    public BazaarItemEntity fetchById(long id){
-        return bazaarItemRepository.findById((int) id).orElse(null);
+    public List<BazaarItemEntity> fetchAll(){
+        return (List<BazaarItemEntity>) bazaarItemRepository.findAll();
     }
 
+    public BazaarItemEntity fetchById(int id){
+        return bazaarItemRepository.findById(id).orElse(null);
+    }
+
+    public BazaarItemEntity updateQuantity(int itemId, int addQty){
+        BazaarItemEntity item = fetchById(itemId);
+        int newQty = item.getQuantity() + addQty;
+        if (newQty < 0) newQty = 0;
+        item.setQuantity(newQty);
+
+        return bazaarItemRepository.save(item);
+    }
 
 }
