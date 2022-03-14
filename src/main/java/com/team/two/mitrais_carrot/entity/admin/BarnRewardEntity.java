@@ -37,7 +37,7 @@ public class BarnRewardEntity {
     private int carrotAmount;
 
     @Column(name = "giving_conditional")
-    @Enumerated(EnumType.STRING)
+    // @Enumerated(EnumType.STRING)
     private String givingConditional; //Sebagai referensi Cron job untuk memberi carrot. Referensi ada 3: Birth Day, Join Date dan end of the year
 
 }
