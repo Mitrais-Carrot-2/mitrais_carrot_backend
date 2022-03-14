@@ -18,6 +18,11 @@ public class UserGroupEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @Column(name = "user_id")
+    private int userId;
+
+    @Column(name = "group_id")
+    private int groupId;
     //user_id disini tuh manager atau siapa yang ngemanage group nya
 //    @Column(name = "user_id")
 //    @OneToMany(mappedBy = "userGroups")
