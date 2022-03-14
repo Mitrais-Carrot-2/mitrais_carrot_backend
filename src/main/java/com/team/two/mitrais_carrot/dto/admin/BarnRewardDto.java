@@ -21,6 +21,6 @@ public class BarnRewardDto {
     private int carrotAmount;
 
     @JsonProperty("giving_conditional")
-    private LocalDate givingConditional;
+    private String givingConditional;
 
 }
