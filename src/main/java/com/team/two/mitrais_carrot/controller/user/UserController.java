@@ -26,7 +26,7 @@ public class UserController {
         return userService.fetchAll();
     }
 
-    @GetMapping("{id")
+    @GetMapping("{id}")
     public UserEntity getUser(@PathVariable("id") String id){
         return userService.fetchById(Long.parseLong(id));
     }
