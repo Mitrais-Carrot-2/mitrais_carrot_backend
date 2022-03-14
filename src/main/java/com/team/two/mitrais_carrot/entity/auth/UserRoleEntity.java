@@ -22,13 +22,10 @@ public class UserRoleEntity {
     private Long id;
 
     @Column(name = "user_id")
-    private Long userId;
+    @OneToMany(cascade = CascadeType.ALL)
+    private Set<UserEntity> user_id = new HashSet<>();
 
     @Column(name = "role_id")
-    private Integer roleId;
-
-    public UserRoleEntity(Long userId, Integer roleId) {
-        this.userId = userId;
-        this.roleId = roleId;
-    }
+    @OneToMany(cascade = CascadeType.ALL)
+    private Set<RoleEntity> role_id = new HashSet<>();
 }
