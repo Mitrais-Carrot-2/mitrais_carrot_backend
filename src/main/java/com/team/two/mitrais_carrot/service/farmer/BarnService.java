@@ -22,6 +22,19 @@ public class BarnService {
       return barnRepository.findAll();
   }
 
+  public BarnEntity getBarnById(int id){
+    return barnRepository.findById(id).orElse(null); // TODO : Buat exception ketika Barn tdk ditemukan
+  }
+
+  public BarnEntity shareCarrot(Long carrotAmount, int barnId){
+    BarnEntity barn = getBarnById(barnId);
+    Long remainingCarrot = barn.getCarrotAmount();
+    Long distributedCarrot = barn.getDistributedCarrot();
+    barn.setCarrotAmount(remainingCarrot - carrotAmount);
+    barn.setDistributedCarrot(distributedCarrot);
+    return barnRepository.save(barn);
+  }
+
   public BarnEntity createBarn(BarnDto req) {
       BarnEntity barnEntity = new BarnEntity();
       UserDetailsImpl user = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
