@@ -1,5 +1,7 @@
 package com.team.two.mitrais_carrot.dto.farmer;
 
+import java.time.LocalDate;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
@@ -11,8 +13,14 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class SetBirthdayCarrotDto {
+public class BarnRewardDto {
+    @JsonProperty("reward_decription")
+    private String rewardDescription;
+    
     @JsonProperty("carrot_amount")
     private int carrotAmount;
+
+    @JsonProperty("giving_conditional")
+    private LocalDate givingConditional;
 
 }

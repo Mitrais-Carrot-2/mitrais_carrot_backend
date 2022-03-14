@@ -7,7 +7,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 // import javax.validation.constraints.NotBlank;
 
@@ -24,11 +23,16 @@ public class BarnEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	// @ManyToOne
+	// TODO : Buat relasi ke barnToFreezer sebagai PK
 	private int id;
 
 	@Column(name = "id_user")
+	// TODO : Buat relasi ke user sebagai FK
 	private Long idUser;
+
+	@Column(name = "barn_setting_id")
+	// TODO : Buat relasi ke barn setting sebagai FK
+	private int barnSettingId;
 
 	@Column(name = "barn_name")
 	private String barnName;
