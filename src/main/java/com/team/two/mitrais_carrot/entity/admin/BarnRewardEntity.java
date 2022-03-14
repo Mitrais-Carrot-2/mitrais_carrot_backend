@@ -1,4 +1,4 @@
-package com.team.two.mitrais_carrot.entity.farmer;
+package com.team.two.mitrais_carrot.entity.admin;
 
 import java.time.LocalDate;
 

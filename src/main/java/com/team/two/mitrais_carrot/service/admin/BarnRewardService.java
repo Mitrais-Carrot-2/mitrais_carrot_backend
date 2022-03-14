@@ -1,8 +1,10 @@
-package com.team.two.mitrais_carrot.service.farmer;
+package com.team.two.mitrais_carrot.service.admin;
 
-import com.team.two.mitrais_carrot.dto.farmer.BarnRewardDto;
-import com.team.two.mitrais_carrot.entity.farmer.BarnRewardEntity;
-import com.team.two.mitrais_carrot.repository.farmer.BarnRewardRepository;
+import java.util.List;
+
+import com.team.two.mitrais_carrot.dto.admin.BarnRewardDto;
+import com.team.two.mitrais_carrot.entity.admin.BarnRewardEntity;
+import com.team.two.mitrais_carrot.repository.admin.BarnRewardRepository;
 
 import org.springframework.stereotype.Service;
 
@@ -12,6 +14,10 @@ public class BarnRewardService {
 
     public BarnRewardService(BarnRewardRepository barnRewardRepository) {
         this.barnRewardRepository = barnRewardRepository;
+    }
+
+    public List<BarnRewardEntity> fetchAllBarnRewards(){
+        return barnRewardRepository.findAll();
     }
 
     public BarnRewardEntity createBarnReward(BarnRewardDto req) {
