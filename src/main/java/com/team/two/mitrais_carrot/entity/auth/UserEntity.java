@@ -26,6 +26,12 @@ import java.util.Set;
         @UniqueConstraint(columnNames = "email")
 })
 public class UserEntity {
+    public UserEntity(String username, String password, String email) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+    }
+
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
