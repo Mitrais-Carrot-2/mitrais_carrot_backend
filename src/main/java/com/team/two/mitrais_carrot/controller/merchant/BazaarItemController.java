@@ -15,6 +15,8 @@ public class BazaarItemController {
     @Autowired
     BazaarItemService bazaarItemService;
 
+    public BazaarItemController(BazaarItemService bazaarItemService) { this.bazaarItemService = bazaarItemService; }
+
     @PostMapping("")
     public BazaarItemEntity addBazaarItem(@RequestBody BazaarItemDto request){
         return bazaarItemService.add(request);
@@ -25,8 +27,8 @@ public class BazaarItemController {
         return bazaarItemService.getAll();
     }
 
-    @GetMapping("{id}")
-    public BazaarItemEntity getBazaarItem(@PathVariable("id") String id){
-        return bazaarItemService.getById(Integer.parseInt(id));
-    }
+//    @GetMapping("{id}")
+//    public BazaarItemEntity getBazaarItem(@PathVariable("id") String id){
+//        return bazaarItemService.getById(Integer.parseInt(id));
+//    }
 }

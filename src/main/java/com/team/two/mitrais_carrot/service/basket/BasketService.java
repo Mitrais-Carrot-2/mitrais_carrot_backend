@@ -1,5 +1,6 @@
 package com.team.two.mitrais_carrot.service.basket;
 
+import com.team.two.mitrais_carrot.entity.auth.UserEntity;
 import com.team.two.mitrais_carrot.entity.basket.BasketEntity;
 import com.team.two.mitrais_carrot.repository.BasketRepository;
 import com.team.two.mitrais_carrot.service.farmer.BarnService;
@@ -18,11 +19,11 @@ public class BasketService {
         return (List<BasketEntity>) basketRepository.findAll();
     }
 
-    public BasketEntity getActiveBasket (boolean isActive) {
-        return basketRepository.findByBarnId(barnService.getActiveBarnId(isActive));
+    public BasketEntity getActiveBasket (UserEntity user, boolean isActive) {
+        return basketRepository.findByUserIdAndBarnId(user.getId(), barnService.getActiveBarnId(isActive));
     }
 
-    public int getActiveBasketId (boolean isActive) {
-        return getActiveBasket(isActive).getId();
+    public int getActiveBasketId (UserEntity user, boolean isActive) {
+        return getActiveBasket(user, isActive).getId();
     }
 }

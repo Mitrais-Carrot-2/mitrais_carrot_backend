@@ -36,7 +36,7 @@ public class UserService {
     public UserEntity updateCarrot(int userId, int addCarrot){
         UserEntity user = getById(userId);
 
-        BasketEntity basket = basketService.getActiveBasket(true);
+        BasketEntity basket = basketService.getActiveBasket(user, true);
 
         long newCarrot = basket.getCarrotAmount() + addCarrot;
         if (newCarrot < 0) newCarrot = 0;

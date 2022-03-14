@@ -13,8 +13,10 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/user")
 public class UserController {
-    @Autowired
+//    @Autowired
     UserService userService;
+
+    public UserController(UserService userService) { this.userService = userService; }
 
     @PostMapping("")
     public UserEntity addUser(@RequestBody UserDto userDto){
@@ -26,9 +28,9 @@ public class UserController {
         return userService.getAll();
     }
 
-    @GetMapping("{id}")
-    public UserEntity getUser(@PathVariable("id") String id){
-        return userService.getById(Long.parseLong(id));
-    }
+//    @GetMapping("{id}")
+//    public UserEntity getUser(@PathVariable("id") String id){
+//        return userService.getById(Long.parseLong(id));
+//    }
 
 }

@@ -58,7 +58,7 @@ public class ExchangeService {
     }
 
     public boolean isCarrotEnough(UserEntity buyer, BazaarItemEntity item){
-        BasketEntity basket = basketService.getActiveBasket(true);
+        BasketEntity basket = basketService.getActiveBasket(buyer, true);
         return (basket.getCarrotAmount() >= item.getPrice());
     }
 
