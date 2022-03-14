@@ -7,12 +7,18 @@ import com.team.two.mitrais_carrot.repository.BazaarItemRepository;
 
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 
 @Service
 public class BazaarItemService{
     BazaarItemRepository bazaarItemRepository;
     public BazaarItemService(BazaarItemRepository bazaarItemRepository){
         this.bazaarItemRepository = bazaarItemRepository;
+    }
+
+    public List<BazaarItemEntity> getBazaarItems(){
+        return (List<BazaarItemEntity>) bazaarItemRepository.findAll();
     }
 
     public BazaarItemEntity createBazaarItem(BazaarItemDto request){
