@@ -8,7 +8,6 @@ import lombok.Setter;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
-import com.team.two.mitrais_carrot.entity.employee.UserBasketEntity;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
