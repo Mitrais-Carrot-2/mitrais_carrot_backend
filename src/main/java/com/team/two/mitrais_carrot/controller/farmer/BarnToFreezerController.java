@@ -1,8 +1,8 @@
 package com.team.two.mitrais_carrot.controller.farmer;
 
-import com.team.two.mitrais_carrot.dto.farmer.TransferToManagerDto;
+import com.team.two.mitrais_carrot.dto.farmer.BarnToFreezerDto;
 import com.team.two.mitrais_carrot.entity.freezer.FreezerEntity;
-import com.team.two.mitrais_carrot.service.farmer.TransferToManagerService;
+import com.team.two.mitrais_carrot.service.farmer.BarnToFreezerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,12 +10,12 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 //@PreAuthorize("hasAnyRole('FARMER')")
 @RequestMapping("/api/farmer/transfer")
-public class TransferToManagerController {
+public class BarnToFreezerController {
     @Autowired
-    TransferToManagerService transferToManagerService;
+    BarnToFreezerService barnToFreezerService;
 
     @PostMapping("")
-    public FreezerEntity transfer(TransferToManagerDto transferDto){
-        return transferToManagerService.sendToManager(transferDto);
+    public FreezerEntity transfer(@RequestBody BarnToFreezerDto transferDto){
+        return barnToFreezerService.sendToManager(transferDto);
     }
 }

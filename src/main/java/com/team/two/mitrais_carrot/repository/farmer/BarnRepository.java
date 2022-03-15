@@ -6,7 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface BarnRepository extends JpaRepository <BarnEntity, Integer> {
-    BarnEntity findBy();
-
     BarnEntity findByIsActive(Boolean isActive);
 }

@@ -35,11 +35,6 @@ public class BasketEntity {
     @Column(name = "bazaarCarrot")
     private long bazaarCarrot;
 
-    @Column(name = "barn_id")
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "barns", joinColumns = @JoinColumn(name = "id"), inverseJoinColumns = @JoinColumn(name = "barn_id"))
-    private int barnId;
-
 //    public boolean getIsActive() {
 //    }
 

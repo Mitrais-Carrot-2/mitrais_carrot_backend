@@ -29,16 +29,17 @@ public class UserService {
 
     public UserEntity updateCarrot(int userId, int addCarrot){
         UserEntity user = fetchById(userId);
-        //TODO LIST STREAM GET ALL CARROT AMOUNT
-        BasketEntity basket = user.getBaskets().stream().findFirst().get();
-        if (basket.isActive()){
-            long newCarrot = basket.getCarrotAmount() + addCarrot;
-            if (newCarrot < 0) newCarrot = 0;
-            basket.setCarrotAmount(newCarrot);
-        }
-        else System.out.println("Basket Is Inactive");
-
-        return userRepository.save(user);
+//        //TODO LIST STREAM GET ALL CARROT AMOUNT
+//        BasketEntity basket = user.getBaskets();
+//        if (basket.isActive()){
+//            long newCarrot = basket.getCarrotAmount() + addCarrot;
+//            if (newCarrot < 0) newCarrot = 0;
+//            basket.setCarrotAmount(newCarrot);
+//        }
+//        else System.out.println("Basket Is Inactive");
+//
+//        return userRepository.save(user);
+        return user;
     }
 
 }

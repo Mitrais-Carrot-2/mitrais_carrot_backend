@@ -58,9 +58,10 @@ public class ExchangeService {
     public boolean isCarrotEnough(UserEntity buyer, BazaarItemEntity item){
         //using stream get the user's basket carrotAmount
         //TODO LIST STREAM GET ALL CARROT AMOUNT
-        BasketEntity basket = buyer.getBaskets().stream().findFirst().get();
-
-        return (basket.getCarrotAmount() >= item.getPrice());
+//        BasketEntity basket = buyer.getBaskets().stream().findFirst().get();
+//
+//        return (basket.getCarrotAmount() >= item.getPrice());
+        return true;
     }
 
     public status buyBazaarItem(int buyerId, int itemId){
