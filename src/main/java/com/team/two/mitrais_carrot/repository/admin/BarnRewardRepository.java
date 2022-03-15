@@ -7,5 +7,9 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface BarnRewardRepository extends JpaRepository <BarnRewardEntity, Integer> {
+
+    // BarnRewardEntity findByGivingConditionalEqual(ETypeBarnReward type);
+
+    // BarnRewardEntity findByGivingConitionalIsEqual(ETypeBarnReward.USER_BIRTHDAY);
     
 }
