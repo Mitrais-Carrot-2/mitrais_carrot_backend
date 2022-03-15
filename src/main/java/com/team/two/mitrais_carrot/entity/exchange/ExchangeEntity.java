@@ -26,7 +26,7 @@ public class ExchangeEntity {
     private boolean status;
 
     @Column(name = "price")
-    private int price;
+    private long price;
 
     @Column(name = "exchangeDate")
     private LocalDate exchangeDate;
