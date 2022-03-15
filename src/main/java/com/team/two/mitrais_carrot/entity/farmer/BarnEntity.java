@@ -53,17 +53,16 @@ public class BarnEntity {
 			joinColumns = @JoinColumn(name = "barn_id"))
 	private BasketEntity baskets;
 
-<<<<<<< HEAD
 //	@ManyToOne(cascade = CascadeType.ALL)
 //	@JoinTable(name = "freezers",
 //			joinColumns = @JoinColumn(name = "barn_id"));
 
 	@OneToMany(targetEntity = FreezerEntity.class, mappedBy = "freezerId", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private List<FreezerEntity> freezerId;
-=======
+
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinTable(name = "freezers",
 			joinColumns = @JoinColumn(name = "barn_id"))
 	private FreezerEntity freezers;
->>>>>>> 2be1e85acef6fc520499dfa4a4d8a6764fef4a5f
+
 }
