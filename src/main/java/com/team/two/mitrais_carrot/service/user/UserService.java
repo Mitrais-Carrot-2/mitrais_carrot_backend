@@ -19,7 +19,6 @@ import java.util.List;
 public class UserService {
     private UserRepository userRepository;
 
-    private BasketRepository basketRepository;
     private BasketService basketService;
 
     public UserService(UserRepository userRepository) {this.userRepository = userRepository;}
