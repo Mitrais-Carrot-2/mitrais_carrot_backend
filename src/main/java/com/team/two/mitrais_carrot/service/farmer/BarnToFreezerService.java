@@ -36,7 +36,7 @@ public class BarnToFreezerService {
         Long barnBalance = barn.getCarrotAmount();
         Long transferedCarrot = Math.abs(req.getCarrotAmount());
 
-        FreezerEntity freezer = freezerRepository.findByBarnIdAndManagerId(barn.getBarnId(), req.getManagerId());
+        FreezerEntity freezer = freezerRepository.findByBarnId_FreezerId_BarnIdAndBarnId_FreezerId_ManagerId(barn, req.getManagerId());
         FreezerEntity freezerEntity;
 
         try {

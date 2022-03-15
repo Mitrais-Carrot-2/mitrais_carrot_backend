@@ -90,10 +90,13 @@ public class UserEntity {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<RoleEntity> roles = new HashSet<>();
 
-//    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-//    @JoinTable(name = "baskets",
-//            joinColumns = @JoinColumn(name = "user_id"))
-//    private BasketEntity baskets;
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @JoinTable(name = "baskets",
+            joinColumns = @JoinColumn(name = "user_id"))
+    private BasketEntity baskets;
+
+    private int dayOfYearBirthDay;
+
 //
 //    @ManyToOne
 //    @JoinTable(name = "userGroups", joinColumns = @JoinColumn(name = "user_id"))

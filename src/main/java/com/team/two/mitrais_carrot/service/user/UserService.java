@@ -5,6 +5,7 @@ import com.team.two.mitrais_carrot.dto.UpdateProfileDto;
 import com.team.two.mitrais_carrot.dto.auth.UserDto;
 import com.team.two.mitrais_carrot.entity.auth.UserEntity;
 import com.team.two.mitrais_carrot.entity.basket.BasketEntity;
+import com.team.two.mitrais_carrot.entity.farmer.BarnEntity;
 import com.team.two.mitrais_carrot.repository.BasketRepository;
 import com.team.two.mitrais_carrot.repository.UserRepository;
 import com.team.two.mitrais_carrot.service.basket.BasketService;
@@ -52,7 +53,7 @@ public class UserService {
         userRepository.save(user);
         System.out.println("FINISHED SAVING USER");
 
-        int barnId = barnService.isActiveBarn(true);
+        BarnEntity barnId = barnService.isActiveBarn(true);
         System.out.println("BARN ID = " + barnId);
 
         BasketEntity basket = basketService.add(user.getId());

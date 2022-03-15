@@ -78,11 +78,11 @@ public class BasketService {
     }
 
     public BasketEntity getActiveBasket (UserEntity user, boolean isActive) {
-        return basketRepository.findByUserIdAndBarnId(user.getId(), barnService.isActiveBarn(isActive));
+        return basketRepository.findByUserIdAndBarnId(user.getId(), barnService.isActiveBarn(isActive).getBarnId());
     }
 
     public int getActiveBasketId (UserEntity user, boolean isActive) {
-        return getActiveBasket(user, isActive).getId();
+        return getActiveBasket(user, isActive).getBasketId();
     }
 
     public long getTotalCarrot(UserEntity user){

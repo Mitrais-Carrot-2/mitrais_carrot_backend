@@ -2,6 +2,7 @@ package com.team.two.mitrais_carrot.entity.basket;
 
 import java.time.LocalDate;
 
+import com.team.two.mitrais_carrot.entity.farmer.BarnEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,11 +20,11 @@ import com.team.two.mitrais_carrot.entity.auth.UserEntity;
 @Table(name = "baskets")
 public class BasketEntity {
     @Id
-    @Column(name = "id")
+//    @Column(name = "id")
     @GeneratedValue
-    private int id;
+    private int basketId;
 
-    public BasketEntity(long userId, int barnId, long carrotAmount, long rewardCarrot, long shareCarrot, long bazaarCarrot) {
+    public BasketEntity(long userId, BarnEntity barnId, long carrotAmount, long rewardCarrot, long shareCarrot, long bazaarCarrot) {
         this.userId = userId;
         this.barnId = barnId;
         this.carrotAmount = carrotAmount;
@@ -35,8 +36,9 @@ public class BasketEntity {
     @Column(name = "user_id")
     private long userId;
 
-    @Column(name = "barn_id")
-    private int barnId;
+    @ManyToOne
+    @JoinColumn(name = "barnId")
+    private BarnEntity barnId;
 
     @Column(name = "carrotAmount")
     private long carrotAmount;
@@ -50,12 +52,4 @@ public class BasketEntity {
     @Column(name = "bazaarCarrot")
     private long bazaarCarrot;
 
-    public BasketEntity(long userId, long barnId, long carrotAmount, long rewardCarrot, long shareCarrot, long bazaarCarrot) {
-        this.userId = userId;
-        this.barnId = barnId;
-        this.carrotAmount = carrotAmount;
-        this.rewardCarrot = rewardCarrot;
-        this.shareCarrot = shareCarrot;
-        this.bazaarCarrot = bazaarCarrot;
-    }
 }
