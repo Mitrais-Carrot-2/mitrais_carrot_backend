@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import lombok.*;
+import org.springframework.http.ResponseEntity;
 
 @Entity
 @Getter

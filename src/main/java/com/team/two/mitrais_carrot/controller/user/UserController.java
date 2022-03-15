@@ -33,9 +33,9 @@ public class UserController {
         return userService.getAll();
     }
 
-//    @GetMapping("{id}")
-//    public UserEntity getUser(@PathVariable("id") String id){
-//        return userService.getById(Long.parseLong(id));
-//    }
+    @GetMapping("{id}")
+    public UserEntity getUser(@PathVariable("id") String id){
+        return userService.getById(Long.parseLong(id));
+    }
 
 }
