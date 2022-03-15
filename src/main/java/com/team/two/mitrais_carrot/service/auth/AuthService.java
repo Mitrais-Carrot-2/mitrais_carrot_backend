@@ -26,6 +26,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -45,6 +46,12 @@ public class AuthService {
 
     @Autowired
     RoleRepository roleRepository;
+
+    @Autowired
+    BasketRepository basketRepository;
+
+    @Autowired
+    BarnRepository barnRepository;
 
     @Autowired
     PasswordEncoder encoder;
@@ -88,7 +95,8 @@ public class AuthService {
         UserEntity user = new UserEntity(signUpRequest.getUsername(),
                 encoder.encode(signUpRequest.getPassword()),
                 signUpRequest.getEmail());
-
+        user.setBirthDate(LocalDate.now());
+        user.setDayOfYearBirthDay(user.getBirthDate().getDayOfYear());
         Set<String> strRoles = signUpRequest.getRole();
         Set<RoleEntity> roles = new HashSet<>();
 
@@ -142,7 +150,10 @@ public class AuthService {
             userRoleEntity.add(new UserRoleEntity(user.getId(), r.getId()));
         });
 
+        BarnEntity barn = barnRepository.findByIsActive(true);
+        basketRepository.save(new BasketEntity(user.getId(), barn.getBarnId(), 0, 0, 0, 0));
         userRoleRepository.saveAll(userRoleEntity);
+
         return ResponseEntity.ok(new MessageDto("Sign Up Successfully!", true));
     }
 }

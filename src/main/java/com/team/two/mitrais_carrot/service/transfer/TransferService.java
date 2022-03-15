@@ -1,7 +1,6 @@
 package com.team.two.mitrais_carrot.service.transfer;
 
 import com.team.two.mitrais_carrot.entity.auth.UserEntity;
-import com.team.two.mitrais_carrot.entity.basket.BasketEntity;
 import com.team.two.mitrais_carrot.entity.farmer.BarnEntity;
 import com.team.two.mitrais_carrot.entity.transfer.TransferEntity;
 import com.team.two.mitrais_carrot.entity.transfer.ETransferType;

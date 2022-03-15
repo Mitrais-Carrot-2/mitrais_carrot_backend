@@ -49,6 +49,10 @@ public class UserService {
      public UserEntity add(UserDto req){
         UserEntity user = new UserEntity(req.getUsername(), req.getPassword(), req.getEmail());
 
+        user.setBirthDate(LocalDate.now());
+
+        user.setDayOfYearBirthDay(user.getBirthDate().getDayOfYear());
+
         userRepository.save(user);
         System.out.println("FINISHED SAVING USER");
 
@@ -56,7 +60,7 @@ public class UserService {
         System.out.println("BARN ID = " + barnId);
 
         BasketEntity basket = basketService.add(user.getId());
-        user.getBaskets().add(basket);
+        user.setBaskets(basket);
         System.out.println("SET BASKET" + basket);
 
         return userRepository.save(user);

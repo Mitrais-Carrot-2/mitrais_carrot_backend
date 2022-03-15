@@ -23,7 +23,7 @@ public class BarnEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	// TODO : Buat relasi ke barnToFreezer sebagai PK
-	private int id;
+	private int barnId;
 
 	@Column(name = "id_user")
 	// TODO : Buat relasi ke user sebagai FK
@@ -53,8 +53,11 @@ public class BarnEntity {
 			joinColumns = @JoinColumn(name = "barn_id"))
 	private List<BasketEntity> baskets = new ArrayList<>();
 
-	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinTable(name = "freezers",
-			joinColumns = @JoinColumn(name = "barn_id"))
-	private FreezerEntity freezers;
+//	@ManyToOne(cascade = CascadeType.ALL)
+//	@JoinTable(name = "freezers",
+//			joinColumns = @JoinColumn(name = "barn_id"));
+
+	@OneToMany(targetEntity = FreezerEntity.class, mappedBy = "freezerId", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	private List<FreezerEntity> freezerId;
+
 }
