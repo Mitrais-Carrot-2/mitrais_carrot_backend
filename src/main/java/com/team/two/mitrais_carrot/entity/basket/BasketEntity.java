@@ -17,14 +17,14 @@ import com.team.two.mitrais_carrot.entity.auth.UserEntity;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "baskets", schema = "public")
+@Table(name = "baskets")
 public class BasketEntity {
     @Id
-    @Column(name = "id")
+//    @Column(name = "id")
     @GeneratedValue
-    private int id;
+    private int basketId;
 
-    public BasketEntity(UserEntity userId, BarnEntity barnId, long carrotAmount, long rewardCarrot, long shareCarrot, long bazaarCarrot) {
+    public BasketEntity(long userId, BarnEntity barnId, long carrotAmount, long rewardCarrot, long shareCarrot, long bazaarCarrot) {
         this.userId = userId;
         this.barnId = barnId;
         this.carrotAmount = carrotAmount;
@@ -33,12 +33,11 @@ public class BasketEntity {
         this.bazaarCarrot = bazaarCarrot;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private UserEntity userId;
+    @Column(name = "user_id")
+    private long userId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "barn_id", nullable = true)
+    @ManyToOne
+    @JoinColumn(name = "barnId")
     private BarnEntity barnId;
 
     @Column(name = "carrotAmount")

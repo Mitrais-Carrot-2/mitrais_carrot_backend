@@ -28,8 +28,8 @@ public class TransferService {
     public TransferEntity transferBarnReward(UserEntity user, Long carrotAmount, ETransferType type) {
         BarnEntity activeBarn = barnService.isActiveBarn(true);
         // Integer activeBarn = 1;
-//        BarnEntity barn = barnService.getBarnById(activeBarn);
-        if (activeBarn.getCarrotAmount() >= carrotAmount) {
+        BarnEntity barn = barnService.getBarnById(activeBarn.getBarnId());
+        if (barn.getCarrotAmount() >= carrotAmount) {
             Long currentAmount = basketService.getRewardCarrot(user);
             Long userId = user.getId();
             Long updatedAmount = currentAmount + carrotAmount;

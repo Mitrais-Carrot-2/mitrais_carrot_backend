@@ -10,6 +10,7 @@ import javax.persistence.*;
 import com.team.two.mitrais_carrot.entity.basket.BasketEntity;
 import com.team.two.mitrais_carrot.entity.freezer.FreezerEntity;
 import lombok.*;
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Value;
 
 @Entity
@@ -17,13 +18,13 @@ import org.springframework.beans.factory.annotation.Value;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "barns", schema = "public")
+@Table(name = "barns")
 public class BarnEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	// TODO : Buat relasi ke barnToFreezer sebagai PK
-	private int barnId;
+	private Integer barnId;
 
 	@Column(name = "id_user")
 	// TODO : Buat relasi ke user sebagai FK
@@ -48,14 +49,9 @@ public class BarnEntity {
 	@Value("${cp.barns.distributed_carrot: 0}")
 	private Long distributedCarrot = 0L;
 
-	@OneToMany(mappedBy = "barnId", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private List<BasketEntity> baskets = new ArrayList<>();
-
-//	@ManyToOne(cascade = CascadeType.ALL)
-//	@JoinTable(name = "freezers",
-//			joinColumns = @JoinColumn(name = "barn_id"));
+	@OneToMany(targetEntity = FreezerEntity.class, mappedBy = "basketId", fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+	private List<BasketEntity> basketId;
 
 	@OneToMany(targetEntity = FreezerEntity.class, mappedBy = "freezerId", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private List<FreezerEntity> freezerId;
-
 }
