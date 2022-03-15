@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 
+// import com.team.two.mitrais_carrot.entity.transfer.ETransferType;
 
 import lombok.*;
 
@@ -34,8 +35,8 @@ public class TransferEntity {
 
     @Column(name = "type")
     @NotBlank
-    // @Enumerated(EnumType.STRING)
-    private String type;
+    @Enumerated(EnumType.STRING)
+    private ETransferType type;
 
     @Column(name = "description")
     @NotBlank

@@ -2,6 +2,8 @@ package com.team.two.mitrais_carrot.entity.admin;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -31,7 +33,7 @@ public class BarnRewardEntity {
     private int carrotAmount;
 
     @Column(name = "giving_conditional")
-    // @Enumerated(EnumType.STRING)
-    private String givingConditional; //Sebagai referensi Cron job untuk memberi carrot. Referensi ada 3: Birth Day, Join Date dan end of the year
+    @Enumerated(EnumType.STRING)
+    private ETypeBarnReward givingConditional; //Sebagai referensi Cron job untuk memberi carrot. Referensi ada 3: Birth Day, Join Date dan end of the year
 
 }
