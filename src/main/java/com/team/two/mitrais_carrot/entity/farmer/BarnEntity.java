@@ -48,7 +48,7 @@ public class BarnEntity {
 	@Value("${cp.barns.distributed_carrot: 0}")
 	private Long distributedCarrot = 0L;
 
-	@ManyToOne(cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL)
 	@JoinTable(name = "baskets",
 			joinColumns = @JoinColumn(name = "barn_id"))
 	private BasketEntity baskets;

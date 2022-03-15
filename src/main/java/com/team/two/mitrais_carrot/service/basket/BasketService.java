@@ -4,16 +4,18 @@ import com.team.two.mitrais_carrot.entity.auth.UserEntity;
 import com.team.two.mitrais_carrot.entity.basket.BasketEntity;
 import com.team.two.mitrais_carrot.repository.BasketRepository;
 import com.team.two.mitrais_carrot.service.farmer.BarnService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class BasketService {
+    @Autowired
     private BasketRepository basketRepository;
-    private BarnService barnService;
 
-    public BasketService(BasketRepository basketRepository) { this.basketRepository = basketRepository;}
+    @Autowired
+    private BarnService barnService;
 
     public BasketEntity add(long userId){
         BasketEntity basket = new BasketEntity();
@@ -25,8 +27,6 @@ public class BasketService {
         basket.setBazaarCarrot(0L);
         basket.setCarrotAmount(0L);
 
-//        user.getBaskets().add(basket);
-
         return basketRepository.save(basket);
     }
 
@@ -35,7 +35,11 @@ public class BasketService {
     }
 
     public BasketEntity updateCarrot(UserEntity user, long addCarrot, EBasket transferType){
+        System.out.println("GET NEW ACTIVE BASKET");
+
         BasketEntity basket = getActiveBasket(user, true);
+
+        System.out.println("basket = " + basket);
 
         if (transferType == EBasket.SHARE){
             addShareCarrot(basket, addCarrot);

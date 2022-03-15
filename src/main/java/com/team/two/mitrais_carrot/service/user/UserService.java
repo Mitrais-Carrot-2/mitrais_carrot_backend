@@ -23,18 +23,33 @@ import java.util.List;
 
 @Service
 public class UserService {
-    private final UserRepository userRepository;
+    @Autowired
+    private UserRepository userRepository;
 
+    @Autowired
+    private BasketRepository basketRepository;
+
+    @Autowired
     private BasketService basketService;
+
+    @Autowired
+    private BarnService barnService;
 
     @Autowired
     PasswordEncoder encoder;
 
-    public UserService(UserRepository userRepository) {this.userRepository = userRepository;}
 
      public UserEntity add(UserDto req){
         UserEntity user = new UserEntity(req.getUsername(), req.getPassword(), req.getEmail());
-//        basketService.add(user);
+        userRepository.save(user);
+        System.out.println("FINISHED SAVING USER");
+
+        int barnId = barnService.isActiveBarn(true);
+        System.out.println("BARN ID = " + barnId);
+
+        BasketEntity basket = basketService.add(user.getId());
+        user.setBaskets(basket);
+        System.out.println("SET BASKET" + basket);
 
         return userRepository.save(user);
      }

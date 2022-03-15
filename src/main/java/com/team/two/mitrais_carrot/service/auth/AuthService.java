@@ -52,10 +52,6 @@ public class AuthService {
     @Autowired
     JwtUtils jwtUtils;
 
-    private BarnRepository barnRepository;
-    private BasketRepository basketRepository;
-
-
     public JwtDto login(LoginDto loginRequest) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
@@ -140,9 +136,6 @@ public class AuthService {
         user.setRoles(roles);
         user.setActive(true);
         userRepository.save(user);
-
-        BarnEntity barn = barnRepository.findByIsActive(true);
-        basketRepository.save(new BasketEntity(user.getId(), barn.getId(), 0, 0, 0, 0));
 
         List<UserRoleEntity> userRoleEntity = new ArrayList<>();
             roles.forEach(r ->{

@@ -23,7 +23,7 @@ public class BasketEntity {
     @GeneratedValue
     private int id;
 
-    public BasketEntity(long userId, long barnId, long carrotAmount, long rewardCarrot, long shareCarrot, long bazaarCarrot) {
+    public BasketEntity(long userId, int barnId, long carrotAmount, long rewardCarrot, long shareCarrot, long bazaarCarrot) {
         this.userId = userId;
         this.barnId = barnId;
         this.carrotAmount = carrotAmount;
@@ -36,7 +36,7 @@ public class BasketEntity {
     private long userId;
 
     @Column(name = "barn_id")
-    private long barnId;
+    private int barnId;
 
     @Column(name = "carrotAmount")
     private long carrotAmount;
