@@ -20,7 +20,7 @@ public class BasketService {
     }
 
     public BasketEntity getActiveBasket (UserEntity user, boolean isActive) {
-        return basketRepository.findByUserIdAndBarnId(user.getId(), barnService.getActiveBarnId(isActive));
+        return basketRepository.findByUserIdAndBarnId(user.getId(), barnService.isActiveBarn(isActive));
     }
 
     public int getActiveBasketId (UserEntity user, boolean isActive) {

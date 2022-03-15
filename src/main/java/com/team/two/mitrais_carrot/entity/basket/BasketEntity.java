@@ -23,6 +23,12 @@ public class BasketEntity {
     @GeneratedValue
     private int id;
 
+    @Column(name = "user_id")
+    private long userId;
+
+    @Column(name = "barn_id")
+    private long barnId;
+
     @Column(name = "carrotAmount")
     private long carrotAmount;
 
