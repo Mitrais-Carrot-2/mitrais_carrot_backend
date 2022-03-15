@@ -7,6 +7,5 @@ import lombok.Setter;
 @Setter
 public class StaffGroupDto {
     private String name;
-
-    private int userId;
+    private Long managerId;
 }

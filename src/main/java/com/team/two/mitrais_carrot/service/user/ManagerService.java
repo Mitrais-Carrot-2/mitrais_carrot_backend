@@ -1,9 +1,12 @@
 package com.team.two.mitrais_carrot.service.user;
 
-import com.team.two.mitrais_carrot.dto.merchant.StaffGroupDto;
+import com.team.two.mitrais_carrot.dto.user.GroupDto;
 import com.team.two.mitrais_carrot.dto.user.StaffDto;
 import com.team.two.mitrais_carrot.entity.auth.UserEntity;
 import com.team.two.mitrais_carrot.entity.group.GroupEntity;
+import com.team.two.mitrais_carrot.entity.group.UserGroupEntity;
+import com.team.two.mitrais_carrot.repository.user.GroupRepository;
+import com.team.two.mitrais_carrot.repository.user.UserGroupRepository;
 import com.team.two.mitrais_carrot.repository.UserRepository;
 import com.team.two.mitrais_carrot.repository.user.ManagerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +14,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ManagerService {
@@ -19,13 +21,19 @@ public class ManagerService {
     UserRepository userRepository;
 
     @Autowired
+    UserGroupRepository userGroupRepository;
+
+    @Autowired
     ManagerRepository managerRepository;
+
+    @Autowired
+    GroupRepository groupRepository;
 
 //        UserDetailsImpl user = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 //        Long supervisorId = user.getId();
+    Long supervisorId = 2L;
 
     public List<StaffDto> fetchMyStaff(){
-        Long supervisorId = 2L;
         List<UserEntity> staff = managerRepository.findBySupervisorId(supervisorId);
         List<StaffDto> result = new ArrayList<>();
         staff.forEach(s ->
@@ -41,7 +49,14 @@ public class ManagerService {
         return result;
     }
 
-//    public List<StaffGroupDto> fetchMyGroup(){
-//        List<GroupEntity>
-//    }
+    public List<GroupDto> fetchMyGroup(){
+        List<GroupEntity> groups = groupRepository.findByManagerId(supervisorId);
+
+        List<GroupDto> groupDto = new ArrayList<>();
+        groups.forEach(g -> {
+            List<UserGroupEntity> staff = userGroupRepository.findByGroupId(g.getId());
+            groupDto.add(new GroupDto(g.getId(), g.getName(), g.getAllocation(), staff.size(), g.getAllocation()*staff.size(), g.getNote()));
+        });
+        return groupDto;
+    }
 }

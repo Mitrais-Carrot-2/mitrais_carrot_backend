@@ -21,9 +21,15 @@ public class GroupEntity {
     private String name;
 
     @Column(name = "manager_id")
-    private int managerId;
+    private Long managerId;
+
+    @Column(name = "allocation")
+    private long allocation;
+
+    @Column(name = "note")
+    private String note;
 
     @ManyToOne
-    @JoinTable(name = "userGroups", joinColumns = @JoinColumn(name = "id"))
+    @JoinTable(name = "userGroups", joinColumns = @JoinColumn(name = "group_id"))
     private UserGroupEntity userGroup;
 }
