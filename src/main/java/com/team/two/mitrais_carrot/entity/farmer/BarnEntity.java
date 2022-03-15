@@ -49,7 +49,7 @@ public class BarnEntity {
 	@Value("${cp.barns.distributed_carrot: 0}")
 	private Long distributedCarrot = 0L;
 
-	@OneToMany(targetEntity = FreezerEntity.class, mappedBy = "basketId", fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+	@OneToMany(targetEntity = BasketEntity.class, mappedBy = "basketId", fetch = FetchType.EAGER,cascade = CascadeType.ALL)
 	private List<BasketEntity> basketId;
 
 	@OneToMany(targetEntity = FreezerEntity.class, mappedBy = "freezerId", fetch = FetchType.EAGER, cascade = CascadeType.ALL)

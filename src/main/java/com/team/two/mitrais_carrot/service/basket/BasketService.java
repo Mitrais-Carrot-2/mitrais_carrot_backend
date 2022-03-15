@@ -17,7 +17,7 @@ public class BasketService {
     @Autowired
     private BarnService barnService;
 
-    public BasketEntity add(UserEntity userId){
+    public BasketEntity add(long userId){
         BasketEntity basket = new BasketEntity();
 
         basket.setUserId(userId);
@@ -82,7 +82,7 @@ public class BasketService {
     }
 
     public int getActiveBasketId (UserEntity user, boolean isActive) {
-        return getActiveBasket(user, isActive).getId();
+        return getActiveBasket(user, isActive).getBasketId();
     }
 
     public long getTotalCarrot(UserEntity user){

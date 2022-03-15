@@ -61,7 +61,7 @@ public class UserService {
         BarnEntity barnId = barnService.isActiveBarn(true);
         System.out.println("BARN ID = " + barnId.getBarnId());
 
-        BasketEntity basket = basketService.add(user);
+        BasketEntity basket = basketService.add(user.getId());
         user.getBaskets().add(basket);
         System.out.println("SET BASKET" + basket);
 
