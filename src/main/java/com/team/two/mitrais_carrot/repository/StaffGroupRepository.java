@@ -6,4 +6,5 @@ import com.team.two.mitrais_carrot.entity.group.GroupEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface StaffGroupRepository extends JpaRepository<GroupEntity, Integer> {
+
 }

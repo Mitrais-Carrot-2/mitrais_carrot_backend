@@ -3,15 +3,11 @@ package com.team.two.mitrais_carrot.service.merchant;
 import com.team.two.mitrais_carrot.dto.merchant.NewGroupMemberDto;
 import com.team.two.mitrais_carrot.dto.merchant.StaffGroupDto;
 import com.team.two.mitrais_carrot.entity.group.GroupEntity;
-import com.team.two.mitrais_carrot.entity.group.GroupEntity;
-import com.team.two.mitrais_carrot.entity.userGroup.UserGroupEntity;
+import com.team.two.mitrais_carrot.entity.group.UserGroupEntity;
 import com.team.two.mitrais_carrot.repository.StaffGroupRepository;
 import com.team.two.mitrais_carrot.repository.UserGroupRepository;
-import org.apache.catalina.User;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,10 +21,6 @@ public class StaffGroupService {
         this.userGroupRepository = userGroupRepository;
     }
 
-
-
-
-
     public List<GroupEntity> getAllGroups(){
         return (List<GroupEntity>) staffGroupRepository.findAll();
     }
@@ -40,14 +32,14 @@ public class StaffGroupService {
     public GroupEntity createStaffGroup(StaffGroupDto request){
         GroupEntity group = new GroupEntity();
         group.setName(request.getName());
-        group.setUserId(request.getUserId());
+        group.setManagerId(request.getUserId());
         return staffGroupRepository.save(group);
     }
 
     public GroupEntity updateStaffGroup(StaffGroupDto request, Integer id){
         GroupEntity group = staffGroupRepository.getById(id);
         group.setName(request.getName());
-        group.setUserId(request.getUserId());
+        group.setManagerId(request.getUserId());
         return staffGroupRepository.save(group);
     }
 

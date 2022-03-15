@@ -5,7 +5,7 @@ import com.team.two.mitrais_carrot.dto.merchant.NewGroupMemberDto;
 import com.team.two.mitrais_carrot.dto.merchant.StaffGroupDto;
 import com.team.two.mitrais_carrot.entity.group.GroupEntity;
 //import com.team.two.mitrais_carrot.entity.merchant.StaffGroupEntity;
-import com.team.two.mitrais_carrot.entity.userGroup.UserGroupEntity;
+import com.team.two.mitrais_carrot.entity.group.UserGroupEntity;
 import com.team.two.mitrais_carrot.service.merchant.StaffGroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
