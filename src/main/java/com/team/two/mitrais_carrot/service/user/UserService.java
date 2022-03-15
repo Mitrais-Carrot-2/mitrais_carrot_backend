@@ -16,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.filter.CommonsRequestLoggingFilter;
 
+import java.time.LocalDate;
 import java.util.List;
 
 
@@ -33,12 +34,22 @@ public class UserService {
 
      public UserEntity add(UserDto req){
         UserEntity user = new UserEntity(req.getUsername(), req.getPassword(), req.getEmail());
+        //Isi manual birthday
+        user.setBirthDate(LocalDate.now());
+        user.setDayOfYearBirthDay(user.getBirthDate().getDayOfYear());
         return userRepository.save(user);
      }
 
     public List<UserEntity> getAll(){ return userRepository.findAll(); }
 
     public UserEntity getById(long id){ return userRepository.findById(id).orElse(null);}
+
+    public List<UserEntity> getBirthdayPerson(){
+
+        // return this.getAll().stream().filter(person -> {return person.getDayOfYearBirthDay() == LocalDate.now().getDayOfYear();}).collect(Collectors.toList());
+        
+        return userRepository.findAllByDayOfYearBirthDay(LocalDate.now().getDayOfYear());
+    }
 
     public UserEntity getByUsername(String username){ return userRepository.findByUsername(username).orElse(null); }
     //public change password function
