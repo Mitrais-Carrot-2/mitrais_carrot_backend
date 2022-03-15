@@ -40,4 +40,13 @@ public class BasketEntity {
 
     @Column(name = "bazaarCarrot")
     private long bazaarCarrot;
+
+    public BasketEntity(long userId, long barnId, long carrotAmount, long rewardCarrot, long shareCarrot, long bazaarCarrot) {
+        this.userId = userId;
+        this.barnId = barnId;
+        this.carrotAmount = carrotAmount;
+        this.rewardCarrot = rewardCarrot;
+        this.shareCarrot = shareCarrot;
+        this.bazaarCarrot = bazaarCarrot;
+    }
 }

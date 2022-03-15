@@ -8,9 +8,13 @@ import com.team.two.mitrais_carrot.entity.auth.ERole;
 import com.team.two.mitrais_carrot.entity.auth.RoleEntity;
 import com.team.two.mitrais_carrot.entity.auth.UserEntity;
 import com.team.two.mitrais_carrot.entity.auth.UserRoleEntity;
+import com.team.two.mitrais_carrot.entity.basket.BasketEntity;
+import com.team.two.mitrais_carrot.entity.farmer.BarnEntity;
+import com.team.two.mitrais_carrot.repository.BasketRepository;
 import com.team.two.mitrais_carrot.repository.RoleRepository;
 import com.team.two.mitrais_carrot.repository.UserRepository;
 import com.team.two.mitrais_carrot.repository.UserRoleRepository;
+import com.team.two.mitrais_carrot.repository.farmer.BarnRepository;
 import com.team.two.mitrais_carrot.security.jwt.JwtUtils;
 import com.team.two.mitrais_carrot.security.services.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +45,12 @@ public class AuthService {
 
     @Autowired
     RoleRepository roleRepository;
+
+    @Autowired
+    BasketRepository basketRepository;
+
+    @Autowired
+    BarnRepository barnRepository;
 
     @Autowired
     PasswordEncoder encoder;
@@ -138,7 +148,10 @@ public class AuthService {
             userRoleEntity.add(new UserRoleEntity(user.getId(), r.getId()));
         });
 
+        BarnEntity barn = barnRepository.findByIsActive(true);
+        basketRepository.save(new BasketEntity(user.getId(), barn.getBarnId(), 0, 0, 0, 0));
         userRoleRepository.saveAll(userRoleEntity);
+
         return ResponseEntity.ok(new MessageDto("Sign Up Successfully!", true));
     }
 }

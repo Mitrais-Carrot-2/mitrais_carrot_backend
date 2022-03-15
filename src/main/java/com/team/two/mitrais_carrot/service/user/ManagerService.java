@@ -1,10 +1,16 @@
 package com.team.two.mitrais_carrot.service.user;
 
+import com.team.two.mitrais_carrot.dto.manager.TransferToStaffDto;
 import com.team.two.mitrais_carrot.dto.user.GroupDto;
 import com.team.two.mitrais_carrot.dto.user.StaffDto;
 import com.team.two.mitrais_carrot.entity.auth.UserEntity;
+import com.team.two.mitrais_carrot.entity.basket.BasketEntity;
+import com.team.two.mitrais_carrot.entity.farmer.BarnEntity;
+import com.team.two.mitrais_carrot.entity.freezer.FreezerEntity;
 import com.team.two.mitrais_carrot.entity.group.GroupEntity;
 import com.team.two.mitrais_carrot.entity.group.UserGroupEntity;
+import com.team.two.mitrais_carrot.repository.BasketRepository;
+import com.team.two.mitrais_carrot.repository.farmer.BarnRepository;
 import com.team.two.mitrais_carrot.repository.user.GroupRepository;
 import com.team.two.mitrais_carrot.repository.user.UserGroupRepository;
 import com.team.two.mitrais_carrot.repository.UserRepository;
@@ -29,6 +35,12 @@ public class ManagerService {
     @Autowired
     GroupRepository groupRepository;
 
+    @Autowired
+    BasketRepository basketRepository;
+
+    @Autowired
+    BarnRepository barnRepository;
+
 //        UserDetailsImpl user = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 //        Long supervisorId = user.getId();
     Long supervisorId = 2L;
@@ -46,6 +58,22 @@ public class ManagerService {
                 s.getJobGrade())
             )
         );
+        return result;
+    }
+
+    public TransferToStaffDto transferToStaff(TransferToStaffDto req){
+        BarnEntity barn = barnRepository.findByIsActive(true);
+        BasketEntity oldBasket = basketRepository.findByUserIdAndBarnId(req.getStaffId(), barn.getBarnId());
+
+        BasketEntity newBasket = new BasketEntity(req.getStaffId(), barn.getBarnId(), oldBasket.getShareCarrot() + req.getCarrotAmount(), 0, oldBasket.getShareCarrot() + req.getCarrotAmount(), 0);
+        basketRepository.save(newBasket);
+
+        TransferToStaffDto result = new TransferToStaffDto();
+        result.setStaffId(newBasket.getUserId());
+        result.setCarrotAmount(newBasket.getCarrotAmount());
+        result.setSharedAmount(newBasket.getShareCarrot());
+        result.setNote(req.getNote());
+
         return result;
     }
 

@@ -1,6 +1,7 @@
 package com.team.two.mitrais_carrot.entity.farmer;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import javax.persistence.*;
 // import javax.validation.constraints.NotBlank;
@@ -21,7 +22,7 @@ public class BarnEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	// TODO : Buat relasi ke barnToFreezer sebagai PK
-	private int id;
+	private int barnId;
 
 	@Column(name = "id_user")
 	// TODO : Buat relasi ke user sebagai FK
@@ -51,8 +52,10 @@ public class BarnEntity {
 			joinColumns = @JoinColumn(name = "barn_id"))
 	private BasketEntity basket;
 
-	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinTable(name = "freezer",
-			joinColumns = @JoinColumn(name = "barn_id"))
-	private FreezerEntity freezer;
+//	@ManyToOne(cascade = CascadeType.ALL)
+//	@JoinTable(name = "freezers",
+//			joinColumns = @JoinColumn(name = "barn_id"));
+
+	@OneToMany(targetEntity = FreezerEntity.class, mappedBy = "freezerId", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	private List<FreezerEntity> freezerId;
 }

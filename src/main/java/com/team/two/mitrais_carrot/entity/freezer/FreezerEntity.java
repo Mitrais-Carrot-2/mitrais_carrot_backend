@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+
+import com.team.two.mitrais_carrot.entity.farmer.BarnEntity;
 import lombok.*;
 import org.springframework.http.ResponseEntity;
 
@@ -15,12 +17,13 @@ import org.springframework.http.ResponseEntity;
 @Table(name = "freezers")
 public class FreezerEntity {
     @Id
-    @Column(name = "id")
+//    @Column(name = "freezer_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer freezerId;
 
-    @Column(name = "barn_id")
-    private Integer barnId;
+    @ManyToOne
+    @JoinColumn(name = "barnId")
+    private BarnEntity barnId;
 
     @Column(name = "manager_id")
     private Long managerId;
@@ -30,7 +33,4 @@ public class FreezerEntity {
 
     @Column(name = "distributed_carrot")
     private int distributedCarrot;
-
-    @Column(name = "share_at")
-    private LocalDateTime shareAt;
 }
