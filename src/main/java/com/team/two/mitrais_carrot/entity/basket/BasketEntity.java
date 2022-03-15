@@ -36,7 +36,7 @@ public class BasketEntity {
     private long rewardCarrot;
 
     @Column(name = "sharedCarrot")
-    private long sharedCarrot;
+    private long shareCarrot;
 
     @Column(name = "bazaarCarrot")
     private long bazaarCarrot;

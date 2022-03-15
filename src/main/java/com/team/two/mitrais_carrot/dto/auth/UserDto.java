@@ -7,17 +7,16 @@ import lombok.*;
 @Getter
 @Setter
 public class UserDto {
-    private boolean isActive;
     private String username;
-    private String firstName;
-    private String lastName;
+//    private String firstName;
+//    private String lastName;
     private String password;
-    private String address;
-    private LocalDate birthDate;
+//    private String address;
+//    private LocalDate birthDate;
     private String email;
-    private int supervisorId;
-    private byte[] image;
-    private String jobFamily;
-    private String jobGrade;
-    private String office;
+//    private int supervisorId;
+//    private byte[] image;
+//    private String jobFamily;
+//    private String jobGrade;
+//    private String office;
 }

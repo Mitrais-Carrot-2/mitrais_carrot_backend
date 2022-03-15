@@ -40,18 +40,6 @@ public class UserService {
 
     public UserEntity getById(long id){ return userRepository.findById(id).orElse(null);}
 
-    public UserEntity updateCarrot(int userId, int addCarrot){
-        UserEntity user = getById(userId);
-
-        BasketEntity basket = basketService.getActiveBasket(user, true);
-
-        long newCarrot = basket.getCarrotAmount() + addCarrot;
-        if (newCarrot < 0) newCarrot = 0;
-        basket.setCarrotAmount(newCarrot);
-
-        return userRepository.save(user);
-    }
-
     public UserEntity getByUsername(String username){ return userRepository.findByUsername(username).orElse(null); }
     //public change password function
     public Boolean changePassword(String username, String oldPassword, String newPassword){
