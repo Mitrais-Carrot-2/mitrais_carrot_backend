@@ -51,7 +51,7 @@ public class BarnEntity {
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinTable(name = "baskets",
 			joinColumns = @JoinColumn(name = "barn_id"))
-	private BasketEntity baskets;
+	private List<BasketEntity> baskets = new ArrayList<>();
 
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinTable(name = "freezers",

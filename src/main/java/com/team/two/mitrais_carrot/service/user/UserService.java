@@ -56,7 +56,7 @@ public class UserService {
         System.out.println("BARN ID = " + barnId);
 
         BasketEntity basket = basketService.add(user.getId());
-        user.setBaskets(basket);
+        user.getBaskets().add(basket);
         System.out.println("SET BASKET" + basket);
 
         return userRepository.save(user);
