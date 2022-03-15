@@ -1,6 +1,7 @@
 package com.team.two.mitrais_carrot.entity.auth;
 
 import com.team.two.mitrais_carrot.entity.basket.BasketEntity;
+import com.team.two.mitrais_carrot.entity.group.UserGroupEntity;
 import lombok.*;
 
 import org.hibernate.annotations.Type;
@@ -92,4 +93,7 @@ public class UserEntity {
             joinColumns = @JoinColumn(name = "user_id"))
     private BasketEntity baskets;
 
+    @ManyToOne
+    @JoinTable(name = "userGroups", joinColumns = @JoinColumn(name = "user_id"))
+    private UserGroupEntity userGroup;
 }
