@@ -1,10 +1,7 @@
 package com.team.two.mitrais_carrot.entity.auth;
 
 import com.team.two.mitrais_carrot.entity.basket.BasketEntity;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import org.hibernate.annotations.Type;
 
@@ -34,7 +31,7 @@ public class UserEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private boolean flag;
+    private boolean isActive;
 
     @Column(name = "username", nullable = false)
 //    @NotBlank(message = "Username is required")
@@ -94,7 +91,7 @@ public class UserEntity {
             joinColumns = @JoinColumn(name = "user_id"))
     private BasketEntity baskets;
 
-    public boolean isFlag() {
-        return flag;
+    public boolean isActive() {
+        return isActive;
     }
 }
