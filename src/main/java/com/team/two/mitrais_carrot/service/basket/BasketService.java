@@ -15,6 +15,21 @@ public class BasketService {
 
     public BasketService(BasketRepository basketRepository) { this.basketRepository = basketRepository;}
 
+    public BasketEntity add(long userId){
+        BasketEntity basket = new BasketEntity();
+
+        basket.setUserId(userId);
+        basket.setBarnId(barnService.isActiveBarn(true));
+        basket.setShareCarrot(0L);
+        basket.setRewardCarrot(0L);
+        basket.setBazaarCarrot(0L);
+        basket.setCarrotAmount(0L);
+
+//        user.getBaskets().add(basket);
+
+        return basketRepository.save(basket);
+    }
+
     public List<BasketEntity> getAll() {
         return (List<BasketEntity>) basketRepository.findAll();
     }

@@ -23,6 +23,15 @@ public class BasketEntity {
     @GeneratedValue
     private int id;
 
+    public BasketEntity(long userId, long barnId, long carrotAmount, long rewardCarrot, long shareCarrot, long bazaarCarrot) {
+        this.userId = userId;
+        this.barnId = barnId;
+        this.carrotAmount = carrotAmount;
+        this.rewardCarrot = rewardCarrot;
+        this.shareCarrot = shareCarrot;
+        this.bazaarCarrot = bazaarCarrot;
+    }
+
     @Column(name = "user_id")
     private long userId;
 

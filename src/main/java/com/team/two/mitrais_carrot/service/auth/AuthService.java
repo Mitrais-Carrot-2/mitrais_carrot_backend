@@ -8,9 +8,13 @@ import com.team.two.mitrais_carrot.entity.auth.ERole;
 import com.team.two.mitrais_carrot.entity.auth.RoleEntity;
 import com.team.two.mitrais_carrot.entity.auth.UserEntity;
 import com.team.two.mitrais_carrot.entity.auth.UserRoleEntity;
+import com.team.two.mitrais_carrot.entity.basket.BasketEntity;
+import com.team.two.mitrais_carrot.entity.farmer.BarnEntity;
+import com.team.two.mitrais_carrot.repository.BasketRepository;
 import com.team.two.mitrais_carrot.repository.RoleRepository;
 import com.team.two.mitrais_carrot.repository.UserRepository;
 import com.team.two.mitrais_carrot.repository.UserRoleRepository;
+import com.team.two.mitrais_carrot.repository.farmer.BarnRepository;
 import com.team.two.mitrais_carrot.security.jwt.JwtUtils;
 import com.team.two.mitrais_carrot.security.services.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +51,10 @@ public class AuthService {
 
     @Autowired
     JwtUtils jwtUtils;
+
+    private BarnRepository barnRepository;
+    private BasketRepository basketRepository;
+
 
     public JwtDto login(LoginDto loginRequest) {
         Authentication authentication = authenticationManager.authenticate(
@@ -125,13 +133,16 @@ public class AuthService {
 
         if(roles.isEmpty()){
             RoleEntity staffRole = roleRepository.findByName(ERole.ROLE_STAFF)
-                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                    .orElseThrow(() -> new RuntimeException("Error: Role is empty."));
             roles.add(staffRole);
         }
 
         user.setRoles(roles);
         user.setActive(true);
         userRepository.save(user);
+
+        BarnEntity barn = barnRepository.findByIsActive(true);
+        basketRepository.save(new BasketEntity(user.getId(), barn.getId(), 0, 0, 0, 0));
 
         List<UserRoleEntity> userRoleEntity = new ArrayList<>();
             roles.forEach(r ->{

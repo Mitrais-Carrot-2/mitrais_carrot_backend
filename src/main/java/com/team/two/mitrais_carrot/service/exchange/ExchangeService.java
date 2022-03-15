@@ -30,20 +30,20 @@ public class ExchangeService {
     private BasketService basketService;
 
     @Getter
-    enum status{
+    public enum ExchangeStatus{
         Success(200, "[SUCCESS] Purchasing item"),
         NotEnoughCarrots(400, "[FAILED] There are not enough carrots to buy this item"),
         ItemNotFound(404, "[FAILED] Item is not found / unavailable");
 
         int errorCode;
         String message;
-        private status(int errorCode, String message){
+        private ExchangeStatus(int errorCode, String message){
             this.errorCode = errorCode;
             this.message = message;
         }
     }
 
-    private status response;
+    private ExchangeStatus response;
 
     public ExchangeService(ExchangeRepository exchangeRepository) {this.exchangeRepository = exchangeRepository;}
 
@@ -63,22 +63,22 @@ public class ExchangeService {
         return (basket.getCarrotAmount() >= item.getPrice());
     }
 
-    public status buyBazaarItem(int buyerId, int itemId){
+    public ExchangeStatus buyBazaarItem(long buyerId, int itemId){
         UserEntity buyer = userService.getById(buyerId);
         BazaarItemEntity item = bazaarItemService.getById(itemId);
         if (buyer != null){
             if (item == null) {
-                response = status.ItemNotFound;
+                response = ExchangeStatus.ItemNotFound;
             }
             else {
                 if (isCarrotEnough(buyer, item)){
                     add(buyer, item);
                     bazaarItemService.updateQuantity(itemId, -1);
                     basketService.updateCarrot(buyer, -(item.getPrice()), EBasket.BAZAAR);
-                    response = status.Success;
+                    response = ExchangeStatus.Success;
                 }
                 else {
-                    response = status.NotEnoughCarrots;
+                    response = ExchangeStatus.NotEnoughCarrots;
                 }
             }
         }

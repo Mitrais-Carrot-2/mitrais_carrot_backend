@@ -1,6 +1,8 @@
 package com.team.two.mitrais_carrot.entity.farmer;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.*;
 // import javax.validation.constraints.NotBlank;
@@ -49,10 +51,10 @@ public class BarnEntity {
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinTable(name = "baskets",
 			joinColumns = @JoinColumn(name = "barn_id"))
-	private BasketEntity basket;
+	private BasketEntity baskets;
 
 	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinTable(name = "freezer",
+	@JoinTable(name = "freezers",
 			joinColumns = @JoinColumn(name = "barn_id"))
-	private FreezerEntity freezer;
+	private FreezerEntity freezers;
 }

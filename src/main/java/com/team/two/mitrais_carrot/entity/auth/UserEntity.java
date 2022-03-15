@@ -7,7 +7,9 @@ import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -88,7 +90,7 @@ public class UserEntity {
     private Set<RoleEntity> roles = new HashSet<>();
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    @JoinTable(name = "user_baskets",
+    @JoinTable(name = "baskets",
             joinColumns = @JoinColumn(name = "user_id"))
     private BasketEntity baskets;
 
