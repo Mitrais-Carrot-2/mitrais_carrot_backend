@@ -10,9 +10,15 @@ import com.team.two.mitrais_carrot.service.basket.BasketService;
 import com.team.two.mitrais_carrot.service.basket.EBasket;
 import com.team.two.mitrais_carrot.service.farmer.BarnService;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+@Service
 public class TransferService {
     private final TransferRepository transferHistoryRepository;
+    @Autowired
     private BasketService basketService;
+    @Autowired
     private BarnService barnService;
 
     public TransferService(TransferRepository transferHistoryRepository) {
@@ -22,6 +28,7 @@ public class TransferService {
     // TODO : Transfer Rewards -> Admin to user
     public TransferEntity transferBarnReward(UserEntity user, Long carrotAmount, ETransferType type) {
         Integer activeBarn = barnService.isActiveBarn(true);
+        // Integer activeBarn = 1;
         BarnEntity barn = barnService.getBarnById(activeBarn);
         if (barn.getCarrotAmount() >= carrotAmount) {
             Long currentAmount = basketService.getRewardCarrot(user);

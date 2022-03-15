@@ -14,12 +14,15 @@ import com.team.two.mitrais_carrot.repository.admin.BarnRewardRepository;
 import com.team.two.mitrais_carrot.service.transfer.TransferService;
 import com.team.two.mitrais_carrot.service.user.UserService;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class BarnRewardService {
     private final BarnRewardRepository barnRewardRepository;
+    @Autowired
     private UserService userService;
+    @Autowired
     private TransferService transferService;
 
     public BarnRewardService(BarnRewardRepository barnRewardRepository) {
@@ -49,7 +52,6 @@ public class BarnRewardService {
             transferService.transferBarnReward(user, 10L, ETransferType.TYPE_REWARD);
         }
         
-
         return birthdayPerson;
     }
 
