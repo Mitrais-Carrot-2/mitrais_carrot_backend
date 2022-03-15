@@ -44,5 +44,5 @@ public class TransferEntity {
 
     @Column(name = "carrot_amount")
     @NotBlank
-    private int carrotAmount;
+    private Long carrotAmount;
 }
