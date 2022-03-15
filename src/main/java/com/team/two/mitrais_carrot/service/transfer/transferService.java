@@ -1,18 +1,18 @@
-package com.team.two.mitrais_carrot.service.transferHistory;
+package com.team.two.mitrais_carrot.service.transfer;
 
 import com.team.two.mitrais_carrot.entity.auth.UserEntity;
-import com.team.two.mitrais_carrot.entity.transferHistory.TransferHistoryEntity;
-import com.team.two.mitrais_carrot.repository.TransferHistoryRepository;
+import com.team.two.mitrais_carrot.entity.transfer.TransferEntity;
+import com.team.two.mitrais_carrot.repository.TransferRepository;
 
-public class transferHistoryService {
-    private final TransferHistoryRepository transferHistoryRepository;
+public class transferService {
+    private final TransferRepository transferHistoryRepository;
 
-    public transferHistoryService(TransferHistoryRepository transferHistoryRepository) {
+    public transferService(TransferRepository transferHistoryRepository) {
         this.transferHistoryRepository = transferHistoryRepository;
     }
 
     // TODO : Transfer Rewards -> Admin to user
-    public TransferHistoryEntity TransferBarnReward(UserEntity user, int carrotAmount){
+    public TransferEntity TransferBarnReward(UserEntity user, int carrotAmount){
         int currentAmount = 0; //Tungg basket
         Long userId = user.getId();
         int updatedAmount = currentAmount + carrotAmount;
@@ -20,7 +20,7 @@ public class transferHistoryService {
 
         Long adminId = 0l; //Kesepakatan admin id = 0
 
-        TransferHistoryEntity transfer = new TransferHistoryEntity();
+        TransferEntity transfer = new TransferEntity();
         transfer.setReceiverId(userId);
         transfer.setSenderId(adminId);
         transfer.setCarrotAmount(carrotAmount);
@@ -31,6 +31,8 @@ public class transferHistoryService {
     //TODO : Transfer shared -> User to user
 
     //TODO : Transfer Bazaar -> What is this??
+
+    // TODO : List all transfer
 
     
 }

@@ -1,4 +1,4 @@
-package com.team.two.mitrais_carrot.entity.transferHistory;
+package com.team.two.mitrais_carrot.entity.transfer;
 
 import java.time.LocalDate;
 
@@ -14,7 +14,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "transferHistories")
-public class TransferHistoryEntity {
+public class TransferEntity {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
