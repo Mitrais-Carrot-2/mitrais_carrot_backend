@@ -1,7 +1,9 @@
 package com.team.two.mitrais_carrot.controller.user;
 
+import com.team.two.mitrais_carrot.dto.user.GroupDto;
 import com.team.two.mitrais_carrot.dto.user.StaffDto;
 import com.team.two.mitrais_carrot.entity.auth.UserEntity;
+import com.team.two.mitrais_carrot.entity.group.GroupEntity;
 import com.team.two.mitrais_carrot.service.user.ManagerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -25,9 +27,10 @@ public class ManagerController {
     }
 
     // TODO List of Group
-//    public List<GroupDto> fetchMyGroup(){
-//        return managerService.fetchMyGroup();
-//    }
+    @GetMapping("/group")
+    public List<GroupDto> fetchMyGroup(){
+        return managerService.fetchMyGroup();
+    }
 
     // TODO List of Group Staff
 }
