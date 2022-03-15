@@ -1,6 +1,7 @@
 package com.team.two.mitrais_carrot.dto.admin;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.team.two.mitrais_carrot.entity.admin.ETypeBarnReward;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,6 +20,6 @@ public class BarnRewardDto {
     private int carrotAmount;
 
     @JsonProperty("giving_conditional")
-    private String givingConditional;
+    private ETypeBarnReward givingConditional;
 
 }

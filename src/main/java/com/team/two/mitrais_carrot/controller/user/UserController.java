@@ -20,7 +20,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/user")
 public class UserController {
-//    @Autowired
+    @Autowired
     UserService userService;
 
     public UserController(UserService userService) { this.userService = userService; }
