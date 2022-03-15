@@ -98,4 +98,7 @@ public class UserEntity {
 //    @ManyToOne
 //    @JoinTable(name = "userGroups", joinColumns = @JoinColumn(name = "user_id"))
 //    private UserGroupEntity userGroup;
+
+    @Column(name = "dayOfYearBirthDay")
+    private int dayOfYearBirthDay;
 }
