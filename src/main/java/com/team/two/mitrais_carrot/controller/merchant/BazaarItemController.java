@@ -27,8 +27,8 @@ public class BazaarItemController {
         return bazaarItemService.getAll();
     }
 
-//    @GetMapping("{id}")
-//    public BazaarItemEntity getBazaarItem(@PathVariable("id") String id){
-//        return bazaarItemService.getById(Integer.parseInt(id));
-//    }
+    @GetMapping("{id}")
+    public BazaarItemEntity getBazaarItem(@PathVariable("id") String id){
+        return bazaarItemService.getById(Integer.parseInt(id));
+    }
 }

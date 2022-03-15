@@ -24,7 +24,6 @@ import java.util.List;
 public class UserService {
     private final UserRepository userRepository;
 
-    private BasketRepository basketRepository;
     private BasketService basketService;
 
     @Autowired

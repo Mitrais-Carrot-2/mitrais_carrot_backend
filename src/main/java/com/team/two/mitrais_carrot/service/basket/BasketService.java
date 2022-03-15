@@ -26,4 +26,24 @@ public class BasketService {
     public int getActiveBasketId (UserEntity user, boolean isActive) {
         return getActiveBasket(user, isActive).getId();
     }
+
+    public long getTotalCarrot(UserEntity user){
+        BasketEntity activeBasket = getActiveBasket(user, true);
+        return activeBasket.getCarrotAmount();
+    }
+
+    public long getSharedCarrot(UserEntity user){
+        BasketEntity activeBasket = getActiveBasket(user, true);
+        return activeBasket.getSharedCarrot();
+    }
+
+    public long getRewardCarrot(UserEntity user){
+        BasketEntity activeBasket = getActiveBasket(user, true);
+        return activeBasket.getRewardCarrot();
+    }
+
+    public long getBazaarCarrot(UserEntity user){
+        BasketEntity activeBasket = getActiveBasket(user, true);
+        return activeBasket.getBazaarCarrot();
+    }
 }
