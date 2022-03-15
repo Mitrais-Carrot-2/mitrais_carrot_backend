@@ -1,24 +1,27 @@
 package com.team.two.mitrais_carrot.service.user;
 
-import com.team.two.mitrais_carrot.dto.auth.UserDto;
+import com.team.two.mitrais_carrot.dto.UpdatePasswordDto;
+import com.team.two.mitrais_carrot.dto.UpdateProfileDto;
 import com.team.two.mitrais_carrot.entity.auth.UserEntity;
 import com.team.two.mitrais_carrot.entity.basket.BasketEntity;
-import com.team.two.mitrais_carrot.entity.merchant.BazaarItemEntity;
-import com.team.two.mitrais_carrot.repository.BasketRepository;
-import com.team.two.mitrais_carrot.repository.BazaarItemRepository;
 import com.team.two.mitrais_carrot.repository.UserRepository;
 import com.team.two.mitrais_carrot.service.basket.BasketService;
-import com.team.two.mitrais_carrot.service.farmer.BarnService;
-import com.team.two.mitrais_carrot.service.merchant.BazaarItemService;
 
+import lombok.extern.java.Log;
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.filter.CommonsRequestLoggingFilter;
+//import logger
+import org.slf4j.Logger;
+import org.springframework.web.multipart.MultipartFile;
 
+
+import javax.persistence.Lob;
+import java.awt.*;
 import java.time.LocalDate;
 import java.util.List;
-
+import java.util.Optional;
 
 
 @Service
@@ -30,19 +33,16 @@ public class UserService {
     @Autowired
     PasswordEncoder encoder;
 
-    public UserService(UserRepository userRepository) {this.userRepository = userRepository;}
 
-     public UserEntity add(UserDto req){
-        UserEntity user = new UserEntity(req.getUsername(), req.getPassword(), req.getEmail());
-        //Isi manual birthday
-        user.setBirthDate(LocalDate.now());
-        user.setDayOfYearBirthDay(user.getBirthDate().getDayOfYear());
-        return userRepository.save(user);
-     }
+    Logger logger = org.slf4j.LoggerFactory.getLogger(UserService.class);
+
+    public UserService(UserRepository userRepository) {this.userRepository = userRepository;}
 
     public List<UserEntity> getAll(){ return userRepository.findAll(); }
 
-    public UserEntity getById(long id){ return userRepository.findById(id).orElse(null);}
+    public UserEntity getById(long id){
+        return userRepository.findById(id).orElse(null);
+    }
 
     public List<UserEntity> getBirthdayPerson(){
 
@@ -51,17 +51,53 @@ public class UserService {
         return userRepository.findAllByDayOfYearBirthDay(LocalDate.now().getDayOfYear());
     }
 
-    public UserEntity getByUsername(String username){ return userRepository.findByUsername(username).orElse(null); }
-    //public change password function
-    public Boolean changePassword(String username, String oldPassword, String newPassword){
-        UserEntity user = getByUsername(username);
-        if (encoder.matches(oldPassword, user.getPassword())){
-            user.setPassword(encoder.encode(newPassword));
-            userRepository.save(user);
-            return true;
+
+    //findByUsername
+    public UserEntity getByUsername(String username){
+            long userId = userRepository.findByUsername(username).getId();
+            logger.info("User ID: " + userId);
+            if(userId != 0){
+                return getById(userId);
+            }
+            return null;
+    }
+
+    public Boolean checkPassword(String username, String password){
+        long userId = userRepository.findByUsername(username).getId();
+        if(userId != 0){
+            UserEntity user = getById(userId);
+            if(encoder.matches(password, user.getPassword()) == true){
+                logger.info("" + user.getUsername() + " Password is correct");
+                return true;
+            }
+            else {
+                logger.info("" + user.getUsername() + " Password is incorrect");
+                return false;
+            }
+
         }
-        //return password is false or username is not found
         return false;
+    }
+
+    public UserEntity changePassword(String username, String newPassword) {
+        UserEntity user = getByUsername(username);
+        user.setPassword(encoder.encode(newPassword));
+        return userRepository.save(user);
+    }
+
+    public UserEntity updateProfile(String username,UpdateProfileDto req ) {
+        UserEntity user = getByUsername(username);
+        user.setUsername(req.getUsername());
+        user.setFirstName(req.getFirstName());
+        user.setLastName(req.getLastName());
+        user.setAddress(req.getAddress());
+        user.setEmail(req.getEmail());
+
+        return userRepository.save(user);
+        }
+
+    public void changeImage(String username, Lob image) {
+        UserEntity user = getByUsername(username);
     }
 
 }
