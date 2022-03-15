@@ -4,23 +4,42 @@ import com.team.two.mitrais_carrot.entity.auth.UserEntity;
 import com.team.two.mitrais_carrot.entity.basket.BasketEntity;
 import com.team.two.mitrais_carrot.repository.BasketRepository;
 import com.team.two.mitrais_carrot.service.farmer.BarnService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class BasketService {
+    @Autowired
     private BasketRepository basketRepository;
+
+    @Autowired
     private BarnService barnService;
 
-    public BasketService(BasketRepository basketRepository) { this.basketRepository = basketRepository;}
+    public BasketEntity add(long userId){
+        BasketEntity basket = new BasketEntity();
+
+        basket.setUserId(userId);
+        basket.setBarnId(barnService.isActiveBarn(true));
+        basket.setShareCarrot(0L);
+        basket.setRewardCarrot(0L);
+        basket.setBazaarCarrot(0L);
+        basket.setCarrotAmount(0L);
+
+        return basketRepository.save(basket);
+    }
 
     public List<BasketEntity> getAll() {
         return (List<BasketEntity>) basketRepository.findAll();
     }
 
     public BasketEntity updateCarrot(UserEntity user, long addCarrot, EBasket transferType){
+        System.out.println("GET NEW ACTIVE BASKET");
+
         BasketEntity basket = getActiveBasket(user, true);
+
+        System.out.println("basket = " + basket);
 
         if (transferType == EBasket.SHARE){
             addShareCarrot(basket, addCarrot);

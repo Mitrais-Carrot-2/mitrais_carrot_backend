@@ -26,6 +26,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -94,7 +95,8 @@ public class AuthService {
         UserEntity user = new UserEntity(signUpRequest.getUsername(),
                 encoder.encode(signUpRequest.getPassword()),
                 signUpRequest.getEmail());
-
+        user.setBirthDate(LocalDate.now());
+        user.setDayOfYearBirthDay(user.getBirthDate().getDayOfYear());
         Set<String> strRoles = signUpRequest.getRole();
         Set<RoleEntity> roles = new HashSet<>();
 
@@ -135,7 +137,7 @@ public class AuthService {
 
         if(roles.isEmpty()){
             RoleEntity staffRole = roleRepository.findByName(ERole.ROLE_STAFF)
-                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                    .orElseThrow(() -> new RuntimeException("Error: Role is empty."));
             roles.add(staffRole);
         }
 

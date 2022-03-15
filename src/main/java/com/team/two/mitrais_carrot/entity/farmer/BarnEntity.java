@@ -1,6 +1,7 @@
 package com.team.two.mitrais_carrot.entity.farmer;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.*;
@@ -47,15 +48,22 @@ public class BarnEntity {
 	@Value("${cp.barns.distributed_carrot: 0}")
 	private Long distributedCarrot = 0L;
 
-	@ManyToOne(cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL)
 	@JoinTable(name = "baskets",
 			joinColumns = @JoinColumn(name = "barn_id"))
-	private BasketEntity basket;
+	private BasketEntity baskets;
 
+<<<<<<< HEAD
 //	@ManyToOne(cascade = CascadeType.ALL)
 //	@JoinTable(name = "freezers",
 //			joinColumns = @JoinColumn(name = "barn_id"));
 
 	@OneToMany(targetEntity = FreezerEntity.class, mappedBy = "freezerId", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private List<FreezerEntity> freezerId;
+=======
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinTable(name = "freezers",
+			joinColumns = @JoinColumn(name = "barn_id"))
+	private FreezerEntity freezers;
+>>>>>>> 2be1e85acef6fc520499dfa4a4d8a6764fef4a5f
 }

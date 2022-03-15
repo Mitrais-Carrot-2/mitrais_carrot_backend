@@ -14,6 +14,7 @@ import com.team.two.mitrais_carrot.service.user.UserService;
 
 
 import lombok.Getter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -21,29 +22,39 @@ import java.util.Set;
 
 @Service
 public class ExchangeService {
+    @Autowired
     private ExchangeRepository exchangeRepository;
+
+    @Autowired
     private BazaarItemRepository bazaarItemRepository;
+
+    @Autowired
     private UserRepository userRepository;
 
+    @Autowired
     private BazaarItemService bazaarItemService;
+
+    @Autowired
     private UserService userService;
+
+    @Autowired
     private BasketService basketService;
 
     @Getter
-    enum status{
+    public enum ExchangeStatus{
         Success(200, "[SUCCESS] Purchasing item"),
         NotEnoughCarrots(400, "[FAILED] There are not enough carrots to buy this item"),
         ItemNotFound(404, "[FAILED] Item is not found / unavailable");
 
         int errorCode;
         String message;
-        private status(int errorCode, String message){
+        private ExchangeStatus(int errorCode, String message){
             this.errorCode = errorCode;
             this.message = message;
         }
     }
 
-    private status response;
+    private ExchangeStatus response;
 
     public ExchangeService(ExchangeRepository exchangeRepository) {this.exchangeRepository = exchangeRepository;}
 
@@ -63,22 +74,22 @@ public class ExchangeService {
         return (basket.getCarrotAmount() >= item.getPrice());
     }
 
-    public status buyBazaarItem(int buyerId, int itemId){
+    public ExchangeStatus buyBazaarItem(long buyerId, int itemId){
         UserEntity buyer = userService.getById(buyerId);
         BazaarItemEntity item = bazaarItemService.getById(itemId);
         if (buyer != null){
             if (item == null) {
-                response = status.ItemNotFound;
+                response = ExchangeStatus.ItemNotFound;
             }
             else {
                 if (isCarrotEnough(buyer, item)){
                     add(buyer, item);
                     bazaarItemService.updateQuantity(itemId, -1);
                     basketService.updateCarrot(buyer, -(item.getPrice()), EBasket.BAZAAR);
-                    response = status.Success;
+                    response = ExchangeStatus.Success;
                 }
                 else {
-                    response = status.NotEnoughCarrots;
+                    response = ExchangeStatus.NotEnoughCarrots;
                 }
             }
         }

@@ -6,6 +6,11 @@ import lombok.Setter;
 @Getter
 @Setter
 public class StaffGroupDto {
+    //private int id;
     private String name;
-    private Long managerId;
+    private Long allocation;
+    //private Integer totalMember;
+    //private Long total;
+    private String note;
+    private Integer managerId;
 }

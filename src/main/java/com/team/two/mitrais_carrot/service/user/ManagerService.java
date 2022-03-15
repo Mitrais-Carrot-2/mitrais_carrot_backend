@@ -82,7 +82,7 @@ public class ManagerService {
 
         List<GroupDto> groupDto = new ArrayList<>();
         groups.forEach(g -> {
-            List<UserGroupEntity> staff = userGroupRepository.findByGroupId(g.getId());
+            List<UserGroupEntity> staff = userGroupRepository.findByGroup_Id(g.getId());
             groupDto.add(new GroupDto(g.getId(), g.getName(), g.getAllocation(), staff.size(), g.getAllocation()*staff.size(), g.getNote()));
         });
         return groupDto;
