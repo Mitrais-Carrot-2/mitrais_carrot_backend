@@ -62,7 +62,7 @@ public class UserEntity {
 //    @NotBlank(message = "Address is required")
     private String address;
 
-//    @Column(name = "birthDate", nullable = false)
+   @Column(name = "birthDate", nullable = false)
 //    @NotBlank(message = "Birthdate is required")
     private LocalDate birthDate;
 
@@ -98,4 +98,7 @@ public class UserEntity {
     @ManyToOne
     @JoinTable(name = "userGroups", joinColumns = @JoinColumn(name = "user_id"))
     private UserGroupEntity userGroup;
+
+    @Column(name = "dayOfYearBirthDay")
+    private int dayOfYearBirthDay;
 }
