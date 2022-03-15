@@ -21,7 +21,8 @@ public class BasketController {
 
     @PostMapping("")
     public BasketEntity addBasket(long userId){
-        return basketService.add(userId);
+        UserEntity user = userService.getById(userId);
+        return basketService.add(user);
     }
 
     @PutMapping("carrot")

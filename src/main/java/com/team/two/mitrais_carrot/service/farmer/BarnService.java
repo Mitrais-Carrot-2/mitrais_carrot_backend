@@ -66,8 +66,8 @@ public class BarnService {
       return barnRepository.save(barnEntity);
   }
 
-  public Integer isActiveBarn(boolean active){
-      return barnRepository.findByIsActive(active).getBarnId();
+  public BarnEntity isActiveBarn(boolean active){
+      return barnRepository.findByIsActive(active);
   }
 
   public Boolean checkActive(LocalDate startDate, LocalDate expiredDate) {

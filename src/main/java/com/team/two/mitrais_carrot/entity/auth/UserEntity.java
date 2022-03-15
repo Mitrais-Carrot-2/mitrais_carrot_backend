@@ -18,7 +18,7 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "users", uniqueConstraints = {
+@Table(name = "users", schema = "public", uniqueConstraints = {
         @UniqueConstraint(columnNames = "username"),
         @UniqueConstraint(columnNames = "email")
 })
@@ -90,10 +90,8 @@ public class UserEntity {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<RoleEntity> roles = new HashSet<>();
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    @JoinTable(name = "baskets",
-            joinColumns = @JoinColumn(name = "user_id"))
-    private BasketEntity baskets;
+    @OneToMany(mappedBy = "userId", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<BasketEntity> baskets = new ArrayList<>();
 
     @ManyToOne
     @JoinTable(name = "userGroups", joinColumns = @JoinColumn(name = "user_id"))

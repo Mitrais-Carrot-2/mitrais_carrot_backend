@@ -17,7 +17,7 @@ import org.springframework.beans.factory.annotation.Value;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "barns")
+@Table(name = "barns", schema = "public")
 public class BarnEntity {
 
 	@Id
@@ -48,10 +48,8 @@ public class BarnEntity {
 	@Value("${cp.barns.distributed_carrot: 0}")
 	private Long distributedCarrot = 0L;
 
-	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinTable(name = "baskets",
-			joinColumns = @JoinColumn(name = "barn_id"))
-	private BasketEntity baskets;
+	@OneToMany(mappedBy = "barnId", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private List<BasketEntity> baskets = new ArrayList<>();
 
 //	@ManyToOne(cascade = CascadeType.ALL)
 //	@JoinTable(name = "freezers",

@@ -15,6 +15,8 @@ import com.team.two.mitrais_carrot.repository.user.GroupRepository;
 import com.team.two.mitrais_carrot.repository.user.UserGroupRepository;
 import com.team.two.mitrais_carrot.repository.UserRepository;
 import com.team.two.mitrais_carrot.repository.user.ManagerRepository;
+import com.team.two.mitrais_carrot.service.basket.BasketService;
+import com.team.two.mitrais_carrot.service.farmer.BarnService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -41,6 +43,12 @@ public class ManagerService {
     @Autowired
     BarnRepository barnRepository;
 
+    @Autowired
+    UserService userService;
+
+    @Autowired
+    BarnService barnService;
+
 //        UserDetailsImpl user = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 //        Long supervisorId = user.getId();
     Long supervisorId = 2L;
@@ -65,11 +73,12 @@ public class ManagerService {
         BarnEntity barn = barnRepository.findByIsActive(true);
         BasketEntity oldBasket = basketRepository.findByUserIdAndBarnId(req.getStaffId(), barn.getBarnId());
 
-        BasketEntity newBasket = new BasketEntity(req.getStaffId(), barn.getBarnId(), oldBasket.getShareCarrot() + req.getCarrotAmount(), 0, oldBasket.getShareCarrot() + req.getCarrotAmount(), 0);
+        BasketEntity newBasket = new BasketEntity(userService.getById(req.getStaffId()), barnService.getBarnById(barn.getBarnId()),
+                oldBasket.getShareCarrot() + req.getCarrotAmount(), 0, oldBasket.getShareCarrot() + req.getCarrotAmount(), 0);
         basketRepository.save(newBasket);
 
         TransferToStaffDto result = new TransferToStaffDto();
-        result.setStaffId(newBasket.getUserId());
+        result.setStaffId(newBasket.getUserId().getId());
         result.setCarrotAmount(newBasket.getCarrotAmount());
         result.setSharedAmount(newBasket.getShareCarrot());
         result.setNote(req.getNote());

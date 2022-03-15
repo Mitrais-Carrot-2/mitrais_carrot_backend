@@ -17,7 +17,7 @@ public class BasketService {
     @Autowired
     private BarnService barnService;
 
-    public BasketEntity add(long userId){
+    public BasketEntity add(UserEntity userId){
         BasketEntity basket = new BasketEntity();
 
         basket.setUserId(userId);
@@ -78,7 +78,7 @@ public class BasketService {
     }
 
     public BasketEntity getActiveBasket (UserEntity user, boolean isActive) {
-        return basketRepository.findByUserIdAndBarnId(user.getId(), barnService.isActiveBarn(isActive));
+        return basketRepository.findByUserIdAndBarnId(user.getId(), barnService.isActiveBarn(isActive).getBarnId());
     }
 
     public int getActiveBasketId (UserEntity user, boolean isActive) {

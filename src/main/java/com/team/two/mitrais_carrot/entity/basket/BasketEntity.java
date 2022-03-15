@@ -2,6 +2,7 @@ package com.team.two.mitrais_carrot.entity.basket;
 
 import java.time.LocalDate;
 
+import com.team.two.mitrais_carrot.entity.farmer.BarnEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,14 +17,14 @@ import com.team.two.mitrais_carrot.entity.auth.UserEntity;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "baskets")
+@Table(name = "baskets", schema = "public")
 public class BasketEntity {
     @Id
     @Column(name = "id")
     @GeneratedValue
     private int id;
 
-    public BasketEntity(long userId, int barnId, long carrotAmount, long rewardCarrot, long shareCarrot, long bazaarCarrot) {
+    public BasketEntity(UserEntity userId, BarnEntity barnId, long carrotAmount, long rewardCarrot, long shareCarrot, long bazaarCarrot) {
         this.userId = userId;
         this.barnId = barnId;
         this.carrotAmount = carrotAmount;
@@ -32,11 +33,13 @@ public class BasketEntity {
         this.bazaarCarrot = bazaarCarrot;
     }
 
-    @Column(name = "user_id")
-    private long userId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private UserEntity userId;
 
-    @Column(name = "barn_id")
-    private int barnId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "barn_id", nullable = true)
+    private BarnEntity barnId;
 
     @Column(name = "carrotAmount")
     private long carrotAmount;
