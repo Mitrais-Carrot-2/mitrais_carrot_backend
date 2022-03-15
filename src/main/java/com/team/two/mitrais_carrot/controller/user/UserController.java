@@ -7,6 +7,8 @@ import com.team.two.mitrais_carrot.dto.auth.UserDto;
 import com.team.two.mitrais_carrot.entity.auth.UserEntity;
 import com.team.two.mitrais_carrot.entity.basket.BasketEntity;
 import com.team.two.mitrais_carrot.repository.UserRepository;
+import com.team.two.mitrais_carrot.service.basket.BasketService;
+import com.team.two.mitrais_carrot.service.basket.EBasket;
 import com.team.two.mitrais_carrot.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMessage;
@@ -27,7 +29,10 @@ public class UserController {
     @Autowired
     PasswordEncoder encoder;
 
-    public UserController(UserService userService) { this.userService = userService; }
+    @PostMapping("")
+    public UserEntity addUser(@RequestBody UserDto userDto){
+        return userService.add(userDto);
+    }
 
     @GetMapping("/")
     public List<UserEntity> getAllUsers(){

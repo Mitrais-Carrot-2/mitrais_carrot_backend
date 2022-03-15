@@ -2,10 +2,15 @@ package com.team.two.mitrais_carrot.service.user;
 
 import com.team.two.mitrais_carrot.dto.UpdatePasswordDto;
 import com.team.two.mitrais_carrot.dto.UpdateProfileDto;
+import com.team.two.mitrais_carrot.dto.auth.UserDto;
 import com.team.two.mitrais_carrot.entity.auth.UserEntity;
 import com.team.two.mitrais_carrot.entity.basket.BasketEntity;
+import com.team.two.mitrais_carrot.repository.BasketRepository;
 import com.team.two.mitrais_carrot.repository.UserRepository;
 import com.team.two.mitrais_carrot.service.basket.BasketService;
+import com.team.two.mitrais_carrot.service.basket.EBasket;
+import com.team.two.mitrais_carrot.service.farmer.BarnService;
+import com.team.two.mitrais_carrot.service.merchant.BazaarItemService;
 
 import lombok.extern.java.Log;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
@@ -26,17 +31,37 @@ import java.util.Optional;
 
 @Service
 public class UserService {
-    private final UserRepository userRepository;
+    @Autowired
+    private UserRepository userRepository;
 
+    @Autowired
+    private BasketRepository basketRepository;
+
+    @Autowired
     private BasketService basketService;
+
+    @Autowired
+    private BarnService barnService;
 
     @Autowired
     PasswordEncoder encoder;
 
+     public UserEntity add(UserDto req){
+        UserEntity user = new UserEntity(req.getUsername(), req.getPassword(), req.getEmail());
 
+        userRepository.save(user);
+        System.out.println("FINISHED SAVING USER");
+
+        int barnId = barnService.isActiveBarn(true);
+        System.out.println("BARN ID = " + barnId);
+
+        BasketEntity basket = basketService.add(user.getId());
+        user.setBaskets(basket);
+        System.out.println("SET BASKET" + basket);
+
+        return userRepository.save(user);
+     }
     Logger logger = org.slf4j.LoggerFactory.getLogger(UserService.class);
-
-    public UserService(UserRepository userRepository) {this.userRepository = userRepository;}
 
     public List<UserEntity> getAll(){ return userRepository.findAll(); }
 
