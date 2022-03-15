@@ -26,16 +26,16 @@ public class TransferService {
 
     // TODO : Transfer Rewards -> Admin to user
     public TransferEntity transferBarnReward(UserEntity user, Long carrotAmount, ETransferType type) {
-        Integer activeBarn = barnService.isActiveBarn(true);
+        BarnEntity activeBarn = barnService.isActiveBarn(true);
         // Integer activeBarn = 1;
-        BarnEntity barn = barnService.getBarnById(activeBarn);
+        BarnEntity barn = barnService.getBarnById(activeBarn.getBarnId());
         if (barn.getCarrotAmount() >= carrotAmount) {
             Long currentAmount = basketService.getRewardCarrot(user);
             Long userId = user.getId();
             Long updatedAmount = currentAmount + carrotAmount;
             basketService.updateCarrot(user, updatedAmount, EBasket.REWARD);
 
-            barnService.shareCarrot(carrotAmount, activeBarn);
+            barnService.shareCarrot(carrotAmount, activeBarn.getBarnId());
 
             Long adminId = 0l; // Kesepakatan admin id = 0
 

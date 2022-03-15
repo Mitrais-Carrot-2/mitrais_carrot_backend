@@ -105,9 +105,9 @@ public class UserEntity {
             joinColumns = @JoinColumn(name = "user_id"))
     private BasketEntity baskets;
 
-    @ManyToOne
-    @JoinTable(name = "userGroups", joinColumns = @JoinColumn(name = "user_id"))
-    private UserGroupEntity userGroup;
+//    @ManyToOne
+//    @JoinTable(name = "userGroups", joinColumns = @JoinColumn(name = "user_id"))
+//    private UserGroupEntity userGroup;
 
     @Column(name = "dayOfYearBirthDay")
     private int dayOfYearBirthDay;

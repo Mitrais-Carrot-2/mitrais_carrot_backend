@@ -65,7 +65,7 @@ public class ManagerService {
         BarnEntity barn = barnRepository.findByIsActive(true);
         BasketEntity oldBasket = basketRepository.findByUserIdAndBarnId(req.getStaffId(), barn.getBarnId());
 
-        BasketEntity newBasket = new BasketEntity(req.getStaffId(), barn.getBarnId(), oldBasket.getShareCarrot() + req.getCarrotAmount(), 0, oldBasket.getShareCarrot() + req.getCarrotAmount(), 0);
+        BasketEntity newBasket = new BasketEntity(req.getStaffId(), barn, oldBasket.getShareCarrot() + req.getCarrotAmount(), 0, oldBasket.getShareCarrot() + req.getCarrotAmount(), 0);
         basketRepository.save(newBasket);
 
         TransferToStaffDto result = new TransferToStaffDto();

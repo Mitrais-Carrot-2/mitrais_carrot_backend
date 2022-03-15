@@ -2,9 +2,11 @@ package com.team.two.mitrais_carrot.entity.freezer;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 
+import com.team.two.mitrais_carrot.entity.basket.BasketEntity;
 import com.team.two.mitrais_carrot.entity.farmer.BarnEntity;
 import lombok.*;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +26,10 @@ public class FreezerEntity {
     @ManyToOne
     @JoinColumn(name = "barnId")
     private BarnEntity barnId;
+
+    @ManyToOne
+    @JoinColumn(name = "basketId")
+    private BasketEntity basketId;
 
     @Column(name = "manager_id")
     private Long managerId;
