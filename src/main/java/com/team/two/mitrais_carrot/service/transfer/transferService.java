@@ -2,6 +2,7 @@ package com.team.two.mitrais_carrot.service.transfer;
 
 import com.team.two.mitrais_carrot.entity.auth.UserEntity;
 import com.team.two.mitrais_carrot.entity.transfer.TransferEntity;
+import com.team.two.mitrais_carrot.entity.transfer.ETransferType;
 import com.team.two.mitrais_carrot.repository.TransferRepository;
 
 public class transferService {
@@ -12,7 +13,7 @@ public class transferService {
     }
 
     // TODO : Transfer Rewards -> Admin to user
-    public TransferEntity TransferBarnReward(UserEntity user, int carrotAmount){
+    public TransferEntity TransferBarnReward(UserEntity user, int carrotAmount, ETransferType type){
         int currentAmount = 0; //Tungg basket
         Long userId = user.getId();
         int updatedAmount = currentAmount + carrotAmount;
@@ -24,6 +25,7 @@ public class transferService {
         transfer.setReceiverId(userId);
         transfer.setSenderId(adminId);
         transfer.setCarrotAmount(carrotAmount);
+        transfer.setType(type);
 
         return transferHistoryRepository.save(transfer);
     }
