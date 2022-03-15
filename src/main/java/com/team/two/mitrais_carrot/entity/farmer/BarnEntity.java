@@ -48,10 +48,10 @@ public class BarnEntity {
 	@Value("${cp.barns.distributed_carrot: 0}")
 	private Long distributedCarrot = 0L;
 
-	@OneToMany(cascade = CascadeType.ALL)
+	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinTable(name = "baskets",
 			joinColumns = @JoinColumn(name = "barn_id"))
-	private List<BasketEntity> baskets = new ArrayList<>();
+	private BasketEntity baskets;
 
 //	@ManyToOne(cascade = CascadeType.ALL)
 //	@JoinTable(name = "freezers",
