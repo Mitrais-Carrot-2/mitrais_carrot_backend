@@ -22,7 +22,7 @@ public class BazaarItemEntity {
     private String name;
 
     @Column(name = "price")
-    private int price;
+    private long price;
 
     @Column(name = "quantity")
     private int quantity;

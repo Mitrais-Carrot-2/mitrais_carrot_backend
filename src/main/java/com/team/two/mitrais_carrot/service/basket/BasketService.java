@@ -19,7 +19,7 @@ public class BasketService {
         return (List<BasketEntity>) basketRepository.findAll();
     }
 
-    public BasketEntity updateCarrot(UserEntity user, int addCarrot, EBasket transferType){
+    public BasketEntity updateCarrot(UserEntity user, long addCarrot, EBasket transferType){
         BasketEntity basket = getActiveBasket(user, true);
 
         if (transferType == EBasket.SHARE){
@@ -41,19 +41,19 @@ public class BasketService {
         return basketRepository.save(basket);
     }
 
-    private void addShareCarrot(BasketEntity basket, int addCarrot){
+    private void addShareCarrot(BasketEntity basket, long addCarrot){
         long newCarrot = basket.getCarrotAmount() + addCarrot;
         if (newCarrot < 0) newCarrot = 0;
         basket.setShareCarrot(newCarrot);
     }
 
-    private void addRewardCarrot(BasketEntity basket, int addCarrot){
+    private void addRewardCarrot(BasketEntity basket, long addCarrot){
         long newCarrot = basket.getCarrotAmount() + addCarrot;
         if (newCarrot < 0) newCarrot = 0;
         basket.setRewardCarrot(newCarrot);
     }
 
-    private void addBazaarCarrot(BasketEntity basket, int addCarrot){
+    private void addBazaarCarrot(BasketEntity basket, long addCarrot){
         long newCarrot = basket.getCarrotAmount() + addCarrot;
         basket.setBazaarCarrot(newCarrot);
     }
