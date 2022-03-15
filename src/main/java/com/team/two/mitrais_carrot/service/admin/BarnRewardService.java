@@ -29,5 +29,9 @@ public class BarnRewardService {
 
     }
 
+    public BarnRewardEntity rewardByBirthDay(){
+        return null;
+    }
+
     //TODO : Give reward as per date
 }
