@@ -6,6 +6,7 @@ import com.team.two.mitrais_carrot.entity.transfer.TransferEntity;
 import com.team.two.mitrais_carrot.entity.transfer.ETransferType;
 import com.team.two.mitrais_carrot.repository.TransferRepository;
 import com.team.two.mitrais_carrot.service.basket.BasketService;
+import com.team.two.mitrais_carrot.service.basket.EBasket;
 
 public class transferService {
     private final TransferRepository transferHistoryRepository;
@@ -20,7 +21,7 @@ public class transferService {
         Long currentAmount = basketService.getRewardCarrot(user);
         Long userId = user.getId();
         Long updatedAmount = currentAmount + carrotAmount;
-        // TODO : Update user basket
+        basketService.updateCarrot(user, updatedAmount, EBasket.REWARD);
 
         Long adminId = 0l; //Kesepakatan admin id = 0
 
