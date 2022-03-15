@@ -1,11 +1,12 @@
 package com.team.two.mitrais_carrot.entity.group;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 import javax.persistence.*;
 
-import com.team.two.mitrais_carrot.entity.auth.UserEntity;
+@JsonIgnoreProperties({"hibernateLazyInitializer"})
 
-@Entity
+@Entity(name = "GroupEntity")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -29,7 +30,7 @@ public class GroupEntity {
     @Column(name = "note")
     private String note;
 
-    @ManyToOne
-    @JoinTable(name = "userGroups", joinColumns = @JoinColumn(name = "group_id"))
-    private UserGroupEntity userGroup;
+//    @ManyToOne
+//    @JoinTable(name = "userGroups", joinColumns = @JoinColumn(name = "group_id"))
+//    private UserGroupEntity userGroup;
 }
