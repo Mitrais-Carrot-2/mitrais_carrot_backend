@@ -8,6 +8,7 @@ import com.team.two.mitrais_carrot.repository.BazaarItemRepository;
 import com.team.two.mitrais_carrot.repository.ExchangeRepository;
 import com.team.two.mitrais_carrot.repository.UserRepository;
 import com.team.two.mitrais_carrot.service.basket.BasketService;
+import com.team.two.mitrais_carrot.service.basket.EBasket;
 import com.team.two.mitrais_carrot.service.merchant.BazaarItemService;
 import com.team.two.mitrais_carrot.service.user.UserService;
 
@@ -73,7 +74,7 @@ public class ExchangeService {
                 if (isCarrotEnough(buyer, item)){
                     add(buyer, item);
                     bazaarItemService.updateQuantity(itemId, -1);
-                    userService.updateCarrot(buyerId, -(item.getPrice()));
+                    basketService.updateCarrot(buyer, -(item.getPrice()), EBasket.BAZAAR);
                     response = status.Success;
                 }
                 else {
