@@ -25,16 +25,16 @@ public class BazaarItemService{
         return bazaarItemRepository.save(item);
     }
 
-    public List<BazaarItemEntity> fetchAll(){
+    public List<BazaarItemEntity> getAll(){
         return bazaarItemRepository.findAll();
     }
 
-    public BazaarItemEntity fetchById(int id){
+    public BazaarItemEntity getById(int id){
         return bazaarItemRepository.findById(id).orElse(null);
     }
 
     public BazaarItemEntity updateQuantity(int itemId, int addQty){
-        BazaarItemEntity item = fetchById(itemId);
+        BazaarItemEntity item = getById(itemId);
         int newQty = item.getQuantity() + addQty;
         if (newQty < 0) newQty = 0;
         item.setQuantity(newQty);

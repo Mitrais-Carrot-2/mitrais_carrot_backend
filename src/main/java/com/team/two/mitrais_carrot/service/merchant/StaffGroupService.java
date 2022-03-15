@@ -11,7 +11,9 @@ import org.apache.catalina.User;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class StaffGroupService {
@@ -50,10 +52,15 @@ public class StaffGroupService {
     }
 
     public UserGroupEntity addNewMember(Integer id, NewGroupMemberDto request){
-        UserGroupEntity member = new UserGroupEntity();
-        member.setGroupId(id);
-        member.setUserId(request.getUserId());
-        return userGroupRepository.save(member);
+        List<UserGroupEntity> compare = userGroupRepository.findAll();
+        compare = compare.stream().filter(s -> s.getGroupId() == id && s.getUserId() == request.getUserId()).collect(Collectors.toList());
+        if (compare.isEmpty()){
+            UserGroupEntity member = new UserGroupEntity();
+            member.setGroupId(id);
+            member.setUserId(request.getUserId());
+            return userGroupRepository.save(member);
+        }
+        return null;
     }
 
     public List<UserGroupEntity> getInGroupStaff(){
