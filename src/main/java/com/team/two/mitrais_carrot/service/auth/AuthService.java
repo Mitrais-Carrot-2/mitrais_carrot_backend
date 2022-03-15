@@ -20,6 +20,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -27,6 +28,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@Service
 public class AuthService {
     @Autowired
     AuthenticationManager authenticationManager;
@@ -69,13 +71,13 @@ public class AuthService {
         if(userRepository.existsByUsername(signUpRequest.getUsername())) {
             return ResponseEntity
                     .badRequest()
-                    .body(new MessageDto("Error: Username is already taken!"));
+                    .body(new MessageDto("Error: Username is already taken!", false));
         }
 
         if(userRepository.existsByEmail(signUpRequest.getEmail())) {
             return ResponseEntity
                     .badRequest()
-                    .body(new MessageDto("Error: Email is already in use!"));
+                    .body(new MessageDto("Error: Email is already in use!", false));
         }
 
         // Create new user's account
@@ -128,6 +130,7 @@ public class AuthService {
         }
 
         user.setRoles(roles);
+        user.setActive(true);
         userRepository.save(user);
 
         List<UserRoleEntity> userRoleEntity = new ArrayList<>();
@@ -136,6 +139,6 @@ public class AuthService {
         });
 
         userRoleRepository.saveAll(userRoleEntity);
-        return ResponseEntity.ok(new MessageDto("Sign Up Successfully!"));
+        return ResponseEntity.ok(new MessageDto("Sign Up Successfully!", true));
     }
 }

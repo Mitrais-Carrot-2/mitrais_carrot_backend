@@ -17,7 +17,6 @@ public class BarnController {
     @Autowired
     BarnService barnService;
 
-
     @GetMapping("/")
     public List<BarnEntity> fetchBarn(){
         return barnService.fetchAllBarn();

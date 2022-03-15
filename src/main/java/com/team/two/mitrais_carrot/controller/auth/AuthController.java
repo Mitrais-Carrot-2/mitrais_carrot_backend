@@ -32,7 +32,9 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
+    @Autowired
     AuthService authService;
+
     @GetMapping("/test")
     public UserDetailsImpl test() {
         UserDetailsImpl user = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
