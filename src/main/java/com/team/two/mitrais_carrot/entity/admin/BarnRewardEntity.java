@@ -30,7 +30,7 @@ public class BarnRewardEntity {
     private String rewardDescription;
 
     @Column(name = "carrot_amount")
-    private int carrotAmount;
+    private Long carrotAmount;
 
     @Column(name = "giving_conditional")
     @Enumerated(EnumType.STRING)

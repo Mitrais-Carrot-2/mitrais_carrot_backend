@@ -17,7 +17,7 @@ public class BarnRewardDto {
     private String rewardDescription;
     
     @JsonProperty("carrot_amount")
-    private int carrotAmount;
+    private Long carrotAmount;
 
     @JsonProperty("giving_conditional")
     private ETypeBarnReward givingConditional;
