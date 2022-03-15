@@ -31,6 +31,7 @@ public class UserEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "is_active")
     private boolean isActive;
 
     @Column(name = "username", nullable = false)
@@ -91,7 +92,4 @@ public class UserEntity {
             joinColumns = @JoinColumn(name = "user_id"))
     private BasketEntity baskets;
 
-    public boolean isActive() {
-        return isActive;
-    }
 }

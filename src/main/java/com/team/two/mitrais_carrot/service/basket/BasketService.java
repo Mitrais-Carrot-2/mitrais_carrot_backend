@@ -19,6 +19,45 @@ public class BasketService {
         return (List<BasketEntity>) basketRepository.findAll();
     }
 
+    public BasketEntity updateCarrot(UserEntity user, int addCarrot, EBasket transferType){
+        BasketEntity basket = getActiveBasket(user, true);
+
+        if (transferType == EBasket.SHARE){
+            addShareCarrot(basket, addCarrot);
+        }
+        else if (transferType == EBasket.REWARD) {
+            addRewardCarrot(basket, addCarrot);
+        }
+        else if (transferType == EBasket.BAZAAR) {
+            addBazaarCarrot(basket, addCarrot);
+        }
+        else {
+            System.out.println("Transfer type is not defined!");
+        }
+
+        long totalCarrot = basket.getShareCarrot() + basket.getRewardCarrot() + basket.getBazaarCarrot();
+        basket.setCarrotAmount(totalCarrot);
+
+        return basketRepository.save(basket);
+    }
+
+    private void addShareCarrot(BasketEntity basket, int addCarrot){
+        long newCarrot = basket.getCarrotAmount() + addCarrot;
+        if (newCarrot < 0) newCarrot = 0;
+        basket.setShareCarrot(newCarrot);
+    }
+
+    private void addRewardCarrot(BasketEntity basket, int addCarrot){
+        long newCarrot = basket.getCarrotAmount() + addCarrot;
+        if (newCarrot < 0) newCarrot = 0;
+        basket.setRewardCarrot(newCarrot);
+    }
+
+    private void addBazaarCarrot(BasketEntity basket, int addCarrot){
+        long newCarrot = basket.getCarrotAmount() + addCarrot;
+        basket.setBazaarCarrot(newCarrot);
+    }
+
     public BasketEntity getActiveBasket (UserEntity user, boolean isActive) {
         return basketRepository.findByUserIdAndBarnId(user.getId(), barnService.isActiveBarn(isActive));
     }
@@ -34,7 +73,7 @@ public class BasketService {
 
     public long getSharedCarrot(UserEntity user){
         BasketEntity activeBasket = getActiveBasket(user, true);
-        return activeBasket.getSharedCarrot();
+        return activeBasket.getShareCarrot();
     }
 
     public long getRewardCarrot(UserEntity user){

@@ -4,26 +4,23 @@ import lombok.*;
 import javax.persistence.*;
 
 import com.team.two.mitrais_carrot.entity.auth.UserEntity;
+import com.team.two.mitrais_carrot.entity.group.GroupEntity;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "groups")
-public class GroupEntity {
+@Table(name = "userGroups")
+public class UserGroupEntity {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "name")
-    private String name;
+    @Column(name = "user_id")
+    private int userId;
 
-    @Column(name = "manager_id")
-    private int managerId;
-
-    @ManyToOne
-    @JoinTable(name = "userGroups", joinColumns = @JoinColumn(name = "id"))
-    private UserGroupEntity userGroup;
+    @Column(name = "group_id")
+    private int groupId;
 }

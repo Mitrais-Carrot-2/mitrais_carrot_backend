@@ -6,6 +6,7 @@ import javax.persistence.*;
 // import javax.validation.constraints.NotBlank;
 
 import com.team.two.mitrais_carrot.entity.basket.BasketEntity;
+import com.team.two.mitrais_carrot.entity.freezer.FreezerEntity;
 import lombok.*;
 import org.springframework.beans.factory.annotation.Value;
 
@@ -49,4 +50,9 @@ public class BarnEntity {
 	@JoinTable(name = "baskets",
 			joinColumns = @JoinColumn(name = "barn_id"))
 	private BasketEntity basket;
+
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinTable(name = "freezer",
+			joinColumns = @JoinColumn(name = "barn_id"))
+	private FreezerEntity freezer;
 }
