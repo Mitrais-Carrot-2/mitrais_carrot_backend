@@ -2,11 +2,15 @@ package com.team.two.mitrais_carrot.entity.auth;
 
 import com.team.two.mitrais_carrot.entity.basket.BasketEntity;
 import com.team.two.mitrais_carrot.entity.group.UserGroupEntity;
+import com.team.two.mitrais_carrot.entity.image.FileNameHelper;
+import com.team.two.mitrais_carrot.entity.image.Image;
 import lombok.*;
 
 import org.hibernate.annotations.Type;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -83,6 +87,12 @@ public class UserEntity {
 
     @Column(name = "office")
     private String office;
+
+    @Column(name = "image_type")
+    private String imageType;
+
+    @Column(name = "image_size")
+    private long imageSize;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JoinTable(name = "user_roles",
