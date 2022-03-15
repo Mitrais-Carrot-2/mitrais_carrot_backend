@@ -50,6 +50,10 @@ public class UserService {
      public UserEntity add(UserDto req){
         UserEntity user = new UserEntity(req.getUsername(), req.getPassword(), req.getEmail());
 
+        user.setBirthDate(LocalDate.now());
+
+        user.setDayOfYearBirthDay(user.getBirthDate().getDayOfYear());
+
         userRepository.save(user);
         System.out.println("FINISHED SAVING USER");
 

@@ -51,5 +51,4 @@ public class BasketEntity {
 
     @Column(name = "bazaarCarrot")
     private long bazaarCarrot;
-
 }

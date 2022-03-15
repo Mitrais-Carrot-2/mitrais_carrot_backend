@@ -95,10 +95,10 @@ public class UserEntity {
             joinColumns = @JoinColumn(name = "user_id"))
     private BasketEntity baskets;
 
-    private int dayOfYearBirthDay;
-
-//
 //    @ManyToOne
 //    @JoinTable(name = "userGroups", joinColumns = @JoinColumn(name = "user_id"))
 //    private UserGroupEntity userGroup;
+
+    @Column(name = "dayOfYearBirthDay")
+    private int dayOfYearBirthDay;
 }

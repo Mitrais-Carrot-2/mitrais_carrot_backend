@@ -1,12 +1,15 @@
 package com.team.two.mitrais_carrot.entity.merchant;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 
-@Entity
+@JsonIgnoreProperties({"hibernateLazyInitializer"})
+
+@Entity(name = "BazaarItemEntity")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -16,7 +19,7 @@ public class BazaarItemEntity {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
     @Column(name = "name")
     private String name;
@@ -35,9 +38,13 @@ public class BazaarItemEntity {
     @Type(type = "org.hibernate.type.BinaryType")
     private byte[] image;
 
-    @Column(name = "expiryDate")
-    private LocalDate expiryDate;
+//    @Column(name = "expiryDate")
+//    private LocalDate expiryDate;
 
-    @Column(name = "bazaar_id")
-    private Long bazaarId;
+//    @Column(name = "bazaar_id")
+//    private Long bazaarId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "bazaar_id")
+    private BazaarEntity bazaar_id;
 }
