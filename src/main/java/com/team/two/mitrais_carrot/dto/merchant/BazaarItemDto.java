@@ -9,7 +9,8 @@ import lombok.Setter;
 public class BazaarItemDto{
     private String name;
     private int price;
-    //private String desc;
+    private String description;
     private int quantity;
+    //    private byte[] image;
     //private Long bazaar_id;
 }
