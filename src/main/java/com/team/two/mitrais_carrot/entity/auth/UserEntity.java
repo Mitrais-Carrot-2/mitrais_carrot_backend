@@ -1,16 +1,14 @@
 package com.team.two.mitrais_carrot.entity.auth;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.team.two.mitrais_carrot.entity.basket.BasketEntity;
 import com.team.two.mitrais_carrot.entity.group.UserGroupEntity;
 import lombok.*;
 
 import org.hibernate.annotations.Type;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
-import java.io.IOException;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -40,36 +38,25 @@ public class UserEntity {
     private boolean isActive;
 
     @Column(name = "username", nullable = false)
-//    @NotBlank(message = "Username is required")
     private String username;
 
     @Column(name = "password", nullable = false)
-//    @NotBlank(message = "Password is required")
     private String password;
 
     @Column(name = "email", nullable = false)
-//    @Email(message = "Please provide a valid email")
-//    @NotBlank(message = "Email is required")
     private String email;
 
-//    @Column(name = "firstName", nullable = false)
-//    @NotBlank(message = "First name is required")
+    @Column(name = "first_name")
     private String firstName;
 
-//    @Column(name = "lastName", nullable = false)
-//    @NotBlank(message = "Last name is required")
+    @Column(name = "last_name")
     private String lastName;
 
-//    @Column(name = "address", nullable = false)
-//    @NotBlank(message = "Address is required")
+    @Column(name = "address")
     private String address;
 
    @Column(name = "birthDate", nullable = false)
-//    @NotBlank(message = "Birthdate is required")
     private LocalDate birthDate;
-
-//    @Column(name = "supervisorId", nullable = false)
-//    @NotBlank(message = "Supervisor ID is required")
     private Long supervisorId;
 
     @Column(name = "jobFamily")
@@ -84,6 +71,7 @@ public class UserEntity {
     @Lob
     @Column(name = "image")
     @Type(type = "org.hibernate.type.BinaryType")
+    @JsonIgnore
     private byte[] image;
 
     @Column(name = "image_type")

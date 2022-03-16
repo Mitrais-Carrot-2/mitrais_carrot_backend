@@ -1,5 +1,6 @@
 package com.team.two.mitrais_carrot.entity.merchant;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 import org.hibernate.annotations.Type;
@@ -36,6 +37,7 @@ public class BazaarItemEntity {
     @Lob
     @Column(name = "image")
     @Type(type = "org.hibernate.type.BinaryType")
+    @JsonIgnore
     private byte[] image;
 
     @Column(name = "image_type")
