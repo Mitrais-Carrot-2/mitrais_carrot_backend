@@ -24,11 +24,11 @@ public class BarnEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	// TODO : Buat relasi ke barnToFreezer sebagai PK
-	private Integer barnId;
+	private Integer id;
 
 	@Column(name = "id_user")
 	// TODO : Buat relasi ke user sebagai FK
-	private Long idUser;
+	private Long userId;
 
 	@Column(name = "barn_name")
 	private String barnName;
@@ -49,9 +49,9 @@ public class BarnEntity {
 	@Value("${cp.barns.distributed_carrot: 0}")
 	private Long distributedCarrot = 0L;
 
-	@OneToMany(targetEntity = BasketEntity.class, mappedBy = "basketId", fetch = FetchType.EAGER,cascade = CascadeType.ALL)
-	private List<BasketEntity> basketId;
+	@OneToMany(mappedBy = "barn", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private List<BasketEntity> baskets = new ArrayList<>();
 
-	@OneToMany(targetEntity = FreezerEntity.class, mappedBy = "freezerId", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	private List<FreezerEntity> freezerId;
+	@OneToMany(mappedBy = "barn", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private List<FreezerEntity> freezers = new ArrayList<>();
 }

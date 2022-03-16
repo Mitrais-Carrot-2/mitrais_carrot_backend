@@ -85,7 +85,7 @@ public class ExchangeService {
                 if (isCarrotEnough(buyer, item)){
                     add(buyer, item);
                     bazaarItemService.updateQuantity(itemId, -1);
-                    basketService.updateCarrot(buyer, -(item.getPrice()), EBasket.BAZAAR);
+                    basketService.updateCarrot(buyer, -1*(item.getPrice()), EBasket.BAZAAR);
                     response = ExchangeStatus.Success;
                 }
                 else {

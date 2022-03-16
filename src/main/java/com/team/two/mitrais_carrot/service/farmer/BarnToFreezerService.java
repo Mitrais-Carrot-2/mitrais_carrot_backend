@@ -30,13 +30,16 @@ public class BarnToFreezerService {
     @Autowired
     FreezerRepository freezerRepository;
 
+    @Autowired
+    BarnService barnService;
+
     public Boolean sendToManager(BarnToFreezerDto req){
 //        Integer barnId = barnRepository.findByIsActive(true).getId();
-        BarnEntity barn = barnRepository.findByIsActive(true);
+        BarnEntity barn = barnService.isActiveBarn(true);
         Long barnBalance = barn.getCarrotAmount();
         Long transferedCarrot = Math.abs(req.getCarrotAmount());
 
-        FreezerEntity freezer = freezerRepository.findByBarnIdAndManagerId(barn.getBarnId(), req.getManagerId());
+        FreezerEntity freezer = freezerRepository.findByBarnIdAndManagerId(barn.getId(), req.getManagerId());
         FreezerEntity freezerEntity;
 
         try {
@@ -46,7 +49,7 @@ public class BarnToFreezerService {
             freezerEntity = new FreezerEntity();
             freezerEntity.setDistributedCarrot(0);
             freezerEntity.setManagerId(req.getManagerId());
-            freezerEntity.setBarnId(barn);
+            freezerEntity.setBarn(barn);
             freezerEntity.setCarrotAmount(req.getCarrotAmount());
         }
 

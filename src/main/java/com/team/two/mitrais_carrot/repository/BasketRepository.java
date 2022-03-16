@@ -1,5 +1,6 @@
 package com.team.two.mitrais_carrot.repository;
 
+import com.team.two.mitrais_carrot.entity.auth.UserEntity;
 import com.team.two.mitrais_carrot.entity.basket.BasketEntity;
 import com.team.two.mitrais_carrot.entity.farmer.BarnEntity;
 import com.team.two.mitrais_carrot.service.farmer.BarnService;
@@ -8,5 +9,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface BasketRepository extends JpaRepository<BasketEntity, Integer> {
-    BasketEntity findByUserIdAndBarnId(long userId, int barnId);
+
+    BasketEntity findByUser_IdAndBarn_Id(Long id, Integer id1);
+
 }

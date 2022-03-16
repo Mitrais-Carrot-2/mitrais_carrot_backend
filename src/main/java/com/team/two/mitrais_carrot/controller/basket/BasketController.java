@@ -22,7 +22,7 @@ public class BasketController {
     @PostMapping("")
     public BasketEntity addBasket(long userId){
         UserEntity user = userService.getById(userId);
-        return basketService.add(userId);
+        return basketService.add(user);
     }
 
     @PutMapping("carrot")
@@ -34,5 +34,11 @@ public class BasketController {
     @GetMapping("")
     public List<BasketEntity> getBaskets(){
         return basketService.getAll();
+    }
+
+    @GetMapping("{id}")
+    public BasketEntity getBasket(long userId){
+        UserEntity user = userService.getById(userId);
+        return basketService.getActiveBasket(user, true);
     }
 }

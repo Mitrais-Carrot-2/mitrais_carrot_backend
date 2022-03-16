@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.team.two.mitrais_carrot.entity.farmer.BarnEntity;
 import lombok.*;
 import org.springframework.http.ResponseEntity;
@@ -19,11 +20,12 @@ public class FreezerEntity {
     @Id
 //    @Column(name = "freezer_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer freezerId;
+    private Integer id;
 
-    @ManyToOne
-    @JoinColumn(name = "barnId")
-    private BarnEntity barnId;
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "barn_id")
+    private BarnEntity barn;
 
     @Column(name = "manager_id")
     private Long managerId;

@@ -2,6 +2,7 @@ package com.team.two.mitrais_carrot.service.basket;
 
 import com.team.two.mitrais_carrot.entity.auth.UserEntity;
 import com.team.two.mitrais_carrot.entity.basket.BasketEntity;
+import com.team.two.mitrais_carrot.entity.farmer.BarnEntity;
 import com.team.two.mitrais_carrot.repository.BasketRepository;
 import com.team.two.mitrais_carrot.service.farmer.BarnService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,11 +18,11 @@ public class BasketService {
     @Autowired
     private BarnService barnService;
 
-    public BasketEntity add(long userId){
+    public BasketEntity add(UserEntity user){
         BasketEntity basket = new BasketEntity();
 
-        basket.setUserId(userId);
-        basket.setBarnId(barnService.isActiveBarn(true));
+        basket.setUser(user);
+        basket.setBarn(barnService.isActiveBarn(true));
         basket.setShareCarrot(0L);
         basket.setRewardCarrot(0L);
         basket.setBazaarCarrot(0L);
@@ -40,6 +41,8 @@ public class BasketService {
         BasketEntity basket = getActiveBasket(user, true);
 
         System.out.println("basket = " + basket);
+
+        System.out.println("add carrot = " + addCarrot);
 
         if (transferType == EBasket.SHARE){
             addShareCarrot(basket, addCarrot);
@@ -78,7 +81,13 @@ public class BasketService {
     }
 
     public BasketEntity getActiveBasket (UserEntity user, boolean isActive) {
-        return basketRepository.findByUserIdAndBarnId(user.getId(), barnService.isActiveBarn(isActive).getBarnId());
+        BarnEntity barn = barnService.isActiveBarn(isActive);
+        return basketRepository.findByUser_IdAndBarn_Id(user.getId(), barn.getId());
+    }
+
+    public BasketEntity getActiveBasket (long userId, boolean isActive) {
+        BarnEntity barn = barnService.isActiveBarn(isActive);
+        return basketRepository.findByUser_IdAndBarn_Id(userId, barn.getId());
     }
 
     public int getActiveBasketId (UserEntity user, boolean isActive) {

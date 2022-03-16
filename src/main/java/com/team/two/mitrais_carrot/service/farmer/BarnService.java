@@ -49,7 +49,7 @@ public class BarnService {
       BarnEntity barnEntity = new BarnEntity();
 //      UserDetailsImpl user = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 //      barnEntity.setIdUser(user.getId());
-      barnEntity.setIdUser(1L);
+      barnEntity.setUserId(1L);
       barnEntity.setBarnName(req.getBarnName());
       barnEntity.setStartDate(req.getStartDate());
       barnEntity.setEndDate(req.getEndDate());

@@ -17,6 +17,8 @@ import com.team.two.mitrais_carrot.repository.UserRoleRepository;
 import com.team.two.mitrais_carrot.repository.farmer.BarnRepository;
 import com.team.two.mitrais_carrot.security.jwt.JwtUtils;
 import com.team.two.mitrais_carrot.security.services.UserDetailsImpl;
+import com.team.two.mitrais_carrot.service.farmer.BarnService;
+import com.team.two.mitrais_carrot.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -58,6 +60,12 @@ public class AuthService {
 
     @Autowired
     JwtUtils jwtUtils;
+
+    @Autowired
+    BarnService barnService;
+
+    @Autowired
+    UserService userService;
 
     public JwtDto login(LoginDto loginRequest) {
         Authentication authentication = authenticationManager.authenticate(
@@ -143,15 +151,20 @@ public class AuthService {
 
         user.setRoles(roles);
         user.setActive(true);
-        userRepository.save(user);
+//        userRepository.save(user);
+        userService.add(user);
 
         List<UserRoleEntity> userRoleEntity = new ArrayList<>();
             roles.forEach(r ->{
             userRoleEntity.add(new UserRoleEntity(user.getId(), r.getId()));
         });
 
-        BarnEntity barn = barnRepository.findByIsActive(true);
-        basketRepository.save(new BasketEntity(user.getId(), barn, 0, 0, 0, 0));
+//        BarnEntity barn = barnService.isActiveBarn(true);
+//        System.out.println("BARN = " + barn);
+//        System.out.println("BARN ID = " + barn.getId());
+////        basketRepository.save(new BasketEntity(user, barn, 0, 0, 0, 0));
+//
+//        System.out.println("FINISHED CREATING BASKET");
         userRoleRepository.saveAll(userRoleEntity);
 
         return ResponseEntity.ok(new MessageDto("Sign Up Successfully!", true));
