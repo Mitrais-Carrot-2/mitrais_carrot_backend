@@ -22,15 +22,14 @@ import org.springframework.beans.factory.annotation.Value;
 @AllArgsConstructor
 @Table(name = "barns")
 public class BarnEntity {
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	// TODO : Buat relasi ke barnToFreezer sebagai PK
-	private Integer barnId;
+	private Integer id;
 
-	@Column(name = "id_user")
+	@Column(name = "user_id")
 	// TODO : Buat relasi ke user sebagai FK
-	private Long idUser;
+	private Long userId;
 
 	@Column(name = "barn_name")
 	private String barnName;
@@ -58,9 +57,9 @@ public class BarnEntity {
 //	@OneToMany(targetEntity = FreezerEntity.class, mappedBy = "freezerId", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 //	private List<FreezerEntity> freezerId;
 
-	@OneToMany(mappedBy = "barnId", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private List<BasketEntity> baskets;
+	@OneToMany(mappedBy = "barn", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private List<BasketEntity> baskets = new ArrayList<>();
 
-	@OneToMany(mappedBy = "barnId", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private List<FreezerEntity> freezers;
+	@OneToMany(mappedBy = "barn", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private List<FreezerEntity> freezers = new ArrayList<>();
 }

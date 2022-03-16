@@ -22,33 +22,26 @@ import com.team.two.mitrais_carrot.entity.auth.UserEntity;
 public class BasketEntity {
     @Id
     @GeneratedValue
-    private int basketId;
+    private int id;
 
-    public BasketEntity(UserEntity userId, BarnEntity barnId, long carrotAmount, long rewardCarrot, long shareCarrot, long bazaarCarrot) {
-        this.userId = userId;
-        this.barnId = barnId;
+    public BasketEntity(UserEntity user, BarnEntity barn, long carrotAmount, long rewardCarrot, long shareCarrot, long bazaarCarrot) {
+        this.user = user;
+        this.barn = barn;
         this.carrotAmount = carrotAmount;
         this.rewardCarrot = rewardCarrot;
         this.shareCarrot = shareCarrot;
         this.bazaarCarrot = bazaarCarrot;
     }
 
-//    @Column(name = "user_id")
-//    private long userId;
-//
-//    @ManyToOne
-//    @JoinColumn(name = "barn_id")
-//    private BarnEntity barnId;
-
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    private UserEntity userId;
+    private UserEntity user;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "barn_id")
-    private BarnEntity barnId;
+    private BarnEntity barn;
 
     @Column(name = "carrotAmount")
     private long carrotAmount;

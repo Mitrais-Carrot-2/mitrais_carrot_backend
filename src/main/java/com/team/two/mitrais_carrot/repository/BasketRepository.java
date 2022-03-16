@@ -8,11 +8,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface BasketRepository extends JpaRepository<BasketEntity, Integer> {
-//    BasketEntity findByUserIdAndBarnId(long userId, int barnId);
-
-    BasketEntity findByUserIdAndBarnId_BarnId(long userId, Integer barnId);
-
-    BasketEntity findByUserId_IdAndBarnId_BarnId(Long userId, Integer barnId);
-
+    BasketEntity findByUser_IdAndBarn_Id(Long id, Integer id1);
 
 }

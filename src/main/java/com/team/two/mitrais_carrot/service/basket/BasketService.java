@@ -22,12 +22,10 @@ public class BasketService {
     @Autowired
     BarnRepository barnRepository;
 
-//    public BasketEntity add(long userId){
     public BasketEntity add(UserEntity user){
         BasketEntity basket = new BasketEntity();
-
-        basket.setUserId(user);
-        basket.setBarnId(barnService.isActiveBarn(true));
+        basket.setUser(user);
+        basket.setBarn(barnService.isActiveBarn(true));
         basket.setShareCarrot(0L);
         basket.setRewardCarrot(0L);
         basket.setBazaarCarrot(0L);
@@ -36,15 +34,11 @@ public class BasketService {
         return basketRepository.save(basket);
     }
 
-    
-
     public List<BasketEntity> getAll() {
         return (List<BasketEntity>) basketRepository.findAll();
     }
 
     public BasketEntity updateCarrot(UserEntity user, long addCarrot, EBasket transferType){
-        System.out.println("GET NEW ACTIVE BASKET");
-
         BasketEntity basket = getActiveBasket(user, true);
 
         System.out.println("basket = " + basket);
@@ -69,30 +63,33 @@ public class BasketService {
     }
 
     private void addShareCarrot(BasketEntity basket, long addCarrot){
-        long newCarrot = basket.getCarrotAmount() + addCarrot;
+        long newCarrot = basket.getShareCarrot() + addCarrot;
         if (newCarrot < 0) newCarrot = 0;
         basket.setShareCarrot(newCarrot);
     }
 
     private void addRewardCarrot(BasketEntity basket, long addCarrot){
-        long newCarrot = basket.getCarrotAmount() + addCarrot;
+        long newCarrot = basket.getRewardCarrot() + addCarrot;
         if (newCarrot < 0) newCarrot = 0;
         basket.setRewardCarrot(newCarrot);
     }
 
     private void addBazaarCarrot(BasketEntity basket, long addCarrot){
-        long newCarrot = basket.getCarrotAmount() + addCarrot;
+        long newCarrot = basket.getBazaarCarrot() + addCarrot;
         basket.setBazaarCarrot(newCarrot);
     }
 
     public BasketEntity getActiveBasket(UserEntity user, boolean isActive) {
-        return basketRepository.findByUserId_IdAndBarnId_BarnId(user.getId(), barnService.isActiveBarn(isActive).getBarnId());
-//        BarnEntity barn = barnRepository.findByIsActive(true);
-//        return basketRepository.findByUserIdAndBarnId_BarnId(user.getId(), barn.getBarnId());
+        return basketRepository.findByUser_IdAndBarn_Id(user.getId(), barnService.isActiveBarn(isActive).getId());
+    }
+
+    public BasketEntity getActiveBasket (long userId, boolean isActive) {
+        BarnEntity barn = barnService.isActiveBarn(isActive);
+        return basketRepository.findByUser_IdAndBarn_Id(userId, barn.getId());
     }
 
     public int getActiveBasketId (UserEntity user, boolean isActive) {
-        return getActiveBasket(user, isActive).getBasketId();
+        return getActiveBasket(user, isActive).getId();
     }
 
     public long getTotalCarrot(UserEntity user){

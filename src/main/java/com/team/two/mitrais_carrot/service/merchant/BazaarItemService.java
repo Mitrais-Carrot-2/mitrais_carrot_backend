@@ -94,6 +94,7 @@ public class BazaarItemService{
             item.setImageType(file.getContentType());
             item.setImageSize(file.getSize());
             item.setImage(file.getBytes());
+
             bazaarItemRepository.save(item);
         } catch (IOException e) {
             e.printStackTrace();

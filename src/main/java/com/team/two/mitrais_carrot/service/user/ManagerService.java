@@ -18,6 +18,7 @@ import com.team.two.mitrais_carrot.repository.farmer.BarnRepository;
 import com.team.two.mitrais_carrot.repository.user.GroupRepository;
 import com.team.two.mitrais_carrot.repository.user.ManagerRepository;
 import com.team.two.mitrais_carrot.repository.user.UserGroupRepository;
+import com.team.two.mitrais_carrot.service.basket.BasketService;
 import com.team.two.mitrais_carrot.security.services.UserDetailsImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,6 +56,7 @@ public class ManagerService {
     FreezerRepository freezerRepository;
 
     @Autowired
+    BasketService basketService;
     TransferRepository transferRepository;
 
     Logger logger = LoggerFactory.getLogger(ManagerService.class);
@@ -90,12 +92,12 @@ public class ManagerService {
 
     public Boolean transferToStaff(TransferToStaffDto req){
         BarnEntity barn = barnRepository.findByIsActive(true);
-        FreezerEntity freezer = freezerRepository.findByManagerIdEqualsAndBarnId_BarnIdEquals(getManagerId(), barn.getBarnId());
+        FreezerEntity freezer = freezerRepository.findByManagerIdAndBarn_Id(getManagerId(), barn.getId());
 
-        BasketEntity oldBasket = basketRepository.findByUserId_IdAndBarnId_BarnId(req.getStaffId(), barn.getBarnId());
+        BasketEntity oldBasket = basketService.getActiveBasket(req.getStaffId(), true);
 
         if(freezer.getCarrotAmount() - req.getCarrotAmount()>=0) {
-            oldBasket.setBarnId(barn);
+            oldBasket.setBarn(barn);
             oldBasket.setCarrotAmount(oldBasket.getShareCarrot() + req.getCarrotAmount());
             oldBasket.setShareCarrot(oldBasket.getShareCarrot() + req.getCarrotAmount());
             basketRepository.save(oldBasket);
@@ -106,7 +108,7 @@ public class ManagerService {
 
             TransferToStaffDto result = new TransferToStaffDto();
 
-            result.setStaffId(oldBasket.getUserId().getId());
+            result.setStaffId(oldBasket.getUser().getId());
             result.setCarrotAmount(oldBasket.getCarrotAmount());
             result.setNote(req.getNote());
 
