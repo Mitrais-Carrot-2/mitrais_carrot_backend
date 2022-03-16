@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,7 +20,10 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "barn_rewards")
+@Table(name = "barn_rewards", uniqueConstraints={
+    @UniqueConstraint(columnNames = "giving_conditional"),
+    @UniqueConstraint(columnNames = "reward_description")
+})
 public class BarnRewardEntity {
 
     @Id
