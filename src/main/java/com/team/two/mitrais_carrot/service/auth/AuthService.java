@@ -96,6 +96,14 @@ public class AuthService {
                 encoder.encode(signUpRequest.getPassword()),
                 signUpRequest.getEmail());
         user.setBirthDate(LocalDate.now());
+        user.setFirstName(signUpRequest.getFirstName());
+        user.setLastName(signUpRequest.getLastName());
+        user.setAddress(signUpRequest.getAddress());
+        user.setSupervisorId(signUpRequest.getSupervisorId());
+        user.setJobFamily(signUpRequest.getJobFamily());
+        user.setJobGrade(signUpRequest.getJobGrade());
+        user.setOffice(signUpRequest.getOffice());
+
         user.setDayOfYearBirthDay(user.getBirthDate().getDayOfYear());
         Set<String> strRoles = signUpRequest.getRole();
         Set<RoleEntity> roles = new HashSet<>();
