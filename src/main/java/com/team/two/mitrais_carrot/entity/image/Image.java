@@ -30,7 +30,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "tbl_image", schema = "public")
+@Table(name = "user_images", schema = "public")
 public class Image extends ImageEntity {
 
     @Column(name = "file_name")

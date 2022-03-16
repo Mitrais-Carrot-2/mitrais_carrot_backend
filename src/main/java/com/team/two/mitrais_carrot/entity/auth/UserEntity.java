@@ -101,11 +101,11 @@ public class UserEntity {
     private Set<RoleEntity> roles = new HashSet<>();
 
     @OneToMany(mappedBy = "userId", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<BasketEntity> baskets = new ArrayList<>();
+    private List<BasketEntity> baskets;
 
-    @ManyToOne
-    @JoinTable(name = "userGroups", joinColumns = @JoinColumn(name = "user_id"))
-    private UserGroupEntity userGroup;
+//    @ManyToOne
+//    @JoinTable(name = "userGroups", joinColumns = @JoinColumn(name = "user_id"))
+//    private UserGroupEntity userGroup;
 
     @Column(name = "dayOfYearBirthDay")
     private int dayOfYearBirthDay;

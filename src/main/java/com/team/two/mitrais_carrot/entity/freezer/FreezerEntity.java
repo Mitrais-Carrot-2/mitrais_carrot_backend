@@ -2,9 +2,11 @@ package com.team.two.mitrais_carrot.entity.freezer;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.team.two.mitrais_carrot.entity.farmer.BarnEntity;
 import lombok.*;
 import org.springframework.http.ResponseEntity;
@@ -17,12 +19,12 @@ import org.springframework.http.ResponseEntity;
 @Table(name = "freezers")
 public class FreezerEntity {
     @Id
-//    @Column(name = "freezer_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer freezerId;
 
-    @ManyToOne
-    @JoinColumn(name = "barnId")
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "barn_id")
     private BarnEntity barnId;
 
     @Column(name = "manager_id")
@@ -36,4 +38,11 @@ public class FreezerEntity {
 
     @OneToMany(targetEntity = FreezerHistoryEntity.class, mappedBy = "freezerHistoryId", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<FreezerHistoryEntity> freezerHistoryId;
+
+    public FreezerEntity(BarnEntity barnId, Long managerId, Long carrotAmount, Long distributedCarrot) {
+        this.barnId = barnId;
+        this.managerId = managerId;
+        this.carrotAmount = carrotAmount;
+        this.distributedCarrot = distributedCarrot;
+    }
 }

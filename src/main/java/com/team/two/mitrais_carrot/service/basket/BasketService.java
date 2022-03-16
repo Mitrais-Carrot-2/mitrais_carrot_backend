@@ -17,10 +17,10 @@ public class BasketService {
     @Autowired
     private BarnService barnService;
 
-    public BasketEntity add(long userId){
+    public BasketEntity add(UserEntity user){
         BasketEntity basket = new BasketEntity();
 
-        basket.setUserId(userId);
+        basket.setUserId(user);
         basket.setBarnId(barnService.isActiveBarn(true));
         basket.setShareCarrot(0L);
         basket.setRewardCarrot(0L);
@@ -78,7 +78,7 @@ public class BasketService {
     }
 
     public BasketEntity getActiveBasket (UserEntity user, boolean isActive) {
-        return basketRepository.findByUserIdAndBarnId(user.getId(), barnService.isActiveBarn(isActive).getBarnId());
+        return basketRepository.findByUserId_IdAndBarnId_BarnId(user.getId(), barnService.isActiveBarn(isActive).getBarnId());
     }
 
     public int getActiveBasketId (UserEntity user, boolean isActive) {

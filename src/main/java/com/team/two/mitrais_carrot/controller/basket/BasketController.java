@@ -20,8 +20,8 @@ public class BasketController {
     UserService userService;
 
     @PostMapping("")
-    public BasketEntity addBasket(long userId){
-        UserEntity user = userService.getById(userId);
+    public BasketEntity addBasket(UserEntity userId){
+        UserEntity user = userService.getById(userId.getId());
         return basketService.add(userId);
     }
 

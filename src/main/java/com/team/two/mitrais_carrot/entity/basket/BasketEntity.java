@@ -2,6 +2,7 @@ package com.team.two.mitrais_carrot.entity.basket;
 
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.team.two.mitrais_carrot.entity.farmer.BarnEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,11 +21,10 @@ import com.team.two.mitrais_carrot.entity.auth.UserEntity;
 @Table(name = "baskets")
 public class BasketEntity {
     @Id
-//    @Column(name = "id")
     @GeneratedValue
     private int basketId;
 
-    public BasketEntity(long userId, BarnEntity barnId, long carrotAmount, long rewardCarrot, long shareCarrot, long bazaarCarrot) {
+    public BasketEntity(UserEntity userId, BarnEntity barnId, long carrotAmount, long rewardCarrot, long shareCarrot, long bazaarCarrot) {
         this.userId = userId;
         this.barnId = barnId;
         this.carrotAmount = carrotAmount;
@@ -33,10 +33,20 @@ public class BasketEntity {
         this.bazaarCarrot = bazaarCarrot;
     }
 
-    @Column(name = "user_id")
-    private long userId;
+//    @Column(name = "user_id")
+//    private long userId;
+//
+//    @ManyToOne
+//    @JoinColumn(name = "barn_id")
+//    private BarnEntity barnId;
 
-    @ManyToOne
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private UserEntity userId;
+
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "barn_id")
     private BarnEntity barnId;
 

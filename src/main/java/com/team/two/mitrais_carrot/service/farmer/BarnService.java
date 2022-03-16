@@ -1,15 +1,17 @@
 package com.team.two.mitrais_carrot.service.farmer;
 
 import com.team.two.mitrais_carrot.dto.farmer.BarnDto;
-import com.team.two.mitrais_carrot.entity.basket.BasketEntity;
 import com.team.two.mitrais_carrot.entity.farmer.BarnEntity;
-import com.team.two.mitrais_carrot.repository.BasketRepository;
 import com.team.two.mitrais_carrot.repository.farmer.BarnRepository;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import com.team.two.mitrais_carrot.security.services.UserDetailsImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -28,6 +30,8 @@ public class BarnService {
     return barnRepository.findById(id).orElse(null); // TODO : Buat exception ketika Barn tdk ditemukan
   }
 
+  Logger logger = LoggerFactory.getLogger(BarnService.class);
+
   public BarnEntity shareCarrot(Long carrotAmount, int barnId){
     BarnEntity barn = getBarnById(barnId);
     Long remainingCarrot = barn.getCarrotAmount();
@@ -43,9 +47,17 @@ public class BarnService {
 
   public BarnEntity createBarn(BarnDto req) {
       BarnEntity barnEntity = new BarnEntity();
-//      UserDetailsImpl user = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//      barnEntity.setIdUser(user.getId());
-      barnEntity.setIdUser(1L);
+      UserDetailsImpl user = null;
+      Long userId = 1L;
+      try {
+        user = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        userId = user.getId();
+      } catch (ClassCastException err){
+          userId = 1L;
+      }
+//      logger.error("Auth: "+userId);
+
+      barnEntity.setIdUser(userId);
       barnEntity.setBarnName(req.getBarnName());
       barnEntity.setStartDate(req.getStartDate());
       barnEntity.setEndDate(req.getEndDate());
