@@ -10,19 +10,20 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/bazaar/item")
+@RequestMapping("/api/bazaar")
 public class BazaarItemController {
     @Autowired
     BazaarItemService bazaarItemService;
 
     public BazaarItemController(BazaarItemService bazaarItemService) { this.bazaarItemService = bazaarItemService; }
 
-    @PostMapping("")
-    public BazaarItemEntity addBazaarItem(@RequestBody BazaarItemDto request){
-        return bazaarItemService.add(request);
+    @PostMapping("{id}/item")
+    public BazaarItemEntity addBazaarItem(@PathVariable("id") int id, @RequestBody BazaarItemDto request){
+//        return bazaarItemService.add(request);
+        return bazaarItemService.addNewItem(request,id);
     }
 
-    @GetMapping("")
+    @GetMapping("item")
     public List<BazaarItemEntity> getAllBazaarItems(){
         return bazaarItemService.getAll();
     }
