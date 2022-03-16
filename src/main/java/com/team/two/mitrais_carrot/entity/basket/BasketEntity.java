@@ -21,7 +21,7 @@ import com.team.two.mitrais_carrot.entity.auth.UserEntity;
 @Table(name = "baskets")
 public class BasketEntity {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     public BasketEntity(UserEntity user, BarnEntity barn, long carrotAmount, long rewardCarrot, long shareCarrot, long bazaarCarrot) {
