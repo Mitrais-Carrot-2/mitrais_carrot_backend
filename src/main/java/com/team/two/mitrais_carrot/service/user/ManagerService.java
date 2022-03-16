@@ -68,7 +68,6 @@ public class ManagerService {
             supervisorId = user.getId();
         } catch (ClassCastException err) {
             logger.error("No Authorization / Supervisor not exist!");
-            supervisorId = 2L;
         }
 
         return supervisorId;
