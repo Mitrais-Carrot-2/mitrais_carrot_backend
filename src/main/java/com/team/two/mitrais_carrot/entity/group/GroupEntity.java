@@ -3,6 +3,7 @@ package com.team.two.mitrais_carrot.entity.group;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 import javax.persistence.*;
+import java.util.List;
 
 @JsonIgnoreProperties({"hibernateLazyInitializer"})
 
@@ -16,7 +17,7 @@ public class GroupEntity {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
     @Column(name = "name")
     private String name;
@@ -30,6 +31,8 @@ public class GroupEntity {
     @Column(name = "note")
     private String note;
 
+    @OneToMany(mappedBy = "group", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<UserGroupEntity> userGroups;
 //    @ManyToOne
 //    @JoinTable(name = "userGroups", joinColumns = @JoinColumn(name = "group_id"))
 //    private UserGroupEntity userGroup;

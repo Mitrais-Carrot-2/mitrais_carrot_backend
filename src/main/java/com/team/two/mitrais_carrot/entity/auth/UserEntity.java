@@ -103,9 +103,8 @@ public class UserEntity {
     @OneToMany(mappedBy = "userId", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<BasketEntity> baskets = new ArrayList<>();
 
-    @ManyToOne
-    @JoinTable(name = "userGroups", joinColumns = @JoinColumn(name = "user_id"))
-    private UserGroupEntity userGroup;
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<UserGroupEntity> userGroups;
 
     @Column(name = "dayOfYearBirthDay")
     private int dayOfYearBirthDay;
