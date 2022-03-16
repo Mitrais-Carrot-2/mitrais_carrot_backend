@@ -11,4 +11,6 @@ public interface BazaarItemRepository extends JpaRepository<BazaarItemEntity, In
     List<BazaarItemEntity> findByBazaar_Id(Integer id);
 //    List<BazaarItemEntity> findByBazaar_id_Id(Integer id);
 
+    BazaarItemEntity findOneById(Integer integer);
+
 }

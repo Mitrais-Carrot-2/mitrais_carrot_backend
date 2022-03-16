@@ -18,8 +18,4 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
     Boolean existsByEmail(String email);
 
     List<UserEntity> findAllByDayOfYearBirthDay(int dayOfYear);
-
-    // @Query("select e from users e where day(e.birthDate) = ?1 and month(e.birthDate) = ?2")
-    // List<UserEntity> getByDayAndMonth(int day, int month);
-
 }
