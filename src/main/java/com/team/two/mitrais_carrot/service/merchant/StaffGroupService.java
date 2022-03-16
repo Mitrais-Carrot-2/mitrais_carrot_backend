@@ -10,6 +10,8 @@ import com.team.two.mitrais_carrot.entity.group.UserGroupEntity;
 import com.team.two.mitrais_carrot.repository.UserRepository;
 import com.team.two.mitrais_carrot.repository.user.GroupRepository;
 import com.team.two.mitrais_carrot.repository.user.UserGroupRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -37,6 +39,7 @@ public class StaffGroupService {
         return groupRepository.getById(id);
     }
 
+    Logger logger = LoggerFactory.getLogger(StaffGroupService.class);
     public ResponseEntity<?> createStaffGroup(StaffGroupDto request){
         GroupEntity group = new GroupEntity();
         group.setName(request.getName());

@@ -7,6 +7,8 @@ import lombok.*;
 import javax.persistence.*;
 import org.hibernate.annotations.Type;
 
+import java.util.List;
+
 @JsonIgnoreProperties({"hibernateLazyInitializer"})
 
 @Entity(name = "UserGroupEntity")
@@ -38,4 +40,5 @@ public class UserGroupEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private UserEntity user;
+//    private List<UserEntity> user;
 }

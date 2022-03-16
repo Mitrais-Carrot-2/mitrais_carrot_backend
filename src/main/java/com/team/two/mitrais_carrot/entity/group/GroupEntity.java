@@ -1,6 +1,8 @@
 package com.team.two.mitrais_carrot.entity.group;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.team.two.mitrais_carrot.entity.auth.UserEntity;
 import lombok.*;
 import javax.persistence.*;
 import java.util.List;
