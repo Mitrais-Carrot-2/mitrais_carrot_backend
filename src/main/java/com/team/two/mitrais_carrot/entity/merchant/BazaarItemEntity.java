@@ -38,6 +38,13 @@ public class BazaarItemEntity {
     @Type(type = "org.hibernate.type.BinaryType")
     private byte[] image;
 
+    @Column(name = "image_type")
+    private String imageType;
+
+    @Column(name = "image_size")
+    private long imageSize;
+
+
 //    @Column(name = "expiryDate")
 //    private LocalDate expiryDate;
 
@@ -46,5 +53,5 @@ public class BazaarItemEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "bazaar_id")
-    private BazaarEntity bazaar_id;
+    private BazaarEntity bazaar;
 }

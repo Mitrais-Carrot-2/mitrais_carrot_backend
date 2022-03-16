@@ -26,17 +26,17 @@ public class TestBarnRewardController {
 
     @GetMapping("/")
     public List<UserEntity> testBirthday(){
-        // return barnRewardService.rewardByBirthDay(); //cannot call this function
+        // return barnRewardService.rewardByBirthDay();
         return userService.getBirthdayPerson();
     }
 
-    @GetMapping("TransferOnly/")
-    public TransferEntity testTransfer(){
-        UserEntity birthdayPerson = userService.getBirthdayPerson().stream().findFirst().get();
+    @GetMapping("CheckTransfer/")
+    public List<UserEntity> testTransfer(){
+        // UserEntity birthdayPerson = userService.getBirthdayPerson().stream().findFirst().get();
+        // // return birthdayPerson;
+        // return transferService.transferBarnReward(birthdayPerson, 10L, ETransferType.TYPE_REWARD);
 
-        // return birthdayPerson;
-
-        return transferService.transferBarnReward(birthdayPerson, 10L, ETransferType.TYPE_REWARD);
+        return barnRewardService.rewardByBirthDay();
     }
     
     

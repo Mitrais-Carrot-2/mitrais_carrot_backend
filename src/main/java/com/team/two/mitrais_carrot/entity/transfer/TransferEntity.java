@@ -3,7 +3,7 @@ package com.team.two.mitrais_carrot.entity.transfer;
 import java.time.LocalDate;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 // import com.team.two.mitrais_carrot.entity.transfer.ETransferType;
 
@@ -22,27 +22,27 @@ public class TransferEntity {
     private int id;
 
     @Column(name = "sender_id")
-    @NotBlank
+    @NotNull
     private Long senderId;
 
     @Column(name = "receiver_id")
-    @NotBlank
+    @NotNull
     private Long receiverId;
 
     @Column(name = "time")
-    @NotBlank
+    @NotNull
     private LocalDate time;
 
     @Column(name = "type")
-    @NotBlank
+    @NotNull
     @Enumerated(EnumType.STRING)
     private ETransferType type;
 
     @Column(name = "description")
-    @NotBlank
+    @NotNull
     private String description;
 
     @Column(name = "carrot_amount")
-    @NotBlank
+    @NotNull
     private Long carrotAmount;
 }

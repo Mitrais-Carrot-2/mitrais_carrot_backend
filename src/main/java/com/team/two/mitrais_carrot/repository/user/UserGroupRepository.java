@@ -10,4 +10,6 @@ public interface UserGroupRepository extends JpaRepository<UserGroupEntity, Inte
 
     List<UserGroupEntity> findByGroup_Id(int id);
 
+    UserGroupEntity findByUser_Id(Long id);
+
 }

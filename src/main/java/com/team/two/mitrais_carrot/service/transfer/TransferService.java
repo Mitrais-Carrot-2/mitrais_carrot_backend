@@ -1,6 +1,9 @@
 package com.team.two.mitrais_carrot.service.transfer;
 
+import java.time.LocalDate;
+
 import com.team.two.mitrais_carrot.entity.auth.UserEntity;
+import com.team.two.mitrais_carrot.entity.basket.BasketEntity;
 import com.team.two.mitrais_carrot.entity.farmer.BarnEntity;
 import com.team.two.mitrais_carrot.entity.transfer.TransferEntity;
 import com.team.two.mitrais_carrot.entity.transfer.ETransferType;
@@ -9,43 +12,49 @@ import com.team.two.mitrais_carrot.service.basket.BasketService;
 import com.team.two.mitrais_carrot.service.basket.EBasket;
 import com.team.two.mitrais_carrot.service.farmer.BarnService;
 
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class TransferService {
-    private final TransferRepository transferHistoryRepository;
+    private final TransferRepository transferRepository;
     @Autowired
     private BasketService basketService;
     @Autowired
     private BarnService barnService;
 
-    public TransferService(TransferRepository transferHistoryRepository) {
-        this.transferHistoryRepository = transferHistoryRepository;
+    public TransferService(TransferRepository transferRepository) {
+        this.transferRepository = transferRepository;
     }
 
-    // TODO : Transfer Rewards -> Admin to user
+    Logger logger = org.slf4j.LoggerFactory.getLogger(TransferService.class);
+
+
+    // Transfer Rewards -> Admin to user
     public TransferEntity transferBarnReward(UserEntity user, Long carrotAmount, ETransferType type) {
+        
         BarnEntity activeBarn = barnService.isActiveBarn(true);
-        // Integer activeBarn = 1;
         BarnEntity barn = barnService.getBarnById(activeBarn.getBarnId());
+        
         if (barn.getCarrotAmount() >= carrotAmount) {
-            Long currentAmount = basketService.getRewardCarrot(user);
+            // BasketEntity activeUserBasket = basketService.getActiveBasket(user, true);//ada error tdk bisa menemukan basket
             Long userId = user.getId();
-            Long updatedAmount = currentAmount + carrotAmount;
-            basketService.updateCarrot(user, updatedAmount, EBasket.REWARD);
-
+            basketService.updateCarrot(user, carrotAmount, EBasket.REWARD);
+            
             barnService.shareCarrot(carrotAmount, activeBarn.getBarnId());
-
+            
             Long adminId = 0l; // Kesepakatan admin id = 0
-
+            
             TransferEntity transfer = new TransferEntity();
             transfer.setReceiverId(userId);
             transfer.setSenderId(adminId);
             transfer.setCarrotAmount(carrotAmount);
             transfer.setType(type);
+            transfer.setTime(LocalDate.now());
+            transfer.setDescription("Happy Birthday!!");
 
-            return transferHistoryRepository.save(transfer);
+            return transferRepository.save(transfer);
         }
         return null;
 

@@ -2,8 +2,6 @@ package com.team.two.mitrais_carrot.entity.auth;
 
 import com.team.two.mitrais_carrot.entity.basket.BasketEntity;
 import com.team.two.mitrais_carrot.entity.group.UserGroupEntity;
-import com.team.two.mitrais_carrot.entity.image.FileNameHelper;
-import com.team.two.mitrais_carrot.entity.image.Image;
 import lombok.*;
 
 import org.hibernate.annotations.Type;
@@ -74,11 +72,6 @@ public class UserEntity {
 //    @NotBlank(message = "Supervisor ID is required")
     private Long supervisorId;
 
-    @Lob
-    @Column(name = "image")
-    @Type(type = "org.hibernate.type.BinaryType")
-    private byte[] image;
-
     @Column(name = "jobFamily")
     private String jobFamily;
 
@@ -87,6 +80,11 @@ public class UserEntity {
 
     @Column(name = "office")
     private String office;
+
+    @Lob
+    @Column(name = "image")
+    @Type(type = "org.hibernate.type.BinaryType")
+    private byte[] image;
 
     @Column(name = "image_type")
     private String imageType;
@@ -103,9 +101,8 @@ public class UserEntity {
     @OneToMany(mappedBy = "userId", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<BasketEntity> baskets;
 
-//    @ManyToOne
-//    @JoinTable(name = "userGroups", joinColumns = @JoinColumn(name = "user_id"))
-//    private UserGroupEntity userGroup;
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<UserGroupEntity> userGroups;
 
     @Column(name = "dayOfYearBirthDay")
     private int dayOfYearBirthDay;
