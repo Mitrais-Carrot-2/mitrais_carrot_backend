@@ -20,6 +20,7 @@ import com.team.two.mitrais_carrot.repository.user.ManagerRepository;
 import com.team.two.mitrais_carrot.repository.user.UserGroupRepository;
 import com.team.two.mitrais_carrot.service.basket.BasketService;
 import com.team.two.mitrais_carrot.security.services.UserDetailsImpl;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,18 +58,19 @@ public class ManagerService {
 
     @Autowired
     BasketService basketService;
+
+    @Autowired
     TransferRepository transferRepository;
 
     Logger logger = LoggerFactory.getLogger(ManagerService.class);
 
     public Long getManagerId() {
-        Long supervisorId = 2L;
+        Long supervisorId = 1L;
         try {
             UserDetailsImpl user = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             supervisorId = user.getId();
         } catch (ClassCastException err) {
             logger.error("No Authorization / Supervisor not exist!");
-            supervisorId = 2L;
         }
 
         return supervisorId;
@@ -92,8 +94,8 @@ public class ManagerService {
 
     public Boolean transferToStaff(TransferToStaffDto req){
         BarnEntity barn = barnRepository.findByIsActive(true);
-        FreezerEntity freezer = freezerRepository.findByManagerIdAndBarn_Id(getManagerId(), barn.getId());
-
+        FreezerEntity freezer = freezerRepository.findByManagerIdAndBarn_Id(1L, barn.getId());
+        
         BasketEntity oldBasket = basketService.getActiveBasket(req.getStaffId(), true);
 
         if(freezer.getCarrotAmount() - req.getCarrotAmount()>=0) {
@@ -105,13 +107,13 @@ public class ManagerService {
             freezer.setCarrotAmount(freezer.getCarrotAmount() - req.getCarrotAmount());
             freezer.setDistributedCarrot(freezer.getDistributedCarrot() + req.getCarrotAmount());
             freezerRepository.save(freezer);
-
+            
             TransferToStaffDto result = new TransferToStaffDto();
-
+            
             result.setStaffId(oldBasket.getUser().getId());
             result.setCarrotAmount(oldBasket.getCarrotAmount());
             result.setNote(req.getNote());
-
+            
             TransferEntity history = new TransferEntity();
             history.setSenderId(getManagerId());
             history.setReceiverId(req.getStaffId());
@@ -119,6 +121,7 @@ public class ManagerService {
             history.setNote(req.getNote());
             history.setShareAt(LocalDateTime.now());
             history.setType(ETransferType.TYPE_SHARED);
+            logger.info("test "+history.toString());
             transferRepository.save(history);
 
             return true;
