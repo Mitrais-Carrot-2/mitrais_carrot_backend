@@ -2,6 +2,8 @@ package com.team.two.mitrais_carrot.entity.freezer;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 
