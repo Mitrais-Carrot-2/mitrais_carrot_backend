@@ -1,5 +1,6 @@
 package com.team.two.mitrais_carrot.entity.merchant;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 import org.hibernate.annotations.Type;

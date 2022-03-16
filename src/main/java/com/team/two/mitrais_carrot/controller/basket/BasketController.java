@@ -35,4 +35,10 @@ public class BasketController {
     public List<BasketEntity> getBaskets(){
         return basketService.getAll();
     }
+
+    @GetMapping("{id}")
+    public BasketEntity getBasket(long userId){
+        UserEntity user = userService.getById(userId);
+        return basketService.getActiveBasket(user, true);
+    }
 }

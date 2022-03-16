@@ -8,10 +8,10 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface FreezerRepository extends JpaRepository<FreezerEntity, Integer> {
 
-    FreezerEntity findByManagerIdEqualsAndBarnId_BarnIdEquals(Long managerId, Integer barnId);
+    FreezerEntity findByManagerIdAndBarn_Id(Long managerId, Integer barnId);
 
-    FreezerEntity findByBarnId(Integer barnId);
+    FreezerEntity findByBarn_Id(Integer barnId);
 
-    FreezerEntity findByBarnIdAndManagerId(Integer barnId, Long managerId);
+    FreezerEntity findByBarn_IdAndManagerId(Integer barnId, Long managerId);
 
 }

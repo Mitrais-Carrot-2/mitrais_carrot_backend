@@ -41,7 +41,7 @@ public class UserService {
 
     Logger logger = org.slf4j.LoggerFactory.getLogger(UserService.class);
 
-     public UserEntity add(UserDto req){
+    public UserEntity add(UserDto req){
         UserEntity user = new UserEntity(req.getUsername(), req.getPassword(), req.getEmail());
 
         user.setBirthDate(LocalDate.now());
@@ -52,14 +52,28 @@ public class UserService {
         System.out.println("FINISHED SAVING USER");
 
         BarnEntity barnId = barnService.isActiveBarn(true);
-        System.out.println("BARN ID = " + barnId.getBarnId());
+        System.out.println("BARN ID = " + barnId.getId());
 
         BasketEntity basket = basketService.add(user);
         user.getBaskets().add(basket);
         System.out.println("SET BASKET" + basket);
 
         return userRepository.save(user);
-     }
+    }
+
+    public UserEntity add(UserEntity user){
+        userRepository.save(user);
+        System.out.println("FINISHED SAVING USER");
+
+        BarnEntity barnId = barnService.isActiveBarn(true);
+        System.out.println("BARN ID = " + barnId.getId());
+
+        BasketEntity basket = basketService.add(user);
+        user.getBaskets().add(basket);
+        System.out.println("SET BASKET" + basket);
+
+        return userRepository.save(user);
+    }
 
     public UserService(UserRepository userRepository) {this.userRepository = userRepository;}
 

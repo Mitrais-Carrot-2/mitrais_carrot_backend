@@ -44,7 +44,8 @@ public class ExchangeService {
     public enum ExchangeStatus{
         Success(200, "[SUCCESS] Purchasing item"),
         NotEnoughCarrots(400, "[FAILED] There are not enough carrots to buy this item"),
-        ItemNotFound(404, "[FAILED] Item is not found / unavailable");
+        ItemNotFound(404, "[FAILED] Item is not found / unavailable"),
+        ItemSoldOut(402, "[FAILED] Item is already sold out");
 
         int errorCode;
         String message;
@@ -82,14 +83,19 @@ public class ExchangeService {
                 response = ExchangeStatus.ItemNotFound;
             }
             else {
-                if (isCarrotEnough(buyer, item)){
-                    add(buyer, item);
-                    bazaarItemService.updateQuantity(itemId, -1);
-                    basketService.updateCarrot(buyer, -(item.getPrice()), EBasket.BAZAAR);
-                    response = ExchangeStatus.Success;
+                if (item.getQuantity() > 0){
+                    if (isCarrotEnough(buyer, item)){
+                        add(buyer, item);
+                        bazaarItemService.updateQuantity(itemId, -1);
+                        basketService.updateCarrot(buyer, -(item.getPrice()), EBasket.BAZAAR);
+                        response = ExchangeStatus.Success;
+                    }
+                    else {
+                        response = ExchangeStatus.NotEnoughCarrots;
+                    }
                 }
                 else {
-                    response = ExchangeStatus.NotEnoughCarrots;
+                    response = ExchangeStatus.ItemSoldOut;
                 }
             }
         }

@@ -17,6 +17,7 @@ import com.team.two.mitrais_carrot.repository.UserRoleRepository;
 import com.team.two.mitrais_carrot.repository.farmer.BarnRepository;
 import com.team.two.mitrais_carrot.security.jwt.JwtUtils;
 import com.team.two.mitrais_carrot.security.services.UserDetailsImpl;
+import com.team.two.mitrais_carrot.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -55,6 +56,9 @@ public class AuthService {
 
     @Autowired
     PasswordEncoder encoder;
+
+    @Autowired
+    UserService userService;
 
     @Autowired
     JwtUtils jwtUtils;
@@ -143,15 +147,13 @@ public class AuthService {
 
         user.setRoles(roles);
         user.setActive(true);
-        userRepository.save(user);
+        userService.add(user);
 
         List<UserRoleEntity> userRoleEntity = new ArrayList<>();
             roles.forEach(r ->{
             userRoleEntity.add(new UserRoleEntity(user.getId(), r.getId()));
         });
 
-        BarnEntity barn = barnRepository.findByIsActive(true);
-        basketRepository.save(new BasketEntity(user, barn, 0, 0, 0, 0));
         userRoleRepository.saveAll(userRoleEntity);
 
         return ResponseEntity.ok(new MessageDto("Sign Up Successfully!", true));

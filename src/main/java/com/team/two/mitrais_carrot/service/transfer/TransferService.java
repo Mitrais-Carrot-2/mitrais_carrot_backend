@@ -35,14 +35,14 @@ public class TransferService {
     public TransferEntity transferBarnReward(UserEntity user, Long carrotAmount, ETransferType type) {
         
         BarnEntity activeBarn = barnService.isActiveBarn(true);
-        BarnEntity barn = barnService.getBarnById(activeBarn.getBarnId());
+        BarnEntity barn = barnService.getBarnById(activeBarn.getId());
         
         if (barn.getCarrotAmount() >= carrotAmount) {
             // BasketEntity activeUserBasket = basketService.getActiveBasket(user, true);//ada error tdk bisa menemukan basket
             Long userId = user.getId();
             basketService.updateCarrot(user, carrotAmount, EBasket.REWARD);
             
-            barnService.shareCarrot(carrotAmount, activeBarn.getBarnId());
+            barnService.shareCarrot(carrotAmount, activeBarn.getId());
             
             Long adminId = 0l; // Kesepakatan admin id = 0
             

@@ -26,7 +26,7 @@ public class FreezerEntity {
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "barn_id")
-    private BarnEntity barnId;
+    private BarnEntity barn;
 
     @Column(name = "manager_id")
     private Long managerId;
@@ -40,8 +40,8 @@ public class FreezerEntity {
     @OneToMany(targetEntity = FreezerHistoryEntity.class, mappedBy = "freezerHistoryId", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<FreezerHistoryEntity> freezerHistoryId;
 
-    public FreezerEntity(BarnEntity barnId, Long managerId, Long carrotAmount, Long distributedCarrot) {
-        this.barnId = barnId;
+    public FreezerEntity(BarnEntity barn, Long managerId, Long carrotAmount, Long distributedCarrot) {
+        this.barn = barn;
         this.managerId = managerId;
         this.carrotAmount = carrotAmount;
         this.distributedCarrot = distributedCarrot;

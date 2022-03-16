@@ -57,7 +57,7 @@ public class BarnService {
       }
 //      logger.error("Auth: "+userId);
 
-      barnEntity.setIdUser(userId);
+      barnEntity.setUserId(userId);
       barnEntity.setBarnName(req.getBarnName());
       barnEntity.setStartDate(req.getStartDate());
       barnEntity.setEndDate(req.getEndDate());

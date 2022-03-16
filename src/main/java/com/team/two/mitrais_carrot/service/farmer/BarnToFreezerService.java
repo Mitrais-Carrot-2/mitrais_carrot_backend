@@ -43,16 +43,16 @@ public class BarnToFreezerService {
         Long freezerBalance = 0L;
         Long transferedCarrot = Math.abs(req.getCarrotAmount());
         FreezerHistoryEntity freezerHistory = new FreezerHistoryEntity();
-        logger.info("Barn ID: "+barn.getBarnId());
+        logger.info("Barn ID: "+barn.getId());
         logger.info("Manager ID: "+req.getManagerId());
-        FreezerEntity freezerEntity = freezerRepository.findByManagerIdEqualsAndBarnId_BarnIdEquals(req.getManagerId(), barn.getBarnId());
+        FreezerEntity freezerEntity = freezerRepository.findByManagerIdAndBarn_Id(req.getManagerId(), barn.getId());
         logger.error("Freezer: "+freezerEntity);
         if (freezerEntity==null){
             logger.info("----------------- Create New Freezer -----------------");
             freezerEntity = new FreezerEntity();
             freezerEntity.setDistributedCarrot(0L);
             freezerEntity.setManagerId(req.getManagerId());
-            freezerEntity.setBarnId(barn);
+            freezerEntity.setBarn(barn);
         } else {
             logger.info("----------------- Update Freezer -----------------");
             freezerBalance = freezerEntity.getCarrotAmount();
