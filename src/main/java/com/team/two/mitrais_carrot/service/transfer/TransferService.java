@@ -31,19 +31,16 @@ public class TransferService {
     Logger logger = org.slf4j.LoggerFactory.getLogger(TransferService.class);
 
 
-    // TODO : Transfer Rewards -> Admin to user
+    // Transfer Rewards -> Admin to user
     public TransferEntity transferBarnReward(UserEntity user, Long carrotAmount, ETransferType type) {
         
         BarnEntity activeBarn = barnService.isActiveBarn(true);
-        // Integer activeBarn = 1;
         BarnEntity barn = barnService.getBarnById(activeBarn.getBarnId());
         
         if (barn.getCarrotAmount() >= carrotAmount) {
-            BasketEntity activeUserBasket = basketService.getActiveBasket(user, true);//ada error tdk bisa menemukan basket
+            // BasketEntity activeUserBasket = basketService.getActiveBasket(user, true);//ada error tdk bisa menemukan basket
             Long userId = user.getId();
-            Long currentAmount = activeUserBasket.getRewardCarrot();
-            Long updatedAmount = currentAmount + carrotAmount;
-            basketService.updateCarrot(user, updatedAmount, EBasket.REWARD);
+            basketService.updateCarrot(user, carrotAmount, EBasket.REWARD);
             
             barnService.shareCarrot(carrotAmount, activeBarn.getBarnId());
             
