@@ -1,5 +1,6 @@
 package com.team.two.mitrais_carrot.controller.basket;
 
+import com.team.two.mitrais_carrot.dto.basket.ShowCarrotDto;
 import com.team.two.mitrais_carrot.dto.basket.UpdateCarrotDto;
 import com.team.two.mitrais_carrot.entity.auth.UserEntity;
 import com.team.two.mitrais_carrot.entity.basket.BasketEntity;
@@ -32,13 +33,13 @@ public class BasketController {
     }
 
     @GetMapping("")
-    public List<BasketEntity> getBaskets(){
-        return basketService.getAll();
+    public List<ShowCarrotDto> getBaskets(){
+        return basketService.showAllUserBaskets();
     }
 
-    @GetMapping("{id}")
-    public BasketEntity getBasket(long userId){
+    @GetMapping("{userId}")
+    public ShowCarrotDto getBasket(long userId){
         UserEntity user = userService.getById(userId);
-        return basketService.getActiveBasket(user, true);
+        return basketService.showUserActiveBasket(user, true);
     }
 }

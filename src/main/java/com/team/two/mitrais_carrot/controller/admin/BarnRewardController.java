@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 // TODO : Buat authentikasi agar admin access only
-@RestController
-@RequestMapping("/api/admin/barn_reward")
+//@RestController
+//@RequestMapping("/api/admin/barn_reward")
 public class BarnRewardController {
     @Autowired
     BarnRewardService barnRewardService;

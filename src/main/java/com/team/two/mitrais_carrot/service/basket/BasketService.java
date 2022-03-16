@@ -1,5 +1,6 @@
 package com.team.two.mitrais_carrot.service.basket;
 
+import com.team.two.mitrais_carrot.dto.basket.ShowCarrotDto;
 import com.team.two.mitrais_carrot.entity.auth.UserEntity;
 import com.team.two.mitrais_carrot.entity.basket.BasketEntity;
 import com.team.two.mitrais_carrot.entity.farmer.BarnEntity;
@@ -9,6 +10,7 @@ import com.team.two.mitrais_carrot.service.farmer.BarnService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -34,8 +36,20 @@ public class BasketService {
         return basketRepository.save(basket);
     }
 
-    public List<BasketEntity> getAll() {
+    public List<BasketEntity> getAllBaskets() {
         return (List<BasketEntity>) basketRepository.findAll();
+    }
+
+    public List<ShowCarrotDto> showAllUserBaskets() {
+        List<ShowCarrotDto> listCarrotDto = new ArrayList<>();
+        List<BasketEntity> baskets = (List<BasketEntity>) basketRepository.findAll();
+        baskets.stream()
+                .forEach(b -> {
+                    ShowCarrotDto carrotDto = new ShowCarrotDto(b.getUser().getId(), b);
+                    listCarrotDto.add(carrotDto);
+                });
+
+        return listCarrotDto;
     }
 
     public BasketEntity updateCarrot(UserEntity user, long addCarrot, EBasket transferType){
@@ -81,6 +95,11 @@ public class BasketService {
 
     public BasketEntity getActiveBasket(UserEntity user, boolean isActive) {
         return basketRepository.findByUser_IdAndBarn_Id(user.getId(), barnService.isActiveBarn(isActive).getId());
+    }
+
+    public ShowCarrotDto showUserActiveBasket(UserEntity user, boolean isActive){
+        BasketEntity basket = getActiveBasket(user, isActive);
+        return new ShowCarrotDto(user.getId(), basket);
     }
 
     public BasketEntity getActiveBasket (long userId, boolean isActive) {

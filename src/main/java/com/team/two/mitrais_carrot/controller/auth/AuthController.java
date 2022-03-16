@@ -27,9 +27,4 @@ public class AuthController {
     public JwtDto authenticateUser(@Valid @RequestBody LoginDto loginRequest) {
         return authService.login(loginRequest);
     }
-
-    @PostMapping("/signup")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpDto signUpRequest) {
-        return authService.register(signUpRequest);
-    }
 }
