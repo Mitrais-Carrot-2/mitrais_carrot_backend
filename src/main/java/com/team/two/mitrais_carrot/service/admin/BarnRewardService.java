@@ -5,6 +5,7 @@ import java.util.List;
 import javax.validation.constraints.Null;
 
 import com.team.two.mitrais_carrot.dto.admin.BarnRewardDto;
+import com.team.two.mitrais_carrot.dto.admin.EditBarnRewardDto;
 import com.team.two.mitrais_carrot.entity.admin.BarnRewardEntity;
 import com.team.two.mitrais_carrot.entity.admin.ETypeBarnReward;
 import com.team.two.mitrais_carrot.entity.auth.UserEntity;
@@ -40,6 +41,10 @@ public class BarnRewardService {
         return barnRewardRepository.findByGivingConditional(type);
     }
 
+    public BarnRewardEntity searchBarnRewardByDescription(String description){
+        return barnRewardRepository.findByRewardDescription(description);
+    }
+
     public BarnRewardEntity createBarnReward(BarnRewardDto req) {
         BarnRewardEntity barnReward = new BarnRewardEntity();
         barnReward.setRewardDescription(req.getRewardDescription());
@@ -47,6 +52,12 @@ public class BarnRewardService {
         barnReward.setGivingConditional(req.getGivingConditional());
         return barnRewardRepository.save(barnReward);
 
+    }
+
+    public BarnRewardEntity editBarnRewardEntity(EditBarnRewardDto req){
+        BarnRewardEntity selectedBarnReward = this.searchBarnRewardByDescription(req.getRewardDescription());
+        selectedBarnReward.setCarrotAmount(req.getCarrotAmount());
+        return barnRewardRepository.save(selectedBarnReward);
     }
 
     public List<UserEntity> rewardByBirthDay(){
