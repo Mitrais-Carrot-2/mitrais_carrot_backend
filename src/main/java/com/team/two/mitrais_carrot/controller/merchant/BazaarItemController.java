@@ -29,7 +29,10 @@ public class BazaarItemController {
     }
 
     @GetMapping("{id}")
-    public BazaarItemEntity getBazaarItem(@PathVariable("id") String id){
-        return bazaarItemService.getById(Integer.parseInt(id));
+//    public BazaarItemEntity getBazaarItem(@PathVariable("id") String id){
+//        return bazaarItemService.getById(Integer.parseInt(id));
+//    }
+    public List<BazaarItemEntity> getItemBazaar(@PathVariable("id") String id){
+        return bazaarItemService.getItemInBazaar(Integer.parseInt(id));
     }
 }

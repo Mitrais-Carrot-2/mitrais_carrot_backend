@@ -10,6 +10,7 @@ import com.team.two.mitrais_carrot.repository.BazaarItemRepository;
 import com.team.two.mitrais_carrot.repository.BazaarRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -39,7 +40,7 @@ public class BazaarItemService{
             newItem.setPrice(request.getPrice());
             newItem.setQuantity(request.getQuantity());
             newItem.setDescription(request.getDescription());
-            newItem.setBazaar_id(checker);
+            newItem.setBazaar(checker);
         }
 
 //        newItem.setImage(request.getImage());
@@ -64,4 +65,9 @@ public class BazaarItemService{
         return bazaarItemRepository.save(item);
     }
 
+    public List<BazaarItemEntity> getItemInBazaar(int bazaarId){
+        List<BazaarItemEntity> itemBazaar = new ArrayList<>();
+        itemBazaar = bazaarItemRepository.findByBazaar_Id(bazaarId);
+        return itemBazaar;
+    }
 }

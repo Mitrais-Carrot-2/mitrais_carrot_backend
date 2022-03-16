@@ -46,5 +46,5 @@ public class BazaarItemEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "bazaar_id")
-    private BazaarEntity bazaar_id;
+    private BazaarEntity bazaar;
 }
