@@ -103,7 +103,6 @@ public class UserService {
         
     }
 
-
     //findByUsername
     public UserEntity getByUsername(String username){
             UserEntity userEntity = userRepository.findByUsername(username);
@@ -113,8 +112,6 @@ public class UserService {
             }
             return null;
     }
-
-
 
     public Boolean checkPassword(String username, String password){
         UserEntity userEntity = userRepository.findByUsername(username);

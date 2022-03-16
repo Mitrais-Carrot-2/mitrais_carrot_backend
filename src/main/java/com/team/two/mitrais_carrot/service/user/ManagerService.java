@@ -129,12 +129,12 @@ public class ManagerService {
 
     public void transferToStaff(Long userId, Long carrot, String note){
         BarnEntity barn = barnRepository.findByIsActive(true);
-        FreezerEntity freezer = freezerRepository.findByManagerIdEqualsAndBarnId_BarnIdEquals(getManagerId(), barn.getBarnId());
+        FreezerEntity freezer = freezerRepository.findByManagerIdAndBarn_Id(getManagerId(), barn.getId());
 
-        BasketEntity oldBasket = basketRepository.findByUserId_IdAndBarnId_BarnId(userId, barn.getBarnId());
+        BasketEntity oldBasket = basketRepository.findByUser_IdAndBarn_Id(userId, barn.getId());
 
 //        if(freezer.getCarrotAmount() - carrot>=0) {
-            oldBasket.setBarnId(barn);
+            oldBasket.setId(barn.getId());
             oldBasket.setCarrotAmount(oldBasket.getShareCarrot() + carrot);
             oldBasket.setShareCarrot(oldBasket.getShareCarrot() + carrot);
             basketRepository.save(oldBasket);
@@ -145,7 +145,7 @@ public class ManagerService {
 
             TransferToStaffDto result = new TransferToStaffDto();
 
-            result.setStaffId(oldBasket.getUserId().getId());
+            result.setStaffId(oldBasket.getUser().getId());
             result.setCarrotAmount(oldBasket.getCarrotAmount());
             result.setNote(note);
 
@@ -179,7 +179,7 @@ public class ManagerService {
         Integer groupId = req.getGroupId();
 
         BarnEntity barn = barnRepository.findByIsActive(true);
-        FreezerEntity freezer = freezerRepository.findByManagerIdEqualsAndBarnId_BarnIdEquals(getManagerId(), barn.getBarnId());
+        FreezerEntity freezer = freezerRepository.findByManagerIdAndBarn_Id(getManagerId(), barn.getId());
 
         List<UserGroupEntity> members = userGroupRepository.findByGroup_Id(groupId);
         List<BasketEntity> basket = new ArrayList<>();
