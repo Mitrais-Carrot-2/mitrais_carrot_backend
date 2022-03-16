@@ -5,18 +5,9 @@ import com.team.two.mitrais_carrot.dto.UpdatePasswordDto;
 import com.team.two.mitrais_carrot.dto.UpdateProfileDto;
 import com.team.two.mitrais_carrot.dto.auth.UserDto;
 import com.team.two.mitrais_carrot.entity.auth.UserEntity;
-import com.team.two.mitrais_carrot.entity.basket.BasketEntity;
-import com.team.two.mitrais_carrot.entity.image.FileNameHelper;
-import com.team.two.mitrais_carrot.entity.image.Image;
-import com.team.two.mitrais_carrot.entity.image.ImageResponse;
-import com.team.two.mitrais_carrot.repository.UserRepository;
-import com.team.two.mitrais_carrot.service.basket.BasketService;
-import com.team.two.mitrais_carrot.service.basket.EBasket;
-import com.team.two.mitrais_carrot.service.Image.ImageService;
 import com.team.two.mitrais_carrot.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMessage;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +15,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.persistence.*;
 import java.util.List;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -41,11 +31,6 @@ public class UserController {
     public UserEntity addUser(@RequestBody UserDto userDto) {
         return userService.add(userDto);
     }
-
-    @Autowired
-    private ImageService imageService;
-
-    private FileNameHelper fileHelper = new FileNameHelper();
 
     public UserController(UserService userService) {
         this.userService = userService;
@@ -93,7 +78,6 @@ public class UserController {
         }
     }
 
-    //GetImage per username DONE
     @GetMapping("/getImage/{username}")
     public ResponseEntity<byte[]> getImage(@PathVariable String username) throws Exception {
         UserEntity user = userService.getByUsername(username);
@@ -111,8 +95,8 @@ public class UserController {
 
     @PutMapping("/uploadImage/{username}")
     public ResponseEntity<?> uploadImage(@PathVariable String username, @RequestParam("file") MultipartFile file) {
-        try{
-            userService.saveImage(username,file);
+        try {
+            userService.saveImage(username, file);
 
             return ResponseEntity.status(HttpStatus.OK)
                     .body(String.format("File uploaded successfully: %s", file.getOriginalFilename()));
@@ -120,14 +104,5 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(String.format("Could not upload the file: %s!", file.getOriginalFilename()));
         }
-//        if (file.isEmpty()) {
-//            return ResponseEntity.badRequest().body("Please select a file to upload");
-//        }
-//        UserEntity user = userService.getByUsername(username);
-//        if (user != null) {
-//            UserEntity userImage = userService.buildImage(username, file);
-//            return ResponseEntity.ok().contentType(MediaType.valueOf(user.getImageType())).body(user.getImage());
-//        }
-//        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Please import image!");
     }
 }

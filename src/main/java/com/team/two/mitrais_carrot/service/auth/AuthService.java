@@ -151,7 +151,7 @@ public class AuthService {
         });
 
         BarnEntity barn = barnRepository.findByIsActive(true);
-        basketRepository.save(new BasketEntity(user.getId(), barn, 0, 0, 0, 0));
+        basketRepository.save(new BasketEntity(user, barn, 0, 0, 0, 0));
         userRoleRepository.saveAll(userRoleEntity);
 
         return ResponseEntity.ok(new MessageDto("Sign Up Successfully!", true));

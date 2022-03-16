@@ -51,10 +51,16 @@ public class BarnEntity {
 	@Value("${cp.barns.distributed_carrot: 0}")
 	private Long distributedCarrot = 0L;
 
-	@OneToMany(targetEntity = BasketEntity.class, mappedBy = "basketId", fetch = FetchType.EAGER,cascade = CascadeType.ALL)
-	@Fetch(value = FetchMode.SUBSELECT)
-	private List<BasketEntity> basketId;
+//	@OneToMany(targetEntity = BasketEntity.class, mappedBy = "basketId", fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+//	@Fetch(value = FetchMode.SUBSELECT)
+//	private List<BasketEntity> basketId;
+//
+//	@OneToMany(targetEntity = FreezerEntity.class, mappedBy = "freezerId", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+//	private List<FreezerEntity> freezerId;
 
-	@OneToMany(targetEntity = FreezerEntity.class, mappedBy = "freezerId", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	private List<FreezerEntity> freezerId;
+	@OneToMany(mappedBy = "barnId", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private List<BasketEntity> baskets;
+
+	@OneToMany(mappedBy = "barnId", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private List<FreezerEntity> freezers;
 }

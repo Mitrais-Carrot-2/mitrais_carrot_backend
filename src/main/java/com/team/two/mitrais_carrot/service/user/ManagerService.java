@@ -50,9 +50,6 @@ public class ManagerService {
     @Autowired
     FreezerRepository freezerRepository;
 
-    @Autowired
-    FreezerHistoryRepository freezerHistoryRepository;
-
     Logger logger = LoggerFactory.getLogger(ManagerService.class);
 
 //        UserDetailsImpl user = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -78,30 +75,28 @@ public class ManagerService {
     public Boolean transferToStaff(TransferToStaffDto req){
         BarnEntity barn = barnRepository.findByIsActive(true);
         FreezerEntity freezer = freezerRepository.findByManagerIdEqualsAndBarnId_BarnIdEquals(supervisorId, barn.getBarnId());
-        FreezerHistoryEntity freezerHistory = new FreezerHistoryEntity();
-        BasketEntity oldBasket = basketRepository.findByUserIdAndBarnId_BarnId(req.getStaffId(), barn.getBarnId());
 
-        oldBasket.setBarnId(barn);
-        oldBasket.setCarrotAmount(oldBasket.getShareCarrot() + req.getCarrotAmount());
-        oldBasket.setShareCarrot(oldBasket.getShareCarrot() + req.getCarrotAmount());
-        basketRepository.save(oldBasket);
+        BasketEntity oldBasket = basketRepository.findByUserId_IdAndBarnId_BarnId(req.getStaffId(), barn.getBarnId());
 
-        freezer.setCarrotAmount(freezer.getCarrotAmount() - req.getCarrotAmount());
-        freezer.setDistributedCarrot(freezer.getDistributedCarrot()+req.getCarrotAmount());
-        freezerRepository.save(freezer);
+        if(freezer.getCarrotAmount() - req.getCarrotAmount()>=0) {
+            oldBasket.setBarnId(barn);
+            oldBasket.setCarrotAmount(oldBasket.getShareCarrot() + req.getCarrotAmount());
+            oldBasket.setShareCarrot(oldBasket.getShareCarrot() + req.getCarrotAmount());
+            basketRepository.save(oldBasket);
 
-        freezerHistory.setFreezerId(freezer);
-        freezerHistory.setCarrotAmount(req.getCarrotAmount());
-        freezerHistory.setShareAt(LocalDateTime.now());
-        freezerHistoryRepository.save(freezerHistory);
+            freezer.setCarrotAmount(freezer.getCarrotAmount() - req.getCarrotAmount());
+            freezer.setDistributedCarrot(freezer.getDistributedCarrot() + req.getCarrotAmount());
+            freezerRepository.save(freezer);
 
-        TransferToStaffDto result = new TransferToStaffDto();
+            TransferToStaffDto result = new TransferToStaffDto();
 
-        result.setStaffId(oldBasket.getUserId());
-        result.setCarrotAmount(oldBasket.getCarrotAmount());
-        result.setNote(req.getNote());
+            result.setStaffId(oldBasket.getUserId().getId());
+            result.setCarrotAmount(oldBasket.getCarrotAmount());
+            result.setNote(req.getNote());
+            return true;
+        }
 
-        return true;
+        return false;
     }
 
     public List<GroupDto> fetchMyGroup(){

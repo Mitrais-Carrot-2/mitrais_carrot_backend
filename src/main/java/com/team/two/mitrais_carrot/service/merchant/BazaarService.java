@@ -1,9 +1,11 @@
 package com.team.two.mitrais_carrot.service.merchant;
 
+import com.team.two.mitrais_carrot.dto.MessageDto;
 import com.team.two.mitrais_carrot.dto.merchant.CreateBazaarDto;
 import com.team.two.mitrais_carrot.entity.merchant.BazaarEntity;
 import com.team.two.mitrais_carrot.repository.BazaarRepository;
 import org.apache.tomcat.jni.Local;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -23,14 +25,15 @@ public class BazaarService {
         return (List<BazaarEntity>) bazaarRepository.findAll();
     }
 
-    public BazaarEntity createBazaar(CreateBazaarDto request){
+    public ResponseEntity<?> createBazaar(CreateBazaarDto request){
         BazaarEntity bazaar = new BazaarEntity();
         bazaar.setBazaarName(request.getBazaarName());
 //        bazaar.setActive(true);
         bazaar.setStartDate(request.getStartDate());
         bazaar.setEndDate(request.getEndDate());
+        bazaarRepository.save(bazaar);
 
-        return bazaarRepository.save(bazaar);
+        return ResponseEntity.ok(new MessageDto("Success Create New Bazaar"));
     }
 
 }
