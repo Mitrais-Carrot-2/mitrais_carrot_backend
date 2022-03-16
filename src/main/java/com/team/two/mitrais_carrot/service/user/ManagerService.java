@@ -1,13 +1,14 @@
 package com.team.two.mitrais_carrot.service.user;
 
+import com.team.two.mitrais_carrot.dto.manager.TransferToGroupDto;
 import com.team.two.mitrais_carrot.dto.manager.TransferToStaffDto;
 import com.team.two.mitrais_carrot.dto.user.GroupDto;
 import com.team.two.mitrais_carrot.dto.user.StaffDto;
+import com.team.two.mitrais_carrot.dto.user.UserGroupDto;
 import com.team.two.mitrais_carrot.entity.auth.UserEntity;
 import com.team.two.mitrais_carrot.entity.basket.BasketEntity;
 import com.team.two.mitrais_carrot.entity.farmer.BarnEntity;
 import com.team.two.mitrais_carrot.entity.freezer.FreezerEntity;
-import com.team.two.mitrais_carrot.entity.freezer.FreezerHistoryEntity;
 import com.team.two.mitrais_carrot.entity.group.GroupEntity;
 import com.team.two.mitrais_carrot.entity.group.UserGroupEntity;
 import com.team.two.mitrais_carrot.entity.transfer.ETransferType;
@@ -27,6 +28,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ManagerService {
@@ -123,6 +125,43 @@ public class ManagerService {
         return false;
     }
 
+    public void transferToStaff(Long userId, Long carrot, String note){
+        BarnEntity barn = barnRepository.findByIsActive(true);
+        FreezerEntity freezer = freezerRepository.findByManagerIdEqualsAndBarnId_BarnIdEquals(getManagerId(), barn.getBarnId());
+
+        BasketEntity oldBasket = basketRepository.findByUserId_IdAndBarnId_BarnId(userId, barn.getBarnId());
+
+//        if(freezer.getCarrotAmount() - carrot>=0) {
+            oldBasket.setBarnId(barn);
+            oldBasket.setCarrotAmount(oldBasket.getShareCarrot() + carrot);
+            oldBasket.setShareCarrot(oldBasket.getShareCarrot() + carrot);
+            basketRepository.save(oldBasket);
+
+            freezer.setCarrotAmount(freezer.getCarrotAmount() - carrot);
+            freezer.setDistributedCarrot(freezer.getDistributedCarrot() + carrot);
+            freezerRepository.save(freezer);
+
+            TransferToStaffDto result = new TransferToStaffDto();
+
+            result.setStaffId(oldBasket.getUserId().getId());
+            result.setCarrotAmount(oldBasket.getCarrotAmount());
+            result.setNote(note);
+
+            TransferEntity history = new TransferEntity();
+            history.setSenderId(getManagerId());
+            history.setReceiverId(userId);
+            history.setCarrotAmount(carrot);
+            history.setNote(note);
+            history.setShareAt(LocalDateTime.now());
+            history.setType(ETransferType.TYPE_SHARED);
+            transferRepository.save(history);
+
+//            return true;
+//        }
+//
+//        return false;
+    }
+
     public List<GroupDto> fetchMyGroup(){
         List<GroupEntity> groups = groupRepository.findByManagerId(getManagerId());
 
@@ -134,7 +173,32 @@ public class ManagerService {
         return groupDto;
     }
 
-//    public Boolean transferToGroup(TransferToGroupDto){
-//
-//    }
+    public Boolean transferToGroup(TransferToGroupDto req){
+        Integer groupId = req.getGroupId();
+
+        BarnEntity barn = barnRepository.findByIsActive(true);
+        FreezerEntity freezer = freezerRepository.findByManagerIdEqualsAndBarnId_BarnIdEquals(getManagerId(), barn.getBarnId());
+
+        List<UserGroupEntity> members = userGroupRepository.findByGroup_Id(groupId);
+        List<BasketEntity> basket = new ArrayList<>();
+
+        Long totalCarrot = members.size() * req.getCarrotAmount();
+        if(totalCarrot - req.getCarrotAmount()>=0) {
+            members.forEach(m -> {
+                transferToStaff(m.getUser().getId(), req.getCarrotAmount(), req.getNote());
+            });
+            return true;
+        }
+        return false;
+    }
+
+    public List<UserGroupDto> fetchMyStaffGroup(Integer groupId) {
+        List<UserGroupEntity> members = userGroupRepository.findByGroup_Id(groupId);
+        List<UserGroupDto> users = new ArrayList<>();
+        members.forEach(m -> {
+            UserEntity user = userRepository.findByUsername(m.getUser().getUsername());
+            users.add(new UserGroupDto(user.getUsername(), user.getFirstName(), user.getLastName(), user.getJobFamily(), user.getJobGrade(), user.getOffice()));
+        });
+        return users;
+    }
 }

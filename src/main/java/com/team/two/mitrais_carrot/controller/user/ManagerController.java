@@ -1,9 +1,11 @@
 package com.team.two.mitrais_carrot.controller.user;
 
 import com.team.two.mitrais_carrot.dto.MessageDto;
+import com.team.two.mitrais_carrot.dto.manager.TransferToGroupDto;
 import com.team.two.mitrais_carrot.dto.manager.TransferToStaffDto;
 import com.team.two.mitrais_carrot.dto.user.GroupDto;
 import com.team.two.mitrais_carrot.dto.user.StaffDto;
+import com.team.two.mitrais_carrot.dto.user.UserGroupDto;
 import com.team.two.mitrais_carrot.entity.auth.UserEntity;
 import com.team.two.mitrais_carrot.entity.basket.BasketEntity;
 import com.team.two.mitrais_carrot.entity.group.GroupEntity;
@@ -13,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -21,13 +24,12 @@ public class ManagerController {
     @Autowired
     ManagerService managerService;
 
-    // TODO List of Staff
     @GetMapping("/staff")
     public List<StaffDto> fetchMyStaff(){
         return managerService.fetchMyStaff();
     }
 
-    @PostMapping("/staff")
+    @PostMapping("/transfer/staff")
     public ResponseEntity<MessageDto> transferToStaff(TransferToStaffDto req){
         Boolean status = managerService.transferToStaff(req);
         if (status){
@@ -37,11 +39,23 @@ public class ManagerController {
         }
     }
 
-    // TODO List of Group
     @GetMapping("/group")
     public List<GroupDto> fetchMyGroup(){
         return managerService.fetchMyGroup();
     }
 
-    // TODO List of Group Staff
+    @GetMapping("/group/staff/{groupId}")
+    public List<UserGroupDto> fetchMyStaffGroup(@PathVariable("groupId") Integer groupId){
+        return managerService.fetchMyStaffGroup(groupId);
+    }
+
+    @PostMapping("/transfer/group")
+    public ResponseEntity<MessageDto> transferToGroup(TransferToGroupDto req){
+        Boolean status = managerService.transferToGroup(req);
+        if (status){
+            return ResponseEntity.ok(new MessageDto("Transfer from Manager to Group success!", true));
+        } else {
+            return ResponseEntity.badRequest().body(new MessageDto("Not enough carrot in Freezer!", false));
+        }
+    }
 }
