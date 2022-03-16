@@ -16,6 +16,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "transferHistories")
+@ToString
 public class TransferEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,6 +35,7 @@ public class TransferEntity {
     @Enumerated(EnumType.STRING)
     private ETransferType type;
 
+    @Column(name = "note")
     private String note;
 
     @Column(name = "carrot_amount")

@@ -41,7 +41,6 @@ public class BasketService {
     public BasketEntity updateCarrot(UserEntity user, long addCarrot, EBasket transferType){
         BasketEntity basket = getActiveBasket(user, true);
 
-        System.out.println("basket = " + basket);
 
         if (transferType == EBasket.SHARE){
             addShareCarrot(basket, addCarrot);
@@ -53,7 +52,8 @@ public class BasketService {
             addBazaarCarrot(basket, addCarrot);
         }
         else {
-            System.out.println("Transfer type is not defined!");
+            // TODO : Ganti ke logger
+            // System.out.println("Transfer type is not defined!");
         }
 
         long totalCarrot = basket.getShareCarrot() + basket.getRewardCarrot() + basket.getBazaarCarrot();
