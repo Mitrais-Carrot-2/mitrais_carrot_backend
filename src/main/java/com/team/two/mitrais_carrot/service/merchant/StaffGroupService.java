@@ -63,13 +63,18 @@ public class StaffGroupService {
     }
 
     public UserGroupEntity addNewMember(int id, NewGroupMemberDto request){
+        List<UserGroupEntity> userGroupCheck = userGroupRepository.findByGroup_Id(id);
+        userGroupCheck = userGroupCheck.stream()
+                .filter((UserGroupEntity user) -> user.getUser().getId() == (long) request.getUserId())
+                .collect(Collectors.toList());
+        //System.out.println(userGroupCheck.isEmpty());
         UserGroupEntity userGroup = new UserGroupEntity();
         GroupEntity checker = groupRepository.getById(id);
         UserEntity userChecker = userRepository.getById((long) request.getUserId());
-        if(checker.getName() != null){
+        if(userGroupCheck.isEmpty()) {
             userGroup.setGroup(checker);
             userGroup.setUser(userChecker);
-            System.out.println(userGroup.getGroup().getId()+" " +userGroup.getUser());
+            System.out.println(userGroup.getGroup().getId() + " " + userGroup.getUser());
             return userGroupRepository.save(userGroup);
         }
         return null;
