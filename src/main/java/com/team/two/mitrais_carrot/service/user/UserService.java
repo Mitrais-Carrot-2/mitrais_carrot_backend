@@ -46,12 +46,12 @@ public class UserService {
     public UserEntity add(UserDto req){
         UserEntity user = new UserEntity(req.getUsername(), req.getPassword(), req.getEmail());
 
-        user.setBirthDate(LocalDate.now());
+//        user.setBirthDate(LocalDate.now());
         if (!user.getBirthDate().isLeapYear() && (user.getBirthDate().getDayOfYear() >= 60)){ //standarisasi day 60 = 29 Feb, day 61 = 1 Mar
             user.setDayOfYearBirthDay(user.getBirthDate().getDayOfYear()+1);
+        }else {
+            user.setDayOfYearBirthDay(user.getBirthDate().getDayOfYear());
         }
-        user.setDayOfYearBirthDay(user.getBirthDate().getDayOfYear());
-
         userRepository.save(user);
         System.out.println("FINISHED SAVING USER");
 
@@ -66,6 +66,11 @@ public class UserService {
     }
 
     public UserEntity add(UserEntity user){
+        if (!(user.getBirthDate().isLeapYear()) && (user.getBirthDate().getDayOfYear() >= 60)){ //standarisasi day 60 = 29 Feb, day 61 = 1 Mar
+            user.setDayOfYearBirthDay(user.getBirthDate().getDayOfYear()+1);
+        }else {
+            user.setDayOfYearBirthDay(user.getBirthDate().getDayOfYear());
+        }
         userRepository.save(user);
         System.out.println("FINISHED SAVING USER");
 

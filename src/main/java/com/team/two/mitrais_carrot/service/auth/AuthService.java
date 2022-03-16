@@ -99,7 +99,7 @@ public class AuthService {
         UserEntity user = new UserEntity(signUpRequest.getUsername(),
                 encoder.encode(signUpRequest.getPassword()),
                 signUpRequest.getEmail());
-        user.setBirthDate(LocalDate.now());
+        user.setBirthDate(signUpRequest.getBirthDate());
         user.setFirstName(signUpRequest.getFirstName());
         user.setLastName(signUpRequest.getLastName());
         user.setAddress(signUpRequest.getAddress());
