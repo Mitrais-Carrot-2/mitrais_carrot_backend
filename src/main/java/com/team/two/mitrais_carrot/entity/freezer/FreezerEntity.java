@@ -38,5 +38,8 @@ public class FreezerEntity {
     private Long carrotAmount;
 
     @Column(name = "distributed_carrot")
-    private int distributedCarrot;
+    private Long distributedCarrot;
+
+    @OneToMany(targetEntity = FreezerHistoryEntity.class, mappedBy = "freezerHistoryId", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private List<FreezerHistoryEntity> freezerHistoryId;
 }

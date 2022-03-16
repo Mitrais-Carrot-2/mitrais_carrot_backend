@@ -35,11 +35,11 @@ public class AuthController {
     @Autowired
     AuthService authService;
 
-    @GetMapping("/test")
-    public UserDetailsImpl test() {
-        UserDetailsImpl user = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return user;
-    }
+//    @GetMapping("/test")
+//    public UserDetailsImpl test() {
+//        UserDetailsImpl user = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        return user;
+//    }
 
     @PostMapping("/login")
     public JwtDto authenticateUser(@Valid @RequestBody LoginDto loginRequest) {
