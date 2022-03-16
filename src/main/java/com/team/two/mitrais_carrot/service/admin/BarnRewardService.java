@@ -36,6 +36,10 @@ public class BarnRewardService {
         return barnRewardRepository.findAll();
     }
 
+    public BarnRewardEntity searchBarnRewardByType(ETypeBarnReward type){
+        return barnRewardRepository.findByGivingConditional(type);
+    }
+
     public BarnRewardEntity createBarnReward(BarnRewardDto req) {
         BarnRewardEntity barnReward = new BarnRewardEntity();
         barnReward.setRewardDescription(req.getRewardDescription());
@@ -46,10 +50,12 @@ public class BarnRewardService {
     }
 
     public List<UserEntity> rewardByBirthDay(){
+
+        long amount = this.searchBarnRewardByType(ETypeBarnReward.USER_BIRTHDAY).getCarrotAmount();
         
         List<UserEntity> birthdayPerson =  userService.getBirthdayPerson();
         for (UserEntity user : birthdayPerson){
-            transferService.transferBarnReward(user, 10L, ETransferType.TYPE_REWARD);
+            transferService.transferBarnReward(user, amount, ETransferType.TYPE_REWARD);
         }
         
         return birthdayPerson;
