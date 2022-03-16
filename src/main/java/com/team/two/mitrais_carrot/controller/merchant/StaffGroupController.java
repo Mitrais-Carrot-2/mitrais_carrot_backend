@@ -9,6 +9,7 @@ import com.team.two.mitrais_carrot.entity.group.GroupEntity;
 import com.team.two.mitrais_carrot.entity.group.UserGroupEntity;
 import com.team.two.mitrais_carrot.service.merchant.StaffGroupService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,7 +29,7 @@ public class StaffGroupController {
     }
 
     @PostMapping("")
-    public GroupEntity createStaffGroup(@RequestBody StaffGroupDto request){
+    public ResponseEntity<?> createStaffGroup(@RequestBody StaffGroupDto request){
         return staffGroupService.createStaffGroup(request);
     }
 
@@ -38,13 +39,13 @@ public class StaffGroupController {
     }
 
     @PutMapping("{id}")
-    public GroupEntity updateStaffGroup(@PathVariable("id") int id, @RequestBody StaffGroupDto request){
+    public ResponseEntity<?> updateStaffGroup(@PathVariable("id") int id, @RequestBody StaffGroupDto request){
         return staffGroupService.updateStaffGroup(request,id);
     }
 
     //add employee/staff/user into groups
     @PostMapping("{id}")
-    public UserGroupEntity addStaffToGroup(@PathVariable("id") int id, @RequestBody NewGroupMemberDto request){
+    public ResponseEntity<?> addStaffToGroup(@PathVariable("id") int id, @RequestBody NewGroupMemberDto request){
         return staffGroupService.addNewMember(id, request);
     }
 
