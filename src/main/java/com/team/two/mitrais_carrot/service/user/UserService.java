@@ -46,12 +46,12 @@ public class UserService {
     public UserEntity add(UserDto req){
         UserEntity user = new UserEntity(req.getUsername(), req.getPassword(), req.getEmail());
 
-        user.setBirthDate(LocalDate.now());
+//        user.setBirthDate(LocalDate.now());
         if (!user.getBirthDate().isLeapYear() && (user.getBirthDate().getDayOfYear() >= 60)){ //standarisasi day 60 = 29 Feb, day 61 = 1 Mar
             user.setDayOfYearBirthDay(user.getBirthDate().getDayOfYear()+1);
+        }else {
+            user.setDayOfYearBirthDay(user.getBirthDate().getDayOfYear());
         }
-        user.setDayOfYearBirthDay(user.getBirthDate().getDayOfYear());
-
         userRepository.save(user);
         System.out.println("FINISHED SAVING USER");
 
@@ -66,15 +66,20 @@ public class UserService {
     }
 
     public UserEntity add(UserEntity user){
-        userRepository.save(user);
-        System.out.println("FINISHED SAVING USER");
-
-        BarnEntity barnId = barnService.isActiveBarn(true);
-        System.out.println("BARN ID = " + barnId.getId());
-
-        BasketEntity basket = basketService.add(user);
-        user.getBaskets().add(basket);
-        System.out.println("SET BASKET" + basket);
+        if (!(user.getBirthDate().isLeapYear()) && (user.getBirthDate().getDayOfYear() >= 60)){ //standarisasi day 60 = 29 Feb, day 61 = 1 Mar
+            user.setDayOfYearBirthDay(user.getBirthDate().getDayOfYear()+1);
+        }else {
+            user.setDayOfYearBirthDay(user.getBirthDate().getDayOfYear());
+        }
+//        userRepository.save(user);
+//        System.out.println("FINISHED SAVING USER");
+//
+//        BarnEntity barnId = barnService.isActiveBarn(true);
+//        System.out.println("BARN ID = " + barnId.getId());
+//
+//        BasketEntity basket = basketService.add(user);
+//        user.getBaskets().add(basket);
+//        System.out.println("SET BASKET" + basket);
 
         return userRepository.save(user);
     }
@@ -103,7 +108,6 @@ public class UserService {
         
     }
 
-
     //findByUsername
     public UserEntity getByUsername(String username){
             UserEntity userEntity = userRepository.findByUsername(username);
@@ -113,8 +117,6 @@ public class UserService {
             }
             return null;
     }
-
-
 
     public Boolean checkPassword(String username, String password){
         UserEntity userEntity = userRepository.findByUsername(username);

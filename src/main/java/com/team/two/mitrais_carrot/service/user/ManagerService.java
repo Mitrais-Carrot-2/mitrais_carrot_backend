@@ -29,7 +29,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ManagerService {
@@ -68,6 +67,7 @@ public class ManagerService {
             supervisorId = user.getId();
         } catch (ClassCastException err) {
             logger.error("No Authorization / Supervisor not exist!");
+            supervisorId = 2L;
         }
 
         return supervisorId;
@@ -76,16 +76,18 @@ public class ManagerService {
     public List<StaffDto> fetchMyStaff(){
         List<UserEntity> staff = managerRepository.findBySupervisorId(getManagerId());
         List<StaffDto> result = new ArrayList<>();
-        staff.forEach(s ->
-            result.add(new StaffDto(
+        staff.forEach(s ->{
+            result.add(
+                new StaffDto(
                 s.getId(),
                 s.getUsername(),
                 s.getFirstName(),
                 s.getLastName(),
                 s.getJobFamily(),
-                s.getJobGrade())
-            )
-        );
+                s.getJobGrade(),
+                s.getOffice())
+            );
+        });
         return result;
     }
 
@@ -128,12 +130,12 @@ public class ManagerService {
 
     public void transferToStaff(Long userId, Long carrot, String note){
         BarnEntity barn = barnRepository.findByIsActive(true);
-        FreezerEntity freezer = freezerRepository.findByManagerIdEqualsAndBarnId_BarnIdEquals(getManagerId(), barn.getBarnId());
+        FreezerEntity freezer = freezerRepository.findByManagerIdAndBarn_Id(getManagerId(), barn.getId());
 
-        BasketEntity oldBasket = basketRepository.findByUserId_IdAndBarnId_BarnId(userId, barn.getBarnId());
+        BasketEntity oldBasket = basketRepository.findByUser_IdAndBarn_Id(userId, barn.getId());
 
 //        if(freezer.getCarrotAmount() - carrot>=0) {
-            oldBasket.setBarnId(barn);
+            oldBasket.setId(barn.getId());
             oldBasket.setCarrotAmount(oldBasket.getShareCarrot() + carrot);
             oldBasket.setShareCarrot(oldBasket.getShareCarrot() + carrot);
             basketRepository.save(oldBasket);
@@ -144,7 +146,7 @@ public class ManagerService {
 
             TransferToStaffDto result = new TransferToStaffDto();
 
-            result.setStaffId(oldBasket.getUserId().getId());
+            result.setStaffId(oldBasket.getUser().getId());
             result.setCarrotAmount(oldBasket.getCarrotAmount());
             result.setNote(note);
 
@@ -169,7 +171,12 @@ public class ManagerService {
         List<GroupDto> groupDto = new ArrayList<>();
         groups.forEach(g -> {
             List<UserGroupEntity> staff = userGroupRepository.findByGroup_Id(g.getId());
-            groupDto.add(new GroupDto(g.getId(), g.getName(), g.getAllocation(), staff.size(), g.getAllocation()*staff.size(), g.getNote()));
+            List<StaffDto> groupMember = new ArrayList<>();
+            staff.forEach(s -> {
+                UserEntity user = s.getUser();
+                groupMember.add(new StaffDto(user.getId(), user.getUsername(), user.getFirstName(), user.getLastName(), user.getJobFamily(), user.getJobGrade(), user.getOffice()));
+            });
+            groupDto.add(new GroupDto(g.getId(), g.getName(), g.getAllocation(), staff.size(), g.getAllocation()*staff.size(), g.getNote(), groupMember));
         });
         return groupDto;
     }
@@ -178,7 +185,7 @@ public class ManagerService {
         Integer groupId = req.getGroupId();
 
         BarnEntity barn = barnRepository.findByIsActive(true);
-        FreezerEntity freezer = freezerRepository.findByManagerIdEqualsAndBarnId_BarnIdEquals(getManagerId(), barn.getBarnId());
+        FreezerEntity freezer = freezerRepository.findByManagerIdAndBarn_Id(getManagerId(), barn.getId());
 
         List<UserGroupEntity> members = userGroupRepository.findByGroup_Id(groupId);
         List<BasketEntity> basket = new ArrayList<>();

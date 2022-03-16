@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Setter
 @Getter
 @AllArgsConstructor
@@ -14,4 +16,5 @@ public class GroupDto {
     private Integer totalMember;
     private Long total;
     private String note;
+    private List<StaffDto> staff;
 }
