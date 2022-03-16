@@ -47,17 +47,18 @@ public class BarnService {
 
   public BarnEntity createBarn(BarnDto req) {
       BarnEntity barnEntity = new BarnEntity();
-      UserDetailsImpl user = null;
-      Long userId = 1L;
-      try {
-        user = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        userId = user.getId();
-      } catch (ClassCastException err){
-          userId = 1L;
-      }
-//      logger.error("Auth: "+userId);
 
-      barnEntity.setIdUser(userId);
+//      Long userId = 1L;
+//      try {
+//        user = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        userId = user.getId();
+//      } catch (ClassCastException err){
+//          userId = 1L;
+//      }
+
+      //      logger.error("Auth: "+userId);
+
+      barnEntity.setIdUser(getFarmerId());
       barnEntity.setBarnName(req.getBarnName());
       barnEntity.setStartDate(req.getStartDate());
       barnEntity.setEndDate(req.getEndDate());
@@ -85,4 +86,16 @@ public class BarnService {
       LocalDate.now().isBefore(expiredDate)
     );
   }
+
+    public Long getFarmerId() {
+        Long userId = 1L;
+        try {
+            UserDetailsImpl user = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            userId = user.getId();
+        } catch (ClassCastException err) {
+            userId = 1L;
+        }
+
+        return userId;
+    }
 }

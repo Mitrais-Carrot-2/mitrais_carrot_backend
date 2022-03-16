@@ -10,17 +10,18 @@ import com.team.two.mitrais_carrot.entity.freezer.FreezerEntity;
 import com.team.two.mitrais_carrot.entity.freezer.FreezerHistoryEntity;
 import com.team.two.mitrais_carrot.entity.group.GroupEntity;
 import com.team.two.mitrais_carrot.entity.group.UserGroupEntity;
-import com.team.two.mitrais_carrot.repository.BasketRepository;
-import com.team.two.mitrais_carrot.repository.FreezerHistoryRepository;
-import com.team.two.mitrais_carrot.repository.FreezerRepository;
-import com.team.two.mitrais_carrot.repository.UserRepository;
+import com.team.two.mitrais_carrot.entity.transfer.ETransferType;
+import com.team.two.mitrais_carrot.entity.transfer.TransferEntity;
+import com.team.two.mitrais_carrot.repository.*;
 import com.team.two.mitrais_carrot.repository.farmer.BarnRepository;
 import com.team.two.mitrais_carrot.repository.user.GroupRepository;
 import com.team.two.mitrais_carrot.repository.user.ManagerRepository;
 import com.team.two.mitrais_carrot.repository.user.UserGroupRepository;
+import com.team.two.mitrais_carrot.security.services.UserDetailsImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -29,6 +30,7 @@ import java.util.List;
 
 @Service
 public class ManagerService {
+
     @Autowired
     UserRepository userRepository;
 
@@ -50,14 +52,26 @@ public class ManagerService {
     @Autowired
     FreezerRepository freezerRepository;
 
+    @Autowired
+    TransferRepository transferRepository;
+
     Logger logger = LoggerFactory.getLogger(ManagerService.class);
 
-//        UserDetailsImpl user = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//        Long supervisorId = user.getId();
-    Long supervisorId = 2L;
+    public Long getManagerId() {
+        Long supervisorId = 2L;
+        try {
+            UserDetailsImpl user = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            supervisorId = user.getId();
+        } catch (ClassCastException err) {
+            logger.error("No Authorization / Supervisor not exist!");
+            supervisorId = 2L;
+        }
+
+        return supervisorId;
+    }
 
     public List<StaffDto> fetchMyStaff(){
-        List<UserEntity> staff = managerRepository.findBySupervisorId(supervisorId);
+        List<UserEntity> staff = managerRepository.findBySupervisorId(getManagerId());
         List<StaffDto> result = new ArrayList<>();
         staff.forEach(s ->
             result.add(new StaffDto(
@@ -74,7 +88,7 @@ public class ManagerService {
 
     public Boolean transferToStaff(TransferToStaffDto req){
         BarnEntity barn = barnRepository.findByIsActive(true);
-        FreezerEntity freezer = freezerRepository.findByManagerIdEqualsAndBarnId_BarnIdEquals(supervisorId, barn.getBarnId());
+        FreezerEntity freezer = freezerRepository.findByManagerIdEqualsAndBarnId_BarnIdEquals(getManagerId(), barn.getBarnId());
 
         BasketEntity oldBasket = basketRepository.findByUserId_IdAndBarnId_BarnId(req.getStaffId(), barn.getBarnId());
 
@@ -93,6 +107,16 @@ public class ManagerService {
             result.setStaffId(oldBasket.getUserId().getId());
             result.setCarrotAmount(oldBasket.getCarrotAmount());
             result.setNote(req.getNote());
+
+            TransferEntity history = new TransferEntity();
+            history.setSenderId(getManagerId());
+            history.setReceiverId(req.getStaffId());
+            history.setCarrotAmount(req.getCarrotAmount());
+            history.setNote(req.getNote());
+            history.setShareAt(LocalDateTime.now());
+            history.setType(ETransferType.TYPE_SHARED);
+            transferRepository.save(history);
+
             return true;
         }
 
@@ -100,7 +124,7 @@ public class ManagerService {
     }
 
     public List<GroupDto> fetchMyGroup(){
-        List<GroupEntity> groups = groupRepository.findByManagerId(supervisorId);
+        List<GroupEntity> groups = groupRepository.findByManagerId(getManagerId());
 
         List<GroupDto> groupDto = new ArrayList<>();
         groups.forEach(g -> {
@@ -109,4 +133,8 @@ public class ManagerService {
         });
         return groupDto;
     }
+
+//    public Boolean transferToGroup(TransferToGroupDto){
+//
+//    }
 }
