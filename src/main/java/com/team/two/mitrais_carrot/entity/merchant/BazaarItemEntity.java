@@ -37,6 +37,7 @@ public class BazaarItemEntity {
     @Lob
     @Column(name = "image")
     @Type(type = "org.hibernate.type.BinaryType")
+    @JsonIgnore
     private byte[] image;
 
     @Column(name = "image_type")

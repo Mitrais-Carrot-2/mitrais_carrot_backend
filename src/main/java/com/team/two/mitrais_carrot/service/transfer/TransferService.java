@@ -1,6 +1,7 @@
 package com.team.two.mitrais_carrot.service.transfer;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import com.team.two.mitrais_carrot.entity.auth.UserEntity;
 import com.team.two.mitrais_carrot.entity.basket.BasketEntity;
@@ -51,8 +52,8 @@ public class TransferService {
             transfer.setSenderId(adminId);
             transfer.setCarrotAmount(carrotAmount);
             transfer.setType(type);
-            transfer.setTime(LocalDate.now());
-            transfer.setDescription("Happy Birthday!!");
+            transfer.setShareAt(LocalDateTime.now());
+            transfer.setNote("Happy Birthday!!");
 
             return transferRepository.save(transfer);
         }

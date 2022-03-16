@@ -7,6 +7,7 @@ import com.team.two.mitrais_carrot.entity.basket.BasketEntity;
 import com.team.two.mitrais_carrot.entity.farmer.BarnEntity;
 import com.team.two.mitrais_carrot.repository.BasketRepository;
 import com.team.two.mitrais_carrot.repository.UserRepository;
+import com.team.two.mitrais_carrot.service.admin.BarnRewardService;
 import com.team.two.mitrais_carrot.service.basket.BasketService;
 import com.team.two.mitrais_carrot.service.farmer.BarnService;
 
@@ -19,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -45,7 +47,9 @@ public class UserService {
         UserEntity user = new UserEntity(req.getUsername(), req.getPassword(), req.getEmail());
 
         user.setBirthDate(LocalDate.now());
-
+        if (!user.getBirthDate().isLeapYear() && (user.getBirthDate().getDayOfYear() >= 60)){ //standarisasi day 60 = 29 Feb, day 61 = 1 Mar
+            user.setDayOfYearBirthDay(user.getBirthDate().getDayOfYear()+1);
+        }
         user.setDayOfYearBirthDay(user.getBirthDate().getDayOfYear());
 
         userRepository.save(user);
@@ -83,6 +87,23 @@ public class UserService {
         return userRepository.findById(id).orElse(null);
     }
 
+    public List<UserEntity> getBirthdayPerson(){
+        LocalDate today = LocalDate.now();
+        // boolean isLeapYear = barnRewardService.leapYear(today.ge)
+        // return this.getAll().stream().filter(person -> {return person.getDayOfYearBirthDay() == LocalDate.now().getDayOfYear();}).collect(Collectors.toList());
+        if (!(today.isLeapYear()) && (today.getDayOfYear() > 60)){
+            return userRepository.findAllByDayOfYearBirthDay(LocalDate.now().getDayOfYear()+1);
+        } else if (!(today.isLeapYear()) && (today.getDayOfYear() == 60)) { //For Mar 1 in not leap year; give to both birthday on 29 Feb & 1 Mar
+            List<UserEntity> cascade = userRepository.findAllByDayOfYearBirthDay(LocalDate.now().getDayOfYear()+1);
+            cascade.addAll(userRepository.findAllByDayOfYearBirthDay(LocalDate.now().getDayOfYear()));
+            return cascade;
+        } else{ 
+            return userRepository.findAllByDayOfYearBirthDay(LocalDate.now().getDayOfYear());
+        }
+        
+    }
+
+
     //findByUsername
     public UserEntity getByUsername(String username){
             UserEntity userEntity = userRepository.findByUsername(username);
@@ -91,13 +112,6 @@ public class UserService {
                 return userEntity;
             }
             return null;
-    }
-
-    public List<UserEntity> getBirthdayPerson(){
-
-        // return this.getAll().stream().filter(person -> {return person.getDayOfYearBirthDay() == LocalDate.now().getDayOfYear();}).collect(Collectors.toList());
-
-        return userRepository.findAllByDayOfYearBirthDay(LocalDate.now().getDayOfYear());
     }
 
 
