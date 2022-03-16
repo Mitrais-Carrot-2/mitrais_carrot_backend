@@ -72,5 +72,4 @@ public class BarnRewardService {
         return birthdayPerson;
     }
 
-    //TODO : Give reward as per date
 }
