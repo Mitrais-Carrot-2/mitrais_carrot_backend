@@ -39,9 +39,6 @@ public class UserService {
     private BarnService barnService;
 
     @Autowired
-    private BarnRewardService barnRewardService;
-
-    @Autowired
     PasswordEncoder encoder;
 
     Logger logger = org.slf4j.LoggerFactory.getLogger(UserService.class);
