@@ -28,17 +28,13 @@ public class BarnService {
     return barnRepository.findById(id).orElse(null); // TODO : Buat exception ketika Barn tdk ditemukan
   }
 
-  public Long getRemainingCarrot(int barnId){
-    BarnEntity barn = getBarnById(barnId);
-    return barn.getCarrotAmount() - barn.getDistributedCarrot();
-  }
-
   public BarnEntity shareCarrot(Long carrotAmount, int barnId){
-    Long remainingCarrot = this.getRemainingCarrot(barnId);
+    BarnEntity barn = getBarnById(barnId);
+    Long remainingCarrot = barn.getCarrotAmount();
     if (remainingCarrot >= carrotAmount){
-      BarnEntity barn = getBarnById(barnId);
       Long distributedCarrot = barn.getDistributedCarrot();
       barn.setDistributedCarrot(distributedCarrot + carrotAmount);
+      barn.setCarrotAmount(remainingCarrot - carrotAmount);
       return barnRepository.save(barn);
     }
     return null; // TODO : handle insufficient carrot
