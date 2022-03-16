@@ -20,7 +20,7 @@ public class BazaarItemService{
     public BazaarItemEntity add(BazaarItemDto request){
         BazaarItemEntity item = new BazaarItemEntity();
         item.setName(request.getName());
-        item.setPrice(request.getPrice());
+        item.setPrice((long) request.getPrice());
         item.setQuantity(request.getQuantity());
         return bazaarItemRepository.save(item);
     }
