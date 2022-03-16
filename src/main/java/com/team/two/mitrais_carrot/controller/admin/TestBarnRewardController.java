@@ -30,7 +30,7 @@ public class TestBarnRewardController {
         return userService.getBirthdayPerson();
     }
 
-    @GetMapping("TransferOnly/")
+    @GetMapping("CheckTransfer/")
     public List<UserEntity> testTransfer(){
         // UserEntity birthdayPerson = userService.getBirthdayPerson().stream().findFirst().get();
         // // return birthdayPerson;
