@@ -7,9 +7,11 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface FreezerRepository extends JpaRepository<FreezerEntity, Integer> {
+
+    FreezerEntity findByManagerIdEqualsAndBarnId_BarnIdEquals(Long managerId, Integer barnId);
+
     FreezerEntity findByBarnId(Integer barnId);
 
     FreezerEntity findByBarnIdAndManagerId(Integer barnId, Long managerId);
-
 
 }

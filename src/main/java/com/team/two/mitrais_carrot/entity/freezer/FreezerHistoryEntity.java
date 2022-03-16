@@ -1,5 +1,7 @@
 package com.team.two.mitrais_carrot.entity.freezer;
 
+import com.team.two.mitrais_carrot.entity.basket.BasketEntity;
+import com.team.two.mitrais_carrot.entity.farmer.BarnEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -7,6 +9,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -16,16 +19,17 @@ import java.time.LocalDateTime;
 @Table(name = "freezerHistories")
 public class FreezerHistoryEntity {
     @Id
-    @Column(name = "id")
+//    @Column(name = "id")
     @GeneratedValue
-    private int id;
-
-    @Column(name = "barn_id")
-    private Integer barnId;
+    private int freezerHistoryId;
 
     @Column(name = "carrot_amount")
     private Long carrotAmount;
 
     @Column(name = "share_at")
     private LocalDateTime shareAt;
+
+    @ManyToOne
+    @JoinColumn(name = "freezerId")
+    private FreezerEntity freezerId;
 }

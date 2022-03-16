@@ -7,17 +7,23 @@ import com.team.two.mitrais_carrot.entity.auth.UserEntity;
 import com.team.two.mitrais_carrot.entity.basket.BasketEntity;
 import com.team.two.mitrais_carrot.entity.farmer.BarnEntity;
 import com.team.two.mitrais_carrot.entity.freezer.FreezerEntity;
+import com.team.two.mitrais_carrot.entity.freezer.FreezerHistoryEntity;
 import com.team.two.mitrais_carrot.entity.group.GroupEntity;
 import com.team.two.mitrais_carrot.entity.group.UserGroupEntity;
 import com.team.two.mitrais_carrot.repository.BasketRepository;
+import com.team.two.mitrais_carrot.repository.FreezerHistoryRepository;
+import com.team.two.mitrais_carrot.repository.FreezerRepository;
+import com.team.two.mitrais_carrot.repository.UserRepository;
 import com.team.two.mitrais_carrot.repository.farmer.BarnRepository;
 import com.team.two.mitrais_carrot.repository.user.GroupRepository;
-import com.team.two.mitrais_carrot.repository.user.UserGroupRepository;
-import com.team.two.mitrais_carrot.repository.UserRepository;
 import com.team.two.mitrais_carrot.repository.user.ManagerRepository;
+import com.team.two.mitrais_carrot.repository.user.UserGroupRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,6 +47,14 @@ public class ManagerService {
     @Autowired
     BarnRepository barnRepository;
 
+    @Autowired
+    FreezerRepository freezerRepository;
+
+    @Autowired
+    FreezerHistoryRepository freezerHistoryRepository;
+
+    Logger logger = LoggerFactory.getLogger(ManagerService.class);
+
 //        UserDetailsImpl user = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 //        Long supervisorId = user.getId();
     Long supervisorId = 2L;
@@ -61,20 +75,33 @@ public class ManagerService {
         return result;
     }
 
-    public TransferToStaffDto transferToStaff(TransferToStaffDto req){
+    public Boolean transferToStaff(TransferToStaffDto req){
         BarnEntity barn = barnRepository.findByIsActive(true);
-        BasketEntity oldBasket = basketRepository.findByUserIdAndBarnId(req.getStaffId(), barn.getBarnId());
+        FreezerEntity freezer = freezerRepository.findByManagerIdEqualsAndBarnId_BarnIdEquals(supervisorId, barn.getBarnId());
+        FreezerHistoryEntity freezerHistory = new FreezerHistoryEntity();
+        BasketEntity oldBasket = basketRepository.findByUserIdAndBarnId_BarnId(req.getStaffId(), barn.getBarnId());
 
-        BasketEntity newBasket = new BasketEntity(req.getStaffId(), barn, oldBasket.getShareCarrot() + req.getCarrotAmount(), 0, oldBasket.getShareCarrot() + req.getCarrotAmount(), 0);
-        basketRepository.save(newBasket);
+        oldBasket.setBarnId(barn);
+        oldBasket.setCarrotAmount(oldBasket.getShareCarrot() + req.getCarrotAmount());
+        oldBasket.setShareCarrot(oldBasket.getShareCarrot() + req.getCarrotAmount());
+        basketRepository.save(oldBasket);
+
+        freezer.setCarrotAmount(freezer.getCarrotAmount() - req.getCarrotAmount());
+        freezer.setDistributedCarrot(freezer.getDistributedCarrot()+req.getCarrotAmount());
+        freezerRepository.save(freezer);
+
+        freezerHistory.setFreezerId(freezer);
+        freezerHistory.setCarrotAmount(req.getCarrotAmount());
+        freezerHistory.setShareAt(LocalDateTime.now());
+        freezerHistoryRepository.save(freezerHistory);
 
         TransferToStaffDto result = new TransferToStaffDto();
-        result.setStaffId(newBasket.getUserId());
-        result.setCarrotAmount(newBasket.getCarrotAmount());
-        result.setSharedAmount(newBasket.getShareCarrot());
+
+        result.setStaffId(oldBasket.getUserId());
+        result.setCarrotAmount(oldBasket.getCarrotAmount());
         result.setNote(req.getNote());
 
-        return result;
+        return true;
     }
 
     public List<GroupDto> fetchMyGroup(){

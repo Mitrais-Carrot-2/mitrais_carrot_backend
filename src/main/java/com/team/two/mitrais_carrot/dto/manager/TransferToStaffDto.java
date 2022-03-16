@@ -12,8 +12,5 @@ import lombok.Setter;
 public class TransferToStaffDto {
     private Long staffId;
     private Long carrotAmount;
-    private Long rewardAmount;
-    private Long sharedAmount;
-    private Long bazaarAmount;
     private String note;
 }
