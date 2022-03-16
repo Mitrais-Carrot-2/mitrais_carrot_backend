@@ -1,23 +1,27 @@
 package com.team.two.mitrais_carrot.service.farmer;
 
 import com.team.two.mitrais_carrot.dto.farmer.BarnDto;
+import com.team.two.mitrais_carrot.entity.basket.BasketEntity;
 import com.team.two.mitrais_carrot.entity.farmer.BarnEntity;
+import com.team.two.mitrais_carrot.repository.BasketRepository;
 import com.team.two.mitrais_carrot.repository.farmer.BarnRepository;
 import java.time.LocalDate;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import com.team.two.mitrais_carrot.security.services.UserDetailsImpl;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class BarnService {
+  private final BarnRepository barnRepository;
 
-  @Autowired
-  private BarnRepository barnRepository;
+  public BarnService(BarnRepository barnRepository) {
+      this.barnRepository = barnRepository;
+  }
 
   public List<BarnEntity> fetchAllBarn(){
       return barnRepository.findAll();
-//      return barnRepository.findByIsActiveTrue();
   }
 
   public BarnEntity getBarnById(int id){

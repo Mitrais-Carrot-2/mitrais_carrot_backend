@@ -37,7 +37,7 @@ public class BasketEntity {
     private long userId;
 
     @ManyToOne
-    @JoinColumn(name = "barnId")
+    @JoinColumn(name = "barn_id")
     private BarnEntity barnId;
 
     @Column(name = "carrotAmount")

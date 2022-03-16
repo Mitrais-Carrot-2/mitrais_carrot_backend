@@ -11,6 +11,6 @@ public class BazaarItemDto{
     private int price;
     private String description;
     private int quantity;
-//    private byte[] image;
+    //    private byte[] image;
     //private Long bazaar_id;
 }

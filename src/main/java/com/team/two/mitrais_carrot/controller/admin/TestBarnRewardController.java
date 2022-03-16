@@ -26,8 +26,8 @@ public class TestBarnRewardController {
 
     @GetMapping("/")
     public List<UserEntity> testBirthday(){
-        return barnRewardService.rewardByBirthDay(); //cannot call this function
-        // return userService.getBirthdayPerson();
+        // return barnRewardService.rewardByBirthDay(); //cannot call this function
+        return userService.getBirthdayPerson();
     }
 
     @GetMapping("TransferOnly/")

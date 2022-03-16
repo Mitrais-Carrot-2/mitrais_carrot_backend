@@ -21,6 +21,7 @@ public class BasketController {
 
     @PostMapping("")
     public BasketEntity addBasket(long userId){
+        UserEntity user = userService.getById(userId);
         return basketService.add(userId);
     }
 

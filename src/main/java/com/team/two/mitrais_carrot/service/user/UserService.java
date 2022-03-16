@@ -22,10 +22,11 @@ import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
 import org.springframework.web.multipart.MultipartFile;
 
-
 import javax.persistence.Lob;
+import javax.persistence.Transient;
 import java.awt.*;
 import java.time.LocalDate;
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -58,15 +59,17 @@ public class UserService {
         System.out.println("FINISHED SAVING USER");
 
         BarnEntity barnId = barnService.isActiveBarn(true);
-        System.out.println("BARN ID = " + barnId);
+        System.out.println("BARN ID = " + barnId.getBarnId());
 
         BasketEntity basket = basketService.add(user.getId());
-        user.setBaskets(basket);
+        user.getBaskets().add(basket);
         System.out.println("SET BASKET" + basket);
 
         return userRepository.save(user);
      }
     Logger logger = org.slf4j.LoggerFactory.getLogger(UserService.class);
+
+    public UserService(UserRepository userRepository) {this.userRepository = userRepository;}
 
     public List<UserEntity> getAll(){ return userRepository.findAll(); }
 
@@ -77,7 +80,7 @@ public class UserService {
     public List<UserEntity> getBirthdayPerson(){
 
         // return this.getAll().stream().filter(person -> {return person.getDayOfYearBirthDay() == LocalDate.now().getDayOfYear();}).collect(Collectors.toList());
-        
+
         return userRepository.findAllByDayOfYearBirthDay(LocalDate.now().getDayOfYear());
     }
 
@@ -104,7 +107,6 @@ public class UserService {
                 logger.info("" + user.getUsername() + " Password is incorrect");
                 return false;
             }
-
         }
         return false;
     }
@@ -126,8 +128,17 @@ public class UserService {
         return userRepository.save(user);
         }
 
-    public void changeImage(String username, Lob image) {
+    public UserEntity buildImage(String username, MultipartFile file) {
         UserEntity user = getByUsername(username);
+        user.setImageType(file.getContentType());
+        user.setImageSize(file.getSize());
+        try{
+            user.setImage(file.getBytes());
+            userRepository.save(user);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return user;
     }
 
 }

@@ -2,11 +2,15 @@ package com.team.two.mitrais_carrot.entity.auth;
 
 import com.team.two.mitrais_carrot.entity.basket.BasketEntity;
 import com.team.two.mitrais_carrot.entity.group.UserGroupEntity;
+import com.team.two.mitrais_carrot.entity.image.FileNameHelper;
+import com.team.two.mitrais_carrot.entity.image.Image;
 import lombok.*;
 
 import org.hibernate.annotations.Type;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -18,7 +22,7 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "users", uniqueConstraints = {
+@Table(name = "users", schema = "public", uniqueConstraints = {
         @UniqueConstraint(columnNames = "username"),
         @UniqueConstraint(columnNames = "email")
 })
@@ -84,20 +88,24 @@ public class UserEntity {
     @Column(name = "office")
     private String office;
 
+    @Column(name = "image_type")
+    private String imageType;
+
+    @Column(name = "image_size")
+    private long imageSize;
+
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JoinTable(name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<RoleEntity> roles = new HashSet<>();
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    @JoinTable(name = "baskets",
-            joinColumns = @JoinColumn(name = "user_id"))
-    private BasketEntity baskets;
+    @OneToMany(mappedBy = "userId", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<BasketEntity> baskets = new ArrayList<>();
 
-//    @ManyToOne
-//    @JoinTable(name = "userGroups", joinColumns = @JoinColumn(name = "user_id"))
-//    private UserGroupEntity userGroup;
+    @ManyToOne
+    @JoinTable(name = "userGroups", joinColumns = @JoinColumn(name = "user_id"))
+    private UserGroupEntity userGroup;
 
     @Column(name = "dayOfYearBirthDay")
     private int dayOfYearBirthDay;
