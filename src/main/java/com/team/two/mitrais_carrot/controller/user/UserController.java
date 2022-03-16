@@ -15,6 +15,7 @@ import com.team.two.mitrais_carrot.service.basket.EBasket;
 import com.team.two.mitrais_carrot.service.Image.ImageService;
 import com.team.two.mitrais_carrot.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMessage;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -65,14 +66,16 @@ public class UserController {
         if (userService.getByUsername(username) != null) {
             return ResponseEntity.status(HttpStatus.OK).body(userService.getByUsername(username));
         }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageDto("Username not found or Password is wrong!", false));
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new MessageDto("Username not found or Password is wrong!", false));
     }
 
     @PutMapping("updatePassword/{username}")
-    public ResponseEntity<?> updatePassword(@PathVariable("username") String username, @RequestBody UpdatePasswordDto updatePasswordDto) {
+    public ResponseEntity<?> updatePassword(@PathVariable("username") String username,
+            @RequestBody UpdatePasswordDto updatePasswordDto) {
         if (userService.checkPassword(username, updatePasswordDto.getOldPassword())) {
             userService.changePassword(username, updatePasswordDto.getNewPassword());
-            //response entity return ok and message password has been changed!
+            // response entity return ok and message password has been changed!
             return ResponseEntity.status(HttpStatus.OK).body("Password has been changed!");
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Password is wrong!");
@@ -80,7 +83,8 @@ public class UserController {
     }
 
     @PutMapping("updateProfile/{username}")
-    public ResponseEntity<?> updateProfile(@PathVariable("username") String username, @RequestBody UpdateProfileDto updateProfileDto) {
+    public ResponseEntity<?> updateProfile(@PathVariable("username") String username,
+            @RequestBody UpdateProfileDto updateProfileDto) {
         if (userService.checkPassword(username, updateProfileDto.getCurrentPassword())) {
             userService.updateProfile(username, updateProfileDto);
             return ResponseEntity.status(HttpStatus.OK).body("Profile has been changed!");
@@ -89,49 +93,41 @@ public class UserController {
         }
     }
 
-//    public Image getImageByName(String name) throws Exception {
-//        Image image = imageService.findByFileName(name);
-//        if (image == null) {
-//            return Image.defaultImage();
-//        }
-//        return image;
-//    }
-
+    //GetImage per username DONE
     @GetMapping("/getImage/{username}")
     public ResponseEntity<byte[]> getImage(@PathVariable String username) throws Exception {
         UserEntity user = userService.getByUsername(username);
         if (user != null) {
             if (user.getImage() != null) {
-                return ResponseEntity.ok().contentType(MediaType.valueOf(user.getImageType())).body(user.getImage());
+                return ResponseEntity.ok()
+                        .header(HttpHeaders.CONTENT_DISPOSITION,
+                                "attachment; filename=\"Profile " + user.getUsername() + " Image \"")
+                        .contentType(MediaType.valueOf(user.getImageType()))
+                        .body(user.getImage());
             }
-//            UserEntity userEntity = userService.buildImage(username, "/Users/ilaminaty/Desktop/repo/mitrais_carrot_backend/src/images/userdefaultImage.png");
         }
         return ResponseEntity.notFound().build();
     }
 
-    @PostMapping("/uploadImage/{username}")
+    @PutMapping("/uploadImage/{username}")
     public ResponseEntity<?> uploadImage(@PathVariable String username, @RequestParam("file") MultipartFile file) {
-        if (file.isEmpty()) {
-            return ResponseEntity.badRequest().body("Please select a file to upload");
+        try{
+            userService.saveImage(username,file);
+
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(String.format("File uploaded successfully: %s", file.getOriginalFilename()));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(String.format("Could not upload the file: %s!", file.getOriginalFilename()));
         }
-        UserEntity user = userService.getByUsername(username);
-        if (user != null) {
-            UserEntity userImage = userService.buildImage(username, file);
-            return ResponseEntity.ok().contentType(MediaType.valueOf(user.getImageType())).body(user.getImage());
-        }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Please import image!");
+//        if (file.isEmpty()) {
+//            return ResponseEntity.badRequest().body("Please select a file to upload");
+//        }
+//        UserEntity user = userService.getByUsername(username);
+//        if (user != null) {
+//            UserEntity userImage = userService.buildImage(username, file);
+//            return ResponseEntity.ok().contentType(MediaType.valueOf(user.getImageType())).body(user.getImage());
+//        }
+//        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Please import image!");
     }
 }
-
-    //postmapping change user profile
-//    @PutMapping("{username}/updateProfile")
-//    public MessageDto updateProfile(@PathVariable("username") String username, @RequestBody String password ,@RequestBody UpdateProfileDto updateProfileDto){
-//        userService.getByUsername(username);
-//        if(userEntity != null){
-//            if(userEntity.getPassword().equals(encoder.encode(password))){
-//                userService.updateProfile(userEntity.getId(),updateProfileDto);
-//                return new MessageDto("Profile Updated!");
-//            }
-//        }
-//            return new MessageDto("Wrong Password!");
-//        }

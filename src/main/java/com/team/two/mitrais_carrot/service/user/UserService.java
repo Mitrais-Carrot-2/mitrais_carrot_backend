@@ -126,17 +126,11 @@ public class UserService {
         return userRepository.save(user);
         }
 
-    public UserEntity buildImage(String username, MultipartFile file) {
-        UserEntity user = getByUsername(username);
-        user.setImageType(file.getContentType());
-        user.setImageSize(file.getSize());
-        try{
+        public void saveImage(String username, MultipartFile file) throws IOException {
+            UserEntity user = getByUsername(username);
+            user.setImageType(file.getContentType());
             user.setImage(file.getBytes());
+            user.setImageSize(file.getSize());
             userRepository.save(user);
-        } catch (IOException e) {
-            e.printStackTrace();
         }
-        return user;
-    }
-
 }
