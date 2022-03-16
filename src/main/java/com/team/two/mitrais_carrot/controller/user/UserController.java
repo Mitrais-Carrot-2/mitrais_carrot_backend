@@ -82,11 +82,7 @@ public class UserController {
     @PutMapping("updateProfile/{username}")
     public ResponseEntity<?> updateProfile(@PathVariable("username") String username, @RequestBody UpdateProfileDto updateProfileDto) {
         if (userService.checkPassword(username, updateProfileDto.getCurrentPassword())) {
-            if (userService.getByUsername(updateProfileDto.getUsername()) != null) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Username already exist!");
-            }
             userService.updateProfile(username, updateProfileDto);
-            //response entity return ok and message password has been changed!
             return ResponseEntity.status(HttpStatus.OK).body("Profile has been changed!");
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Password is wrong!");

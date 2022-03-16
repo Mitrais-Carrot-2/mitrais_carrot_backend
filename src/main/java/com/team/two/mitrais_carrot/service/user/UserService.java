@@ -87,24 +87,23 @@ public class UserService {
 
     //findByUsername
     public UserEntity getByUsername(String username){
-            long userId = userRepository.findByUsername(username).getId();
-            logger.info("User ID: " + userId);
-            if(userId != 0){
-                return getById(userId);
+            UserEntity userEntity = userRepository.findByUsername(username);
+            if(userEntity != null){
+                logger.info("User ID: " + userEntity.getId());
+                return userEntity;
             }
             return null;
     }
 
     public Boolean checkPassword(String username, String password){
-        long userId = userRepository.findByUsername(username).getId();
-        if(userId != 0){
-            UserEntity user = getById(userId);
-            if(encoder.matches(password, user.getPassword()) == true){
-                logger.info("" + user.getUsername() + " Password is correct");
+        UserEntity userEntity = userRepository.findByUsername(username);
+        if(userEntity != null){
+            if(encoder.matches(password, userEntity.getPassword()) == true){
+                logger.info("" + userEntity.getUsername() + " Password is correct");
                 return true;
             }
             else {
-                logger.info("" + user.getUsername() + " Password is incorrect");
+                logger.info("" + userEntity.getUsername() + " Password is incorrect");
                 return false;
             }
         }
@@ -119,7 +118,6 @@ public class UserService {
 
     public UserEntity updateProfile(String username,UpdateProfileDto req ) {
         UserEntity user = getByUsername(username);
-        user.setUsername(req.getUsername());
         user.setFirstName(req.getFirstName());
         user.setLastName(req.getLastName());
         user.setAddress(req.getAddress());
