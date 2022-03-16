@@ -1,20 +1,27 @@
 package com.team.two.mitrais_carrot.service.merchant;
 
+import com.team.two.mitrais_carrot.entity.group.UserGroupEntity;
+import com.team.two.mitrais_carrot.entity.merchant.BazaarEntity;
 import com.team.two.mitrais_carrot.entity.merchant.BazaarItemEntity;
 import com.team.two.mitrais_carrot.dto.merchant.BazaarItemDto;
 
 import com.team.two.mitrais_carrot.repository.BazaarItemRepository;
 
+import com.team.two.mitrais_carrot.repository.BazaarRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
 @Service
 public class BazaarItemService{
     BazaarItemRepository bazaarItemRepository;
-    public BazaarItemService(BazaarItemRepository bazaarItemRepository){
+    BazaarRepository bazaarRepository;
+
+    public BazaarItemService(BazaarItemRepository bazaarItemRepository, BazaarRepository bazaarRepository){
         this.bazaarItemRepository = bazaarItemRepository;
+        this.bazaarRepository = bazaarRepository;
     }
 
     public BazaarItemEntity add(BazaarItemDto request){
@@ -23,6 +30,22 @@ public class BazaarItemService{
         item.setPrice(request.getPrice());
         item.setQuantity(request.getQuantity());
         return bazaarItemRepository.save(item);
+    }
+
+    public BazaarItemEntity addNewItem(BazaarItemDto request, Integer bazaarId){
+        BazaarItemEntity newItem = new BazaarItemEntity();
+        BazaarEntity checker = bazaarRepository.getById(bazaarId);
+        if(checker.getBazaarName()!=null){
+            newItem.setName(request.getName());
+            newItem.setPrice(request.getPrice());
+            newItem.setQuantity(request.getQuantity());
+            newItem.setDescription(request.getDescription());
+            newItem.setBazaar(checker);
+        }
+
+//        newItem.setImage(request.getImage());
+
+        return bazaarItemRepository.save(newItem);
     }
 
     public List<BazaarItemEntity> getAll(){
@@ -42,4 +65,9 @@ public class BazaarItemService{
         return bazaarItemRepository.save(item);
     }
 
+    public List<BazaarItemEntity> getItemInBazaar(int bazaarId){
+        List<BazaarItemEntity> itemBazaar = new ArrayList<>();
+        itemBazaar = bazaarItemRepository.findByBazaar_Id(bazaarId);
+        return itemBazaar;
+    }
 }

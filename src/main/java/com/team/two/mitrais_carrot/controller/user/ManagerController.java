@@ -1,15 +1,16 @@
 package com.team.two.mitrais_carrot.controller.user;
 
+import com.team.two.mitrais_carrot.dto.MessageDto;
+import com.team.two.mitrais_carrot.dto.manager.TransferToStaffDto;
 import com.team.two.mitrais_carrot.dto.user.GroupDto;
 import com.team.two.mitrais_carrot.dto.user.StaffDto;
 import com.team.two.mitrais_carrot.entity.auth.UserEntity;
+import com.team.two.mitrais_carrot.entity.basket.BasketEntity;
 import com.team.two.mitrais_carrot.entity.group.GroupEntity;
 import com.team.two.mitrais_carrot.service.user.ManagerService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -24,6 +25,16 @@ public class ManagerController {
     @GetMapping("/staff")
     public List<StaffDto> fetchMyStaff(){
         return managerService.fetchMyStaff();
+    }
+
+    @PostMapping("/staff")
+    public ResponseEntity<MessageDto> transferToStaff(TransferToStaffDto req){
+        Boolean status = managerService.transferToStaff(req);
+        if (status){
+            return ResponseEntity.ok(new MessageDto("Transfer from Manager to Staff success!", true));
+        } else {
+            return ResponseEntity.badRequest().body(new MessageDto("Not enough carrot in Freezer!", false));
+        }
     }
 
     // TODO List of Group

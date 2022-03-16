@@ -10,25 +10,29 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/bazaar/item")
+@RequestMapping("/api/bazaar")
 public class BazaarItemController {
     @Autowired
     BazaarItemService bazaarItemService;
 
     public BazaarItemController(BazaarItemService bazaarItemService) { this.bazaarItemService = bazaarItemService; }
 
-    @PostMapping("")
-    public BazaarItemEntity addBazaarItem(@RequestBody BazaarItemDto request){
-        return bazaarItemService.add(request);
+    @PostMapping("{id}/item")
+    public BazaarItemEntity addBazaarItem(@PathVariable("id") int id, @RequestBody BazaarItemDto request){
+//        return bazaarItemService.add(request);
+        return bazaarItemService.addNewItem(request,id);
     }
 
-    @GetMapping("")
+    @GetMapping("item")
     public List<BazaarItemEntity> getAllBazaarItems(){
         return bazaarItemService.getAll();
     }
 
     @GetMapping("{id}")
-    public BazaarItemEntity getBazaarItem(@PathVariable("id") String id){
-        return bazaarItemService.getById(Integer.parseInt(id));
+//    public BazaarItemEntity getBazaarItem(@PathVariable("id") String id){
+//        return bazaarItemService.getById(Integer.parseInt(id));
+//    }
+    public List<BazaarItemEntity> getItemBazaar(@PathVariable("id") String id){
+        return bazaarItemService.getItemInBazaar(Integer.parseInt(id));
     }
 }

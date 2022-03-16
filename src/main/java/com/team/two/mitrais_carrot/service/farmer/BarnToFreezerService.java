@@ -44,7 +44,7 @@ public class BarnToFreezerService {
             freezerEntity.setCarrotAmount(freezerEntity.getCarrotAmount()+req.getCarrotAmount());
         } catch (NullPointerException err){
             freezerEntity = new FreezerEntity();
-            freezerEntity.setDistributedCarrot(0);
+            freezerEntity.setDistributedCarrot(0L);
             freezerEntity.setManagerId(req.getManagerId());
             freezerEntity.setBarnId(barn);
             freezerEntity.setCarrotAmount(req.getCarrotAmount());
@@ -52,6 +52,7 @@ public class BarnToFreezerService {
 
         if (barnBalance - transferedCarrot >= 0) {
             barn.setCarrotAmount(barnBalance - transferedCarrot);
+            barn.setDistributedCarrot(barn.getDistributedCarrot()+transferedCarrot);
 
             transferToManagerRepository.save(freezerEntity);
             barnRepository.save(barn);
