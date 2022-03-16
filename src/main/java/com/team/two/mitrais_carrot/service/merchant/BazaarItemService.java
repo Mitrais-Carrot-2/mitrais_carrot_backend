@@ -41,11 +41,13 @@ public class BazaarItemService{
             newItem.setQuantity(request.getQuantity());
             newItem.setDescription(request.getDescription());
             newItem.setBazaar(checker);
+            return bazaarItemRepository.save(newItem);
         }
-
+        else{
+            return null;
+        }
 //        newItem.setImage(request.getImage());
-
-        return bazaarItemRepository.save(newItem);
+        //return null;
     }
 
     public List<BazaarItemEntity> getAll(){
