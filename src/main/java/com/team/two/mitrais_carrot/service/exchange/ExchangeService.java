@@ -4,12 +4,15 @@ import com.team.two.mitrais_carrot.entity.auth.UserEntity;
 import com.team.two.mitrais_carrot.entity.basket.BasketEntity;
 import com.team.two.mitrais_carrot.entity.exchange.ExchangeEntity;
 import com.team.two.mitrais_carrot.entity.merchant.BazaarItemEntity;
+import com.team.two.mitrais_carrot.entity.transfer.ETransferType;
+import com.team.two.mitrais_carrot.entity.transfer.TransferEntity;
 import com.team.two.mitrais_carrot.repository.BazaarItemRepository;
 import com.team.two.mitrais_carrot.repository.ExchangeRepository;
 import com.team.two.mitrais_carrot.repository.UserRepository;
 import com.team.two.mitrais_carrot.service.basket.BasketService;
 import com.team.two.mitrais_carrot.service.basket.EBasket;
 import com.team.two.mitrais_carrot.service.merchant.BazaarItemService;
+import com.team.two.mitrais_carrot.service.transfer.TransferService;
 import com.team.two.mitrais_carrot.service.user.UserService;
 
 
@@ -18,6 +21,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -40,6 +45,9 @@ public class ExchangeService {
     @Autowired
     private BasketService basketService;
 
+    @Autowired
+    private TransferService transferService;
+
     @Getter
     public enum ExchangeStatus{
         Success(200, "[SUCCESS] Purchasing item"),
@@ -60,14 +68,23 @@ public class ExchangeService {
     public ExchangeService(ExchangeRepository exchangeRepository) {this.exchangeRepository = exchangeRepository;}
 
     public ExchangeEntity add(UserEntity buyer, BazaarItemEntity item){
+        ExchangeEntity exchange = createEntity(buyer, item);
+        return exchangeRepository.save(exchange);
+    }
+
+    public ExchangeEntity add(ExchangeEntity exchange){
+        return exchangeRepository.save(exchange);
+    }
+
+    public ExchangeEntity createEntity(UserEntity buyer, BazaarItemEntity item){
         ExchangeEntity exchange = new ExchangeEntity();
         exchange.setStatus(true);
         exchange.setUserId(buyer.getId());
         exchange.setPrice(item.getPrice());
         exchange.setBazaarItemId(item.getId());
-        exchange.setExchangeDate(LocalDate.now());
+        exchange.setExchangeDate(LocalDateTime.now());
 
-        return exchangeRepository.save(exchange);
+        return exchange;
     }
 
     public boolean isCarrotEnough(UserEntity buyer, BazaarItemEntity item){
@@ -78,6 +95,8 @@ public class ExchangeService {
     public ExchangeStatus buyBazaarItem(long buyerId, int itemId){
         UserEntity buyer = userService.getById(buyerId);
         BazaarItemEntity item = bazaarItemService.getById(itemId);
+        ExchangeEntity exchange = createEntity(buyer, item);
+
         if (buyer != null){
             if (item == null) {
                 response = ExchangeStatus.ItemNotFound;
@@ -85,7 +104,8 @@ public class ExchangeService {
             else {
                 if (item.getQuantity() > 0){
                     if (isCarrotEnough(buyer, item)){
-                        add(buyer, item);
+                        add(exchange);
+                        saveExchangeToTransferHistory(exchange, true);
                         bazaarItemService.updateQuantity(itemId, -1);
                         basketService.updateCarrot(buyer, -(item.getPrice()), EBasket.BAZAAR);
                         response = ExchangeStatus.Success;
@@ -99,9 +119,35 @@ public class ExchangeService {
                 }
             }
         }
-
         return response;
     }
-    
 
+    public TransferEntity saveExchangeToTransferHistory(ExchangeEntity exchange, boolean success){
+        TransferEntity transfer = new TransferEntity();
+        long bazaarId = 999L;
+        long userId = exchange.getUserId();
+        long carrot = exchange.getPrice();
+        LocalDateTime date = exchange.getExchangeDate();
+        String itemName = bazaarItemService.getById(exchange.getBazaarItemId()).getName();
+
+        if (success){
+            transfer.setSenderId(userId);
+            transfer.setReceiverId(bazaarId);
+            transfer.setNote("[SUCCESS] Buy Item " + itemName);
+        }
+        else {
+            transfer.setSenderId(bazaarId);
+            transfer.setReceiverId(userId);
+            transfer.setNote("[FAILED] Buy Item " + itemName);
+        }
+        transfer.setShareAt(date);
+        transfer.setType(ETransferType.TYPE_BAZAAR);
+        transfer.setCarrotAmount(carrot);
+
+        return transferService.add(transfer);
+    }
+
+    public List<ExchangeEntity> getAll(){
+        return (List<ExchangeEntity>) exchangeRepository.findAll();
+    }
 }

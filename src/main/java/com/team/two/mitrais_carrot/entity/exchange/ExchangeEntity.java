@@ -4,6 +4,7 @@ import com.team.two.mitrais_carrot.entity.merchant.BazaarItemEntity;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import javax.persistence.*;
 
@@ -29,7 +30,7 @@ public class ExchangeEntity {
     private long price;
 
     @Column(name = "exchangeDate")
-    private LocalDate exchangeDate;
+    private LocalDateTime exchangeDate;
 
     @Column(name="user_id")
     private long userId;

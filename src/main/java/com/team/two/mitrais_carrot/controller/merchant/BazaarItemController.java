@@ -34,12 +34,9 @@ public class BazaarItemController {
         return bazaarItemService.getAll();
     }
 
-    @GetMapping("{id}")
-//    public BazaarItemEntity getBazaarItem(@PathVariable("id") String id){
-//        return bazaarItemService.getById(Integer.parseInt(id));
-//    }
-    public List<BazaarItemEntity> getItemBazaar(@PathVariable("id") String id){
-        return bazaarItemService.getItemInBazaar(Integer.parseInt(id));
+    @GetMapping("{bazaarId}/{itemId}")
+    public BazaarItemEntity getBazaarItem(@RequestParam(value = "Bazaar ID") int bazaarId, @RequestParam(value = "Item ID") int itemId){
+        return bazaarItemService.getByIdInBazaar(itemId, bazaarId);
     }
 
     @GetMapping("/getImage/{itemId}")

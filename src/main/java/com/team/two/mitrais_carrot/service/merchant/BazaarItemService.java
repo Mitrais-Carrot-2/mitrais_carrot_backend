@@ -82,10 +82,14 @@ public class BazaarItemService{
         return ResponseEntity.ok(new MessageDto("Success Update Item Quantity!", true));
     }
 
-    public List<BazaarItemEntity> getItemInBazaar(int bazaarId){
+    public List<BazaarItemEntity> getAllItemsInBazaar(int bazaarId){
         List<BazaarItemEntity> itemBazaar = new ArrayList<>();
         itemBazaar = bazaarItemRepository.findByBazaar_Id(bazaarId);
         return itemBazaar;
+    }
+
+    public BazaarItemEntity getByIdInBazaar(int itemId, int bazaarId){
+        return bazaarItemRepository.findByIdAndBazaar_Id(itemId, bazaarId);
     }
 
     public void saveImage(int itemId, MultipartFile file) {

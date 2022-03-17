@@ -9,7 +9,8 @@ import java.util.List;
 @Repository
 public interface BazaarItemRepository extends JpaRepository<BazaarItemEntity, Integer>{
     List<BazaarItemEntity> findByBazaar_Id(Integer id);
-//    List<BazaarItemEntity> findByBazaar_id_Id(Integer id);
+
+    BazaarItemEntity findByIdAndBazaar_Id(Integer id, Integer id1);
 
     BazaarItemEntity findOneById(Integer integer);
 

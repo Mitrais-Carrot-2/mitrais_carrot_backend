@@ -21,6 +21,7 @@ import com.team.two.mitrais_carrot.repository.user.UserGroupRepository;
 import com.team.two.mitrais_carrot.service.basket.BasketService;
 import com.team.two.mitrais_carrot.security.services.UserDetailsImpl;
 
+import com.team.two.mitrais_carrot.service.basket.EBasket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -137,9 +138,7 @@ public class ManagerService {
         BasketEntity oldBasket = basketRepository.findByUser_IdAndBarn_Id(userId, barn.getId());
 
 //        if(freezer.getCarrotAmount() - carrot>=0) {
-            oldBasket.setId(barn.getId());
-            oldBasket.setCarrotAmount(oldBasket.getShareCarrot() + carrot);
-            oldBasket.setShareCarrot(oldBasket.getShareCarrot() + carrot);
+            basketService.updateCarrot(oldBasket.getUser(), carrot, EBasket.SHARE);
             basketRepository.save(oldBasket);
 
             freezer.setCarrotAmount(freezer.getCarrotAmount() - carrot);

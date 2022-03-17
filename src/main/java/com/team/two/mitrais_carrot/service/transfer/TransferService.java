@@ -2,6 +2,7 @@ package com.team.two.mitrais_carrot.service.transfer;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import com.team.two.mitrais_carrot.entity.auth.UserEntity;
 import com.team.two.mitrais_carrot.entity.basket.BasketEntity;
@@ -31,14 +32,20 @@ public class TransferService {
 
     Logger logger = org.slf4j.LoggerFactory.getLogger(TransferService.class);
 
+    public TransferEntity add(TransferEntity transfer){
+        return transferRepository.save(transfer);
+    }
+
+    public List<TransferEntity> getAll(){
+        return (List<TransferEntity>) transferRepository.findAll();
+    }
 
     // Transfer Rewards -> Admin to user
     public TransferEntity transferBarnReward(UserEntity user, Long carrotAmount, ETransferType type) {
         
         BarnEntity activeBarn = barnService.isActiveBarn(true);
-        BarnEntity barn = barnService.getBarnById(activeBarn.getId());
         
-        if (barn.getCarrotAmount() >= carrotAmount) {
+        if (activeBarn.getCarrotAmount() >= carrotAmount) {
             // BasketEntity activeUserBasket = basketService.getActiveBasket(user, true);//ada error tdk bisa menemukan basket
             Long userId = user.getId();
             basketService.updateCarrot(user, carrotAmount, EBasket.REWARD);
