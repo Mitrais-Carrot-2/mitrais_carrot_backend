@@ -1,11 +1,15 @@
 package com.team.two.mitrais_carrot.entity.group;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.team.two.mitrais_carrot.entity.auth.UserEntity;
 import lombok.*;
 import javax.persistence.*;
+import java.util.List;
 
-import com.team.two.mitrais_carrot.entity.auth.UserEntity;
+@JsonIgnoreProperties({"hibernateLazyInitializer"})
 
-@Entity
+@Entity(name = "GroupEntity")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -15,14 +19,24 @@ public class GroupEntity {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
     @Column(name = "name")
     private String name;
 
-    //user_id disini tuh manager atau siapa yang ngemanage group nya
-//    @Column(name = "user_id")
-//    @OneToOne
-//    @JoinTable(name = "users", joinColumns = @JoinColumn(name = "group_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
-//    private UserEntity user_id;
+    @Column(name = "manager_id")
+    private Long managerId;
+
+    @Column(name = "allocation")
+    private long allocation;
+
+    @Column(name = "note")
+    private String note;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "group", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<UserGroupEntity> userGroups;
+//    @ManyToOne
+//    @JoinTable(name = "userGroups", joinColumns = @JoinColumn(name = "group_id"))
+//    private UserGroupEntity userGroup;
 }

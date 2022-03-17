@@ -1,7 +1,6 @@
 package com.team.two.mitrais_carrot.dto.farmer;
 
-import java.time.LocalDate;
-
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,11 +10,9 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateBarnDto {
-    private String barnName;
+public class BarnToFreezerDto {
+    @JsonProperty("manager_id")
+    private Long managerId;
+    @JsonProperty("carrot_amount")
     private Long carrotAmount;
-    private LocalDate startDate;
-    private LocalDate expiredDate;
-    private Boolean isActive;
-
 }

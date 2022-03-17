@@ -1,36 +1,43 @@
 package com.team.two.mitrais_carrot.entity.transfer;
 
-import lombok.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
-import com.team.two.mitrais_carrot.entity.auth.UserEntity;
-import com.team.two.mitrais_carrot.entity.transferHistory.TransferHistoryEntity;
+// import com.team.two.mitrais_carrot.entity.transfer.ETransferType;
 
+import lombok.*;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "transfers")
+@Table(name = "transferHistories")
+@ToString
 public class TransferEntity {
     @Id
-    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private int transferId;
+
+    @Column(name = "sender_id")
+    private Long senderId;
+
+    @Column(name = "receiver_id")
+    private Long receiverId;
+
+    @Column(name = "shareAt")
+    private LocalDateTime shareAt;
 
     @Column(name = "type")
-    @NotBlank
-    private String type;
+    @Enumerated(EnumType.STRING)
+    private ETransferType type;
 
-//    @Column(name = "user_id")
-//    @OneToMany(mappedBy = "transfers")
-//    @JoinTable(name = "users", joinColumns = @JoinColumn(name = "transfer_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
-//    private UserEntity user_id;
+    @Column(name = "note")
+    private String note;
 
-//    @Column(name = "transferHistory_id")
-//    @OneToMany(mappedBy = "transfers")
-//    @JoinTable(name = "transferHistories", joinColumns = @JoinColumn(name = "transfer_id"), inverseJoinColumns = @JoinColumn(name = "transferHistory_id"))
-//    private TransferHistoryEntity transferHistory_id;
+    @Column(name = "carrot_amount")
+    private Long carrotAmount;
 }

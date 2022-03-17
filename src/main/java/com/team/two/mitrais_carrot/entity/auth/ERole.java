@@ -1,9 +1,9 @@
 package com.team.two.mitrais_carrot.entity.auth;
 
 public enum ERole {
-    FARMER,
-    MANAGER,
-    STAFF,
-    MERCHANT,
-    ADMIN,
+    ROLE_FARMER,
+    ROLE_MANAGER,
+    ROLE_STAFF,
+    ROLE_MERCHANT,
+    ROLE_ADMIN,
 }

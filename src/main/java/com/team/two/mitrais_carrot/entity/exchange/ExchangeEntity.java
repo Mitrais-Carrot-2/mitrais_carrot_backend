@@ -1,8 +1,10 @@
 package com.team.two.mitrais_carrot.entity.exchange;
 
+import com.team.two.mitrais_carrot.entity.merchant.BazaarItemEntity;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import javax.persistence.*;
 
@@ -25,10 +27,16 @@ public class ExchangeEntity {
     private boolean status;
 
     @Column(name = "price")
-    private int price;
+    private long price;
 
     @Column(name = "exchangeDate")
-    private LocalDate exchangeDate;
+    private LocalDateTime exchangeDate;
+
+    @Column(name="user_id")
+    private long userId;
+
+    @Column(name="bazaarItem_id")
+    private int bazaarItemId;
 
 //    @Column(name = "user_id")
 //    @OneToMany(mappedBy = "exchange")

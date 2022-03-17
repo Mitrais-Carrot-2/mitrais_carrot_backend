@@ -1,17 +1,17 @@
 package com.team.two.mitrais_carrot.entity.auth;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.team.two.mitrais_carrot.entity.basket.BasketEntity;
+import com.team.two.mitrais_carrot.entity.group.UserGroupEntity;
+import lombok.*;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-
-import com.team.two.mitrais_carrot.entity.employee.UserBasketEntity;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -19,20 +19,67 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "users", uniqueConstraints = {
+@Table(name = "users", schema = "public", uniqueConstraints = {
         @UniqueConstraint(columnNames = "username"),
         @UniqueConstraint(columnNames = "email")
 })
 public class UserEntity {
+    public UserEntity(String username, String password, String email) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+    }
+
     @Id
     @Column(name = "user_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "is_active")
+    private boolean isActive;
+
+    @Column(name = "username", nullable = false)
     private String username;
+
+    @Column(name = "password", nullable = false)
     private String password;
+
+    @Column(name = "email", nullable = false)
     private String email;
-    private boolean flag;
+
+    @Column(name = "first_name")
+    private String firstName;
+
+    @Column(name = "last_name")
+    private String lastName;
+
+    @Column(name = "address")
+    private String address;
+
+   @Column(name = "birthDate", nullable = false)
+    private LocalDate birthDate;
+    private Long supervisorId;
+
+    @Column(name = "jobFamily")
+    private String jobFamily;
+
+    @Column(name = "jobGrade")
+    private String jobGrade;
+
+    @Column(name = "office")
+    private String office;
+
+    @Lob
+    @Column(name = "image")
+    @Type(type = "org.hibernate.type.BinaryType")
+    @JsonIgnore
+    private byte[] image;
+
+    @Column(name = "image_type")
+    private String imageType;
+
+    @Column(name = "image_size")
+    private long imageSize;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JoinTable(name = "user_roles",
@@ -40,28 +87,12 @@ public class UserEntity {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<RoleEntity> roles = new HashSet<>();
 
-//    @ManyToOne(cascade = CascadeType.ALL)
-//    private UserBasketEntity userBasket = new UserBasketEntity();
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<BasketEntity> baskets = new ArrayList<>();
 
-    public UserEntity(String username, String password, String email) {
-        this.username = username;
-        this.password = password;
-        this.email = email;
-    }
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<UserGroupEntity> userGroups;
 
-    public boolean isFlag() {
-        return flag;
-    }
-
-    // public void setFlag(boolean flag) {
-    // this.flag = flag;
-    // }
-
-    // public Set<RoleEntity> getRoles() {
-    // return roles;
-    // }
-
-    // public void setRoles(Set<RoleEntity> roles) {
-    // this.roles = roles;
-    // }
+    @Column(name = "dayOfYearBirthDay")
+    private int dayOfYearBirthDay;
 }

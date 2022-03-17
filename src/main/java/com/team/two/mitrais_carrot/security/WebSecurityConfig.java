@@ -12,10 +12,8 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -54,10 +52,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   @Override
   protected void configure(HttpSecurity http) throws Exception {
     http.authorizeRequests()
-//            .antMatchers("/api/auth/**").permitAll()
-//            .antMatchers("/api/swagger-ui/**").permitAll()
+            .antMatchers("/api/auth/**").permitAll()
+            .antMatchers("/api/swagger-ui/**").permitAll()
 //            .antMatchers("/api/user/**").permitAll()
-            .antMatchers("/api/**").permitAll()
             .and().httpBasic().and().csrf().disable();
   }
 }

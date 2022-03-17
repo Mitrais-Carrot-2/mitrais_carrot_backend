@@ -5,7 +5,10 @@ import com.team.two.mitrais_carrot.dto.merchant.CreateBazaarDto;
 import com.team.two.mitrais_carrot.entity.merchant.BazaarEntity;
 import com.team.two.mitrais_carrot.service.merchant.BazaarService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/bazaar")
@@ -16,8 +19,13 @@ public class BazaarController {
         this.bazaarService = bazaarService;
     }
 
+    @GetMapping("")
+    public List<BazaarEntity> getBazaar(){
+        return bazaarService.getBazaar();
+    }
+
     @PostMapping("")
-    public BazaarEntity createBazaar(@RequestBody CreateBazaarDto request){
+    public ResponseEntity<?> createBazaar(@RequestBody CreateBazaarDto request){
         return bazaarService.createBazaar(request);
     }
 
