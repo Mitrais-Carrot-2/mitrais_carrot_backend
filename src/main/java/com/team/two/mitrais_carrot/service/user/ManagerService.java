@@ -100,17 +100,14 @@ public class ManagerService {
         BasketEntity oldBasket = basketService.getActiveBasket(req.getStaffId(), true);
 
         if(freezer.getCarrotAmount() - req.getCarrotAmount()>=0) {
-            oldBasket.setBarn(barn);
-            oldBasket.setCarrotAmount(oldBasket.getShareCarrot() + req.getCarrotAmount());
-            oldBasket.setShareCarrot(oldBasket.getShareCarrot() + req.getCarrotAmount());
-            basketRepository.save(oldBasket);
+            basketService.updateCarrot(oldBasket.getUser(), req.getCarrotAmount(), EBasket.SHARE);
 
             freezer.setCarrotAmount(freezer.getCarrotAmount() - req.getCarrotAmount());
             freezer.setDistributedCarrot(freezer.getDistributedCarrot() + req.getCarrotAmount());
             freezerRepository.save(freezer);
             
             TransferToStaffDto result = new TransferToStaffDto();
-            
+
             result.setStaffId(oldBasket.getUser().getId());
             result.setCarrotAmount(oldBasket.getCarrotAmount());
             result.setNote(req.getNote());
@@ -138,8 +135,8 @@ public class ManagerService {
         BasketEntity oldBasket = basketRepository.findByUser_IdAndBarn_Id(userId, barn.getId());
 
 //        if(freezer.getCarrotAmount() - carrot>=0) {
+
             basketService.updateCarrot(oldBasket.getUser(), carrot, EBasket.SHARE);
-            basketRepository.save(oldBasket);
 
             freezer.setCarrotAmount(freezer.getCarrotAmount() - carrot);
             freezer.setDistributedCarrot(freezer.getDistributedCarrot() + carrot);
