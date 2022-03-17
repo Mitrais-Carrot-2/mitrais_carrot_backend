@@ -17,4 +17,13 @@ public class GroupDto {
     private Long total;
     private String note;
     private List<StaffDto> staff;
+
+    public GroupDto(int id, String name, Long allocation, Integer totalMember, Long total, String note) {
+        this.id = id;
+        this.name = name;
+        this.allocation = allocation;
+        this.totalMember = totalMember;
+        this.total = total;
+        this.note = note;
+    }
 }

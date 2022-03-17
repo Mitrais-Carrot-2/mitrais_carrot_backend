@@ -29,6 +29,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ManagerService {
@@ -56,6 +57,8 @@ public class ManagerService {
 
     @Autowired
     BasketService basketService;
+
+    @Autowired
     TransferRepository transferRepository;
 
     Logger logger = LoggerFactory.getLogger(ManagerService.class);
@@ -74,9 +77,14 @@ public class ManagerService {
     }
 
     public List<StaffDto> fetchMyStaff(){
+        BarnEntity barn = barnRepository.findByIsActive(true);
         List<UserEntity> staff = managerRepository.findBySupervisorId(getManagerId());
         List<StaffDto> result = new ArrayList<>();
         staff.forEach(s ->{
+            BasketEntity basket = s.getBaskets().stream()
+                    .filter(b -> b.getBarn().getId()==barn.getId())
+                    .collect(Collectors.toList()).get(0);
+
             result.add(
                 new StaffDto(
                 s.getId(),
@@ -85,7 +93,8 @@ public class ManagerService {
                 s.getLastName(),
                 s.getJobFamily(),
                 s.getJobGrade(),
-                s.getOffice())
+                s.getOffice(),
+                basket)
             );
         });
         return result;
@@ -134,39 +143,34 @@ public class ManagerService {
 
         BasketEntity oldBasket = basketRepository.findByUser_IdAndBarn_Id(userId, barn.getId());
 
-//        if(freezer.getCarrotAmount() - carrot>=0) {
-            oldBasket.setId(barn.getId());
-            oldBasket.setCarrotAmount(oldBasket.getShareCarrot() + carrot);
-            oldBasket.setShareCarrot(oldBasket.getShareCarrot() + carrot);
-            basketRepository.save(oldBasket);
+        oldBasket.setId(barn.getId());
+        oldBasket.setCarrotAmount(oldBasket.getShareCarrot() + carrot);
+        oldBasket.setShareCarrot(oldBasket.getShareCarrot() + carrot);
+        basketRepository.save(oldBasket);
 
-            freezer.setCarrotAmount(freezer.getCarrotAmount() - carrot);
-            freezer.setDistributedCarrot(freezer.getDistributedCarrot() + carrot);
-            freezerRepository.save(freezer);
+        freezer.setCarrotAmount(freezer.getCarrotAmount() - carrot);
+        freezer.setDistributedCarrot(freezer.getDistributedCarrot() + carrot);
+        freezerRepository.save(freezer);
 
-            TransferToStaffDto result = new TransferToStaffDto();
+        TransferToStaffDto result = new TransferToStaffDto();
 
-            result.setStaffId(oldBasket.getUser().getId());
-            result.setCarrotAmount(oldBasket.getCarrotAmount());
-            result.setNote(note);
+        result.setStaffId(oldBasket.getUser().getId());
+        result.setCarrotAmount(oldBasket.getCarrotAmount());
+        result.setNote(note);
 
-            TransferEntity history = new TransferEntity();
-            history.setSenderId(getManagerId());
-            history.setReceiverId(userId);
-            history.setCarrotAmount(carrot);
-            history.setNote(note);
-            history.setShareAt(LocalDateTime.now());
-            history.setType(ETransferType.TYPE_SHARED);
-            transferRepository.save(history);
-
-//            return true;
-//        }
-//
-//        return false;
+        TransferEntity history = new TransferEntity();
+        history.setSenderId(getManagerId());
+        history.setReceiverId(userId);
+        history.setCarrotAmount(carrot);
+        history.setNote(note);
+        history.setShareAt(LocalDateTime.now());
+        history.setType(ETransferType.TYPE_SHARED);
+        transferRepository.save(history);
     }
 
     public List<GroupDto> fetchMyGroup(){
         List<GroupEntity> groups = groupRepository.findByManagerId(getManagerId());
+        BarnEntity barn = barnRepository.findByIsActive(true);
 
         List<GroupDto> groupDto = new ArrayList<>();
         groups.forEach(g -> {
@@ -174,8 +178,12 @@ public class ManagerService {
             List<StaffDto> groupMember = new ArrayList<>();
             staff.forEach(s -> {
                 UserEntity user = s.getUser();
-                groupMember.add(new StaffDto(user.getId(), user.getUsername(), user.getFirstName(), user.getLastName(), user.getJobFamily(), user.getJobGrade(), user.getOffice()));
+                List<BasketEntity> basket = user.getBaskets().stream()
+                    .filter(b -> b.getBarn().getId()==barn.getId())
+                        .collect(Collectors.toList());
+                groupMember.add(new StaffDto(user.getId(), user.getUsername(), user.getFirstName(), user.getLastName(), user.getJobFamily(), user.getJobGrade(), user.getOffice(), basket.get(0)));
             });
+//            groupDto.add(new GroupDto(g.getId(), g.getName(), g.getAllocation(), staff.size(), g.getAllocation()*staff.size(), g.getNote()));
             groupDto.add(new GroupDto(g.getId(), g.getName(), g.getAllocation(), staff.size(), g.getAllocation()*staff.size(), g.getNote(), groupMember));
         });
         return groupDto;

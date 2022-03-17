@@ -21,7 +21,7 @@ import org.springframework.http.ResponseEntity;
 public class FreezerEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Integer freezerId;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)

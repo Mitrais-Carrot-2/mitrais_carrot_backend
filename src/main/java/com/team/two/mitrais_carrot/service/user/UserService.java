@@ -71,15 +71,13 @@ public class UserService {
         }else {
             user.setDayOfYearBirthDay(user.getBirthDate().getDayOfYear());
         }
-//        userRepository.save(user);
-//        System.out.println("FINISHED SAVING USER");
-//
-//        BarnEntity barnId = barnService.isActiveBarn(true);
-//        System.out.println("BARN ID = " + barnId.getId());
-//
-//        BasketEntity basket = basketService.add(user);
-//        user.getBaskets().add(basket);
-//        System.out.println("SET BASKET" + basket);
+        userRepository.save(user);
+
+        BarnEntity barnId = barnService.isActiveBarn(true);
+
+        BasketEntity basket = basketService.add(user);
+        basket.setBarn(barnId);
+        user.getBaskets().add(basket);
 
         return userRepository.save(user);
     }
