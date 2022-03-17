@@ -33,6 +33,7 @@ public class GroupEntity {
     @Column(name = "note")
     private String note;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "group", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<UserGroupEntity> userGroups;
 //    @ManyToOne
