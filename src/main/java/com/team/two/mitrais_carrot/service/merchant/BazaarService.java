@@ -33,7 +33,7 @@ public class BazaarService {
         bazaar.setEndDate(request.getEndDate());
         bazaarRepository.save(bazaar);
 
-        return ResponseEntity.ok(new MessageDto("Success Create New Bazaar"));
+        return ResponseEntity.ok(new MessageDto("Success Create New Bazaar", true));
     }
 
 }

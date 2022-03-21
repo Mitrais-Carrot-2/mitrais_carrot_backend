@@ -3,8 +3,6 @@ package com.team.two.mitrais_carrot.controller.admin;
 import java.util.List;
 
 import com.team.two.mitrais_carrot.entity.auth.UserEntity;
-import com.team.two.mitrais_carrot.entity.transfer.ETransferType;
-import com.team.two.mitrais_carrot.entity.transfer.TransferEntity;
 import com.team.two.mitrais_carrot.service.admin.BarnRewardService;
 import com.team.two.mitrais_carrot.service.transfer.TransferService;
 import com.team.two.mitrais_carrot.service.user.UserService;

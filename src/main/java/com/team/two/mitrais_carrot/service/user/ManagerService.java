@@ -176,11 +176,8 @@ public class ManagerService {
     public Boolean transferToGroup(TransferToGroupDto req){
         Integer groupId = req.getGroupId();
 
-        BarnEntity barn = barnRepository.findByIsActive(true);
-        FreezerEntity freezer = freezerRepository.findByManagerIdAndBarn_Id(getManagerId(), barn.getId());
 
         List<UserGroupEntity> members = userGroupRepository.findByGroup_Id(groupId);
-        List<BasketEntity> basket = new ArrayList<>();
 
         Long totalCarrot = members.size() * req.getCarrotAmount();
         if(totalCarrot - req.getCarrotAmount()>=0) {

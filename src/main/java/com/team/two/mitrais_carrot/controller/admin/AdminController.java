@@ -4,7 +4,6 @@ import com.team.two.mitrais_carrot.dto.admin.BarnRewardDto;
 import com.team.two.mitrais_carrot.dto.admin.EditBarnRewardDto;
 import com.team.two.mitrais_carrot.dto.auth.SignUpDto;
 import com.team.two.mitrais_carrot.entity.admin.BarnRewardEntity;
-import com.team.two.mitrais_carrot.entity.auth.UserEntity;
 import com.team.two.mitrais_carrot.service.admin.BarnRewardService;
 import com.team.two.mitrais_carrot.service.auth.AuthService;
 import com.team.two.mitrais_carrot.service.transfer.TransferService;
@@ -37,17 +36,17 @@ public class AdminController {
     }
 
     @GetMapping("barnReward")
-    public List<BarnRewardEntity> fetchBarnReward(){
+    public List<BarnRewardEntity> fetchBarnReward() {
         return barnRewardService.fetchAllBarnRewards();
     }
 
     @PostMapping("barnReward")
-    public BarnRewardEntity postBarnReward(@RequestBody BarnRewardDto request){
+    public ResponseEntity<?> postBarnReward(@RequestBody BarnRewardDto request) {
         return barnRewardService.createBarnReward(request);
     }
 
     @PutMapping("barnReward")
-    public BarnRewardEntity editBarnReward(@RequestBody EditBarnRewardDto request){
+    public BarnRewardEntity editBarnReward(@RequestBody EditBarnRewardDto request) {
         return barnRewardService.editBarnRewardEntity(request);
     }
 }
