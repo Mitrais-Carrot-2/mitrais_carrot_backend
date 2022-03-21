@@ -65,13 +65,6 @@ public class BarnService {
       barnEntity.setCarrotAmount(req.getCarrotAmount());
       barnEntity.setIsActive(this.checkActive(req.getStartDate(), req.getEndDate()));
 
-      List<BarnEntity> activeBarn = barnRepository.findByIsActiveTrue();
-      if (activeBarn!=null){
-          activeBarn.forEach(a -> {
-              a.setIsActive(false);
-          });
-          barnRepository.saveAll(activeBarn);
-      }
       return barnRepository.save(barnEntity);
   }
 
