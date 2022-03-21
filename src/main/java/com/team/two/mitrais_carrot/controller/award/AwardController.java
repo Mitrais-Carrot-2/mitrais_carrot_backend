@@ -24,4 +24,9 @@ public class AwardController {
     public ResponseEntity<?> createAward(@RequestBody CreateAwardDTO request){
         return  awardService.createAward(request);
     }
+
+    @PutMapping("{id}")
+    public ResponseEntity<?> updateAward(@RequestBody CreateAwardDTO request, Integer id){
+        return awardService.updateAward(request,id);
+    }
 }

@@ -4,6 +4,7 @@ import com.team.two.mitrais_carrot.dto.MessageDto;
 import com.team.two.mitrais_carrot.dto.award.CreateAwardDTO;
 import com.team.two.mitrais_carrot.entity.award.AwardEntity;
 import com.team.two.mitrais_carrot.repository.AwardRepository;
+import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -30,5 +31,21 @@ public class AwardService {
         award.setStatus(request.isActive());
         awardRepository.save(award);
         return ResponseEntity.ok(new MessageDto("Success Create New Award!", true));
+    }
+
+    public ResponseEntity<?> updateAward(CreateAwardDTO request, Integer id){
+        AwardEntity award = awardRepository.getById(id);
+        if (award.getName().length() == 0){
+            return ResponseEntity.badRequest().body(new MessageDto("Error: Id out of scope!", false));
+        } else{
+            award.setName(request.getName());
+            award.setDescription(request.getDescription());
+            award.setStatus(request.isActive());
+            award.setCarrotAmount(request.getCarrotAmount());
+            award.setExpiryDate(request.getExpiryDate());
+            awardRepository.save(award);
+            return ResponseEntity.ok(new MessageDto("Award Update Success!", true));
+        }
+
     }
 }
