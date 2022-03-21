@@ -2,6 +2,7 @@ package com.team.two.mitrais_carrot.entity.award;
 
 import lombok.*;
 import javax.persistence.*;
+import java.time.LocalDate;
 // import javax.validation.constraints.NotBlank;
 
 @Entity
@@ -27,4 +28,7 @@ public class AwardEntity {
 
     @Column(name = "carrot_amount")
     private Long carrotAmount;
+
+    @Column(name = "expiry_date")
+    private LocalDate expiryDate;
 }
