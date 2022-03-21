@@ -21,15 +21,15 @@ public class ExchangeEntity {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private long id;
 
-    @Column(name = "status")
-    private boolean status;
+    @Column(name = "isActive")
+    private boolean isActive;
 
     @Column(name = "price")
     private long price;
 
-    @Column(name = "exchangeDate")
+    @Column(name = "exchange_date")
     private LocalDateTime exchangeDate;
 
     @Column(name="user_id")
@@ -37,6 +37,9 @@ public class ExchangeEntity {
 
     @Column(name="bazaarItem_id")
     private int bazaarItemId;
+
+    @Column(name="status")
+    private EExchangeStatus status;
 
 //    @Column(name = "user_id")
 //    @OneToMany(mappedBy = "exchange")
