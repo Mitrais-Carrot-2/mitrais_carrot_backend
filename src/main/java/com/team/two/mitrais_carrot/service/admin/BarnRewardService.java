@@ -2,7 +2,6 @@ package com.team.two.mitrais_carrot.service.admin;
 
 import java.util.List;
 
-import javax.validation.constraints.Null;
 
 import com.team.two.mitrais_carrot.dto.admin.BarnRewardDto;
 import com.team.two.mitrais_carrot.dto.admin.EditBarnRewardDto;
@@ -10,7 +9,6 @@ import com.team.two.mitrais_carrot.entity.admin.BarnRewardEntity;
 import com.team.two.mitrais_carrot.entity.admin.ETypeBarnReward;
 import com.team.two.mitrais_carrot.entity.auth.UserEntity;
 import com.team.two.mitrais_carrot.entity.transfer.ETransferType;
-import com.team.two.mitrais_carrot.repository.UserRepository;
 import com.team.two.mitrais_carrot.repository.admin.BarnRewardRepository;
 import com.team.two.mitrais_carrot.service.transfer.TransferService;
 import com.team.two.mitrais_carrot.service.user.UserService;
@@ -72,5 +70,4 @@ public class BarnRewardService {
         return birthdayPerson;
     }
 
-    //TODO : Give reward as per date
 }

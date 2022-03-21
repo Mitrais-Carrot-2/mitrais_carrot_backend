@@ -6,14 +6,12 @@ import com.team.two.mitrais_carrot.entity.farmer.BarnEntity;
 import com.team.two.mitrais_carrot.repository.farmer.BarnRepository;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 import com.team.two.mitrais_carrot.security.services.UserDetailsImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -50,7 +48,7 @@ public class BarnService {
   public ResponseEntity<?> createBarn(BarnDto req) {
     if (barnRepository.existsByBarnName(req.getBarnName())) {
       return ResponseEntity.badRequest()
-          .body(new MessageDto(String.format("Already created Barn with %s name",req.getBarnName()), false));
+          .body(new MessageDto(String.format("Already created Barn with %s name", req.getBarnName()), false));
     }
     BarnEntity barnEntity = new BarnEntity();
 

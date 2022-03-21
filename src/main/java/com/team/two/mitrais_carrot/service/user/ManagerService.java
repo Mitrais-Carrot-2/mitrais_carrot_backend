@@ -31,7 +31,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ManagerService {
@@ -177,11 +176,8 @@ public class ManagerService {
     public Boolean transferToGroup(TransferToGroupDto req){
         Integer groupId = req.getGroupId();
 
-        BarnEntity barn = barnRepository.findByIsActive(true);
-        FreezerEntity freezer = freezerRepository.findByManagerIdAndBarn_Id(getManagerId(), barn.getId());
 
         List<UserGroupEntity> members = userGroupRepository.findByGroup_Id(groupId);
-        List<BasketEntity> basket = new ArrayList<>();
 
         Long totalCarrot = members.size() * req.getCarrotAmount();
         if(totalCarrot - req.getCarrotAmount()>=0) {
