@@ -17,6 +17,7 @@ public class BarnController {
     @Autowired
     BarnService barnService;
 
+    @CrossOrigin(origins = "*")
     @GetMapping("/")
     public List<BarnEntity> fetchBarn() {
         return barnService.fetchAllBarn();
