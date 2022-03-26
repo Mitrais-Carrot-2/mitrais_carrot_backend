@@ -79,7 +79,7 @@ public class UserController {
         }
     }
 
-    @GetMapping("/getImage/{username}")
+    @GetMapping("/Image/{username}")
     public ResponseEntity<byte[]> getImage(@PathVariable String username) throws Exception {
         UserEntity user = userService.getByUsername(username);
         if (user != null) {
@@ -94,7 +94,7 @@ public class UserController {
         return ResponseEntity.notFound().build();
     }
 
-    @PutMapping("/uploadImage/{username}")
+    @PutMapping("/Image/{username}")
     public ResponseEntity<?> uploadImage(@PathVariable String username, @RequestParam("file") MultipartFile file) {
         try {
             userService.saveImage(username, file);
