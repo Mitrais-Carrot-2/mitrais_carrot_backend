@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/admin/")
 public class AdminController {
@@ -50,6 +51,7 @@ public class AdminController {
         return barnRewardService.editBarnRewardEntity(request);
     }
 
+    @CrossOrigin(origins = "*")
     @GetMapping("barnReward/{id}")
     public List<BarnRewardEntity> fetchBarnRewardById(@PathVariable int id) {
         return barnRewardService.fetchBarnRewardById(id);
