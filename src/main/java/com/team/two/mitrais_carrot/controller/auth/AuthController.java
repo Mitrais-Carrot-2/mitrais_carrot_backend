@@ -2,6 +2,7 @@ package com.team.two.mitrais_carrot.controller.auth;
 
 import javax.validation.Valid;
 
+import com.team.two.mitrais_carrot.dto.MessageDto;
 import com.team.two.mitrais_carrot.dto.auth.JwtDto;
 import com.team.two.mitrais_carrot.dto.auth.LoginDto;
 import com.team.two.mitrais_carrot.dto.auth.SignUpDto;
@@ -17,11 +18,10 @@ public class AuthController {
     @Autowired
     AuthService authService;
 
-//    @GetMapping("/test")
-//    public UserDetailsImpl test() {
-//        UserDetailsImpl user = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//        return user;
-//    }
+    @GetMapping("/test")
+    public ResponseEntity test() {
+        return ResponseEntity.ok(new MessageDto("Berhasil"));
+    }
 
     @PostMapping("/login")
     public JwtDto authenticateUser(@Valid @RequestBody LoginDto loginRequest) {

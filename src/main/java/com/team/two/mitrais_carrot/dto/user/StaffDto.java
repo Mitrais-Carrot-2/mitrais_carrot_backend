@@ -17,5 +17,5 @@ public class StaffDto {
 //    private byte[] image;
     private String jobFamily;
     private String jobGrade;
-//    private String office;
+    private String office;
 }

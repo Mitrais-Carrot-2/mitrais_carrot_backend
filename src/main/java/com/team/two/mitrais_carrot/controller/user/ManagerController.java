@@ -1,6 +1,7 @@
 package com.team.two.mitrais_carrot.controller.user;
 
 import com.team.two.mitrais_carrot.dto.MessageDto;
+import com.team.two.mitrais_carrot.dto.manager.FreezerDto;
 import com.team.two.mitrais_carrot.dto.manager.TransferToGroupDto;
 import com.team.two.mitrais_carrot.dto.manager.TransferToStaffDto;
 import com.team.two.mitrais_carrot.dto.user.GroupDto;
@@ -12,6 +13,7 @@ import com.team.two.mitrais_carrot.entity.group.GroupEntity;
 import com.team.two.mitrais_carrot.service.user.ManagerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,14 +21,21 @@ import java.util.Optional;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
+//@PreAuthorize("hasAnyRole('MANAGER')")
 @RequestMapping("/api/manager")
 public class ManagerController {
     @Autowired
     ManagerService managerService;
 
-    @GetMapping("/staff")
-    public List<StaffDto> fetchMyStaff(){
-        return managerService.fetchMyStaff();
+//    @PreAuthorize("hasRole('MANAGER')")
+    @GetMapping("/freezer")
+    public FreezerDto myFreezer(){
+        return managerService.getActiveFreezer();
+    }
+
+    @GetMapping("/{managerId}/staff")
+    public List<StaffDto> fetchMyStaff(@PathVariable("managerId") Long managerId){
+        return managerService.fetchMyStaff(managerId);
     }
 
     @PostMapping("/transfer/staff")

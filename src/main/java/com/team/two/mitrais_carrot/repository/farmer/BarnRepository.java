@@ -10,7 +10,7 @@ import java.util.List;
 public interface BarnRepository extends JpaRepository <BarnEntity, Integer> {
     BarnEntity findByIsActive(Boolean isActive);
 
-    List<BarnEntity> findByIsActiveFalse();
-
-    List<BarnEntity> findByIsActiveTrue();
+//    List<BarnEntity> findByIsActiveFalse();
+//
+//    List<BarnEntity> findByIsActiveTrue();
 }

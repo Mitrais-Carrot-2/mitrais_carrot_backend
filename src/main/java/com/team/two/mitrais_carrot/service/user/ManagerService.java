@@ -1,5 +1,6 @@
 package com.team.two.mitrais_carrot.service.user;
 
+import com.team.two.mitrais_carrot.dto.manager.FreezerDto;
 import com.team.two.mitrais_carrot.dto.manager.TransferToGroupDto;
 import com.team.two.mitrais_carrot.dto.manager.TransferToStaffDto;
 import com.team.two.mitrais_carrot.dto.user.GroupDto;
@@ -77,8 +78,9 @@ public class ManagerService {
         return supervisorId;
     }
 
-    public List<StaffDto> fetchMyStaff(){
-        List<UserEntity> staff = managerRepository.findBySupervisorId(getManagerId());
+    public List<StaffDto> fetchMyStaff(Long managerId){
+        List<UserEntity> staff = managerRepository.findBySupervisorId(managerId);
+//        List<UserEntity> staff = managerRepository.findBySupervisorId(getManagerId());
         List<StaffDto> result = new ArrayList<>();
         staff.forEach(s ->
             result.add(new StaffDto(
@@ -87,7 +89,8 @@ public class ManagerService {
                 s.getFirstName(),
                 s.getLastName(),
                 s.getJobFamily(),
-                s.getJobGrade())
+                s.getJobGrade(),
+                s.getOffice())
             )
         );
         return result;
@@ -149,7 +152,8 @@ public class ManagerService {
             result.setNote(note);
 
             TransferEntity history = new TransferEntity();
-            history.setSenderId(getManagerId());
+            history.setSenderId(Long.valueOf(freezer.getId()));
+//            history.setSenderId(getManagerId());
             history.setReceiverId(userId);
             history.setCarrotAmount(carrot);
             history.setNote(note);
@@ -201,5 +205,18 @@ public class ManagerService {
             users.add(new UserGroupDto(user.getUsername(), user.getFirstName(), user.getLastName(), user.getJobFamily(), user.getJobGrade(), user.getOffice()));
         });
         return users;
+    }
+
+    public FreezerDto getActiveFreezer(){
+        BarnEntity barn = barnRepository.findByIsActive(true);
+        FreezerEntity activeFreezer = freezerRepository.findByManagerIdAndBarn_Id(getManagerId(), barn.getId());
+        FreezerDto freezer = new FreezerDto();
+        freezer.setFreezerId(activeFreezer.getId());
+        freezer.setBarnName(barn.getBarnName());
+        freezer.setBarnOwner(barn.getUserId().getFirstName()+" "+barn.getUserId().getLastName());
+        freezer.setBarnPeriod(barn.getStartDate() +" / "+ barn.getEndDate());
+        freezer.setCarrotAmount(activeFreezer.getCarrotAmount());
+        freezer.setDistributedCarrot(activeFreezer.getDistributedCarrot());
+        return freezer;
     }
 }

@@ -1,29 +1,42 @@
 package com.team.two.mitrais_carrot.service.farmer;
 
 import com.team.two.mitrais_carrot.dto.farmer.BarnDto;
+import com.team.two.mitrais_carrot.entity.auth.UserEntity;
 import com.team.two.mitrais_carrot.entity.farmer.BarnEntity;
+import com.team.two.mitrais_carrot.repository.UserRepository;
 import com.team.two.mitrais_carrot.repository.farmer.BarnRepository;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import com.team.two.mitrais_carrot.security.services.UserDetailsImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 @Service
 public class BarnService {
+    @Autowired
+    UserRepository userRepository;
+
   private final BarnRepository barnRepository;
 
   public BarnService(BarnRepository barnRepository) {
       this.barnRepository = barnRepository;
   }
 
-  public List<BarnEntity> fetchAllBarn(){
-      return barnRepository.findAll();
+  public List<BarnDto> fetchAllBarn(){
+      List<BarnEntity> barns = barnRepository.findAll();
+      List<BarnDto> barnDto = new ArrayList<>();
+
+      barns.forEach(b -> {
+          barnDto.add(new BarnDto(b.getId(), b.getBarnName(), b.getCarrotAmount(), b.getStartDate(), b.getEndDate()));
+      });
+      return barnDto;
   }
 
   public BarnEntity getBarnById(int id){
@@ -48,16 +61,6 @@ public class BarnService {
   public BarnEntity createBarn(BarnDto req) {
       BarnEntity barnEntity = new BarnEntity();
 
-//      Long userId = 1L;
-//      try {
-//        user = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//        userId = user.getId();
-//      } catch (ClassCastException err){
-//          userId = 1L;
-//      }
-
-      //      logger.error("Auth: "+userId);
-
       barnEntity.setUserId(getFarmerId());
       barnEntity.setBarnName(req.getBarnName());
       barnEntity.setStartDate(req.getStartDate());
@@ -65,13 +68,13 @@ public class BarnService {
       barnEntity.setCarrotAmount(req.getCarrotAmount());
       barnEntity.setIsActive(this.checkActive(req.getStartDate(), req.getEndDate()));
 
-      List<BarnEntity> activeBarn = barnRepository.findByIsActiveTrue();
-      if (activeBarn!=null){
-          activeBarn.forEach(a -> {
-              a.setIsActive(false);
-          });
-          barnRepository.saveAll(activeBarn);
-      }
+//      List<BarnEntity> activeBarn = barnRepository.findByIsActiveTrue();
+//      if (activeBarn!=null){
+//          activeBarn.forEach(a -> {
+//              a.setIsActive(false);
+//          });
+//          barnRepository.saveAll(activeBarn);
+//      }
       return barnRepository.save(barnEntity);
   }
 
@@ -87,15 +90,15 @@ public class BarnService {
     );
   }
 
-    public Long getFarmerId() {
-        Long userId = 1L;
+    public UserEntity getFarmerId() {
+        String username = "";
         try {
             UserDetailsImpl user = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            userId = user.getId();
+            username = user.getUsername();
         } catch (ClassCastException err) {
-            userId = 1L;
+            username = "";
         }
 
-        return userId;
+        return userRepository.findByUsername(username);
     }
 }

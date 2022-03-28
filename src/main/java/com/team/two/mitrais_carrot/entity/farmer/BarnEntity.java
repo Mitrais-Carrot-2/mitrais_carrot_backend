@@ -7,6 +7,8 @@ import java.util.List;
 import javax.persistence.*;
 // import javax.validation.constraints.NotBlank;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.team.two.mitrais_carrot.entity.auth.UserEntity;
 import com.team.two.mitrais_carrot.entity.basket.BasketEntity;
 import com.team.two.mitrais_carrot.entity.freezer.FreezerEntity;
 import lombok.*;
@@ -24,12 +26,10 @@ import org.springframework.beans.factory.annotation.Value;
 public class BarnEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	// TODO : Buat relasi ke barnToFreezer sebagai PK
 	private Integer id;
 
-	@Column(name = "user_id")
-	// TODO : Buat relasi ke user sebagai FK
-	private Long userId;
+//	@Column(name = "user_id")
+//	private Long userId;
 
 	@Column(name = "barn_name")
 	private String barnName;
@@ -57,9 +57,16 @@ public class BarnEntity {
 //	@OneToMany(targetEntity = FreezerEntity.class, mappedBy = "freezerId", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 //	private List<FreezerEntity> freezerId;
 
+	@JsonIgnore
 	@OneToMany(mappedBy = "barn", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<BasketEntity> baskets = new ArrayList<>();
 
+	@JsonIgnore
 	@OneToMany(mappedBy = "barn", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<FreezerEntity> freezers = new ArrayList<>();
+
+//	@JsonIgnore
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "user_id")
+	private UserEntity userId;
 }

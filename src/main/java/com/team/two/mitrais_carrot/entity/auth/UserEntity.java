@@ -2,6 +2,8 @@ package com.team.two.mitrais_carrot.entity.auth;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.team.two.mitrais_carrot.entity.basket.BasketEntity;
+import com.team.two.mitrais_carrot.entity.farmer.BarnEntity;
+import com.team.two.mitrais_carrot.entity.freezer.FreezerEntity;
 import com.team.two.mitrais_carrot.entity.group.UserGroupEntity;
 import lombok.*;
 
@@ -92,6 +94,9 @@ public class UserEntity {
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<UserGroupEntity> userGroups;
+
+    @OneToMany(mappedBy = "userId", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<BarnEntity> barn = new ArrayList<>();
 
     @Column(name = "dayOfYearBirthDay")
     private int dayOfYearBirthDay;
