@@ -49,4 +49,9 @@ public class AdminController {
     public BarnRewardEntity editBarnReward(@RequestBody EditBarnRewardDto request) {
         return barnRewardService.editBarnRewardEntity(request);
     }
+
+    @GetMapping("barnReward/{id}")
+    public List<BarnRewardEntity> fetchBarnRewardById(@PathVariable int id) {
+        return barnRewardService.fetchBarnRewardById(id);
+    }
 }

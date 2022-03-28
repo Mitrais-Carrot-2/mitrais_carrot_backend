@@ -2,6 +2,8 @@ package com.team.two.mitrais_carrot.service.farmer;
 
 import com.team.two.mitrais_carrot.dto.MessageDto;
 import com.team.two.mitrais_carrot.dto.farmer.BarnDto;
+import com.team.two.mitrais_carrot.dto.farmer.BarnEditDto;
+import com.team.two.mitrais_carrot.entity.admin.BarnRewardEntity;
 import com.team.two.mitrais_carrot.entity.farmer.BarnEntity;
 import com.team.two.mitrais_carrot.repository.farmer.BarnRepository;
 import java.time.LocalDate;
@@ -84,4 +86,31 @@ public class BarnService {
 
     return userId;
   }
-}
+
+  public ResponseEntity<?> updateBarn(int id, BarnEditDto req) {
+    BarnEntity barnEntity = this.getBarnById(id);
+    if (barnEntity == null) {
+      return ResponseEntity.badRequest().body(new MessageDto("Barn not found", false));
+    }
+    barnEntity.setBarnName(req.getBarnName());
+    barnEntity.setStartDate(req.getStartDate());
+    barnEntity.setEndDate(req.getEndDate());
+    barnEntity.setCarrotAmount(req.getCarrotAmount());
+    barnEntity.setIsActive(this.checkActive(req.getStartDate(), req.getEndDate()));
+    barnRepository.save(barnEntity);
+    return ResponseEntity.ok(new MessageDto(String.format("Successfully updated %s Barn!", req.getBarnName()), true));
+
+  }
+  
+  public ResponseEntity<?> addBarnReward (int id, BarnRewardEntity reward) {
+    BarnEntity barnEntity = this.getBarnById(id);
+    if (barnEntity == null) {
+      return ResponseEntity.badRequest().body(new MessageDto("Barn not found", false));
+    }
+    barnEntity.getBarnReward().add(reward);
+    barnRepository.save(barnEntity);
+    return ResponseEntity.ok(new MessageDto(String.format("Successfully added reward to %s Barn!", barnEntity.getBarnName()), true));
+
+  }
+
+  }

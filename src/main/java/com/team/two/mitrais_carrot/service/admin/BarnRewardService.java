@@ -8,8 +8,10 @@ import com.team.two.mitrais_carrot.dto.admin.EditBarnRewardDto;
 import com.team.two.mitrais_carrot.entity.admin.BarnRewardEntity;
 import com.team.two.mitrais_carrot.entity.admin.ETypeBarnReward;
 import com.team.two.mitrais_carrot.entity.auth.UserEntity;
+import com.team.two.mitrais_carrot.entity.farmer.BarnEntity;
 import com.team.two.mitrais_carrot.entity.transfer.ETransferType;
 import com.team.two.mitrais_carrot.repository.admin.BarnRewardRepository;
+import com.team.two.mitrais_carrot.repository.farmer.BarnRepository;
 import com.team.two.mitrais_carrot.service.transfer.TransferService;
 import com.team.two.mitrais_carrot.service.user.UserService;
 
@@ -20,17 +22,17 @@ import org.springframework.stereotype.Service;
 @Service
 public class BarnRewardService {
     private final BarnRewardRepository barnRewardRepository;
+    private final BarnRepository barnRepository;
+
     @Autowired
     private UserService userService;
     @Autowired
     private TransferService transferService;
 
-    public BarnRewardService(BarnRewardRepository barnRewardRepository) {
+    public BarnRewardService(BarnRewardRepository barnRewardRepository, BarnRepository barnRepository) {
         this.barnRewardRepository = barnRewardRepository;
+        this.barnRepository = barnRepository;
     }
-    // public BarnRewardEntity getBarnRewardByType(ETypeBarnReward type){
-    // return barnRewardRepository.findByGivingConditionalEqual(type);
-    // }
 
     public List<BarnRewardEntity> fetchAllBarnRewards() {
         return barnRewardRepository.findAll();
@@ -44,16 +46,22 @@ public class BarnRewardService {
         return barnRewardRepository.findByRewardDescription(description);
     }
 
+    public List<BarnRewardEntity> fetchBarnRewardById(int id) {
+        return barnRewardRepository.findByBarnId(id);
+    }
+
     public ResponseEntity<?> createBarnReward(BarnRewardDto req) {
-        if (barnRewardRepository.existsByRewardDescription(req.getRewardDescription())) {
-            return ResponseEntity.badRequest().body(new MessageDto(
-                    String.format("%s already exist. Please use change instead", req.getRewardDescription()), false));
-        }
         BarnRewardEntity barnReward = new BarnRewardEntity();
+        BarnEntity barn = barnRepository.findById(req.getBarnId()).orElse(null);
+
         barnReward.setRewardDescription(req.getRewardDescription());
         barnReward.setCarrotAmount(req.getCarrotAmount());
         barnReward.setGivingConditional(req.getGivingConditional());
+        // barnReward.setBarnId(req.getBarnId());
+        barnReward.setBarn(barn);
         barnRewardRepository.save(barnReward);
+        barn.getBarnReward().add(barnReward);
+        barnRepository.save(barn);
         return ResponseEntity
                 .ok(new MessageDto(String.format("Successfully created reward: %s", req.getRewardDescription()), true));
 

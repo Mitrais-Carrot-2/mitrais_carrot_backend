@@ -22,4 +22,7 @@ public class BarnRewardDto {
     @JsonProperty("giving_conditional")
     private ETypeBarnReward givingConditional;
 
+    @JsonProperty("barn_id")
+    private int barnId;
+
 }

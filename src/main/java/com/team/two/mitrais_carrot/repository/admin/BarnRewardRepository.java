@@ -1,5 +1,7 @@
 package com.team.two.mitrais_carrot.repository.admin;
 
+import java.util.List;
+
 import com.team.two.mitrais_carrot.entity.admin.BarnRewardEntity;
 import com.team.two.mitrais_carrot.entity.admin.ETypeBarnReward;
 
@@ -14,6 +16,8 @@ public interface BarnRewardRepository extends JpaRepository<BarnRewardEntity, In
     BarnRewardEntity findByRewardDescription(String description);
 
     boolean existsByRewardDescription(String rewardDescription);
+
+    List<BarnRewardEntity> findByBarnId(int id);
 
     // BarnRewardEntity findByGivingConditionalEqual(ETypeBarnReward type);
 

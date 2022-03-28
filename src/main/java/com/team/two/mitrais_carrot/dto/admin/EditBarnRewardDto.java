@@ -12,6 +12,9 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class EditBarnRewardDto {
+    @JsonProperty("id")
+    private int id;
+
     @JsonProperty("reward_description")
     private String rewardDescription;
 

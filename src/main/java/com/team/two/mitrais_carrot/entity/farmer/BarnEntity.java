@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.persistence.*;
 
+import com.team.two.mitrais_carrot.entity.admin.BarnRewardEntity;
 import com.team.two.mitrais_carrot.entity.basket.BasketEntity;
 import com.team.two.mitrais_carrot.entity.freezer.FreezerEntity;
 import lombok.*;
@@ -49,4 +50,8 @@ public class BarnEntity {
 
 	@OneToMany(mappedBy = "barn", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<FreezerEntity> freezers = new ArrayList<>();
+
+	@OneToMany(mappedBy = "barn", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private List<BarnRewardEntity> barnReward = new ArrayList<>();
+	
 }
