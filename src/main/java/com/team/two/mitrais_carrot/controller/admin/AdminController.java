@@ -46,14 +46,20 @@ public class AdminController {
         return barnRewardService.createBarnReward(request);
     }
 
-    @PutMapping("barnReward")
-    public BarnRewardEntity editBarnReward(@RequestBody EditBarnRewardDto request) {
-        return barnRewardService.editBarnRewardEntity(request);
+    @PutMapping("barnReward/{id}")
+    public BarnRewardEntity editBarnReward(@PathVariable int id,
+            @RequestBody EditBarnRewardDto request) {
+        return barnRewardService.editBarnRewardEntity(id, request);
     }
 
     @CrossOrigin(origins = "*")
     @GetMapping("barnReward/{id}")
     public List<BarnRewardEntity> fetchBarnRewardById(@PathVariable int id) {
         return barnRewardService.fetchBarnRewardById(id);
+    }
+
+    @DeleteMapping("/barnReward/{id}")
+    public ResponseEntity<?> deleteBarnReward(@PathVariable int id) {
+        return barnRewardService.deleteBarnReward(id);
     }
 }

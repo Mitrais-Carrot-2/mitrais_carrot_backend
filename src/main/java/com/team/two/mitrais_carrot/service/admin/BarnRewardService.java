@@ -38,6 +38,10 @@ public class BarnRewardService {
         return barnRewardRepository.findAll();
     }
 
+    public BarnRewardEntity findById(int id) {
+        return barnRewardRepository.findById(id).orElse(null);
+    }
+
     public BarnRewardEntity searchBarnRewardByType(ETypeBarnReward type) {
         return barnRewardRepository.findByGivingConditional(type);
     }
@@ -67,9 +71,11 @@ public class BarnRewardService {
 
     }
 
-    public BarnRewardEntity editBarnRewardEntity(EditBarnRewardDto req) {
-        BarnRewardEntity selectedBarnReward = this.searchBarnRewardByDescription(req.getRewardDescription());
+    public BarnRewardEntity editBarnRewardEntity(int id, EditBarnRewardDto req) {
+        BarnRewardEntity selectedBarnReward = this.findById(id);
+        selectedBarnReward.setRewardDescription(req.getRewardDescription());
         selectedBarnReward.setCarrotAmount(req.getCarrotAmount());
+        selectedBarnReward.setGivingConditional(req.getGivingConditional());
         return barnRewardRepository.save(selectedBarnReward);
     }
 
@@ -83,6 +89,13 @@ public class BarnRewardService {
         }
 
         return birthdayPerson;
+    }
+
+    public ResponseEntity<?> deleteBarnReward(int id) {
+        BarnRewardEntity selectedBarnReward = this.findById(id);
+        barnRewardRepository.delete(selectedBarnReward);
+        return ResponseEntity
+                .ok(new MessageDto(String.format("Successfully deleted reward: %s", selectedBarnReward.getRewardDescription()), true));
     }
 
 }

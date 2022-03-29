@@ -49,7 +49,7 @@ public class BarnRewardEntity {
 
 
     @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "barn_id")
     private BarnEntity barn;
 
