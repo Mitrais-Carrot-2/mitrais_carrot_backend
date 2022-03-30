@@ -38,6 +38,11 @@ public class StaffGroupController {
         return staffGroupService.getStaffListInGroup(id);
     }
 
+    @GetMapping("/details/{id}")
+    public StaffGroupDto getGroupDetail(@PathVariable("id")int id){
+        return staffGroupService.getGroupDetail(id);
+    }
+
     @PutMapping("{id}")
     public ResponseEntity<?> updateStaffGroup(@PathVariable("id") int id, @RequestBody StaffGroupDto request){
         return staffGroupService.updateStaffGroup(request,id);

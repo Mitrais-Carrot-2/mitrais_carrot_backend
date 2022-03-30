@@ -1,6 +1,7 @@
 package com.team.two.mitrais_carrot.dto;
 
-public class MessageDto{
+public class MessageDto<T>{
+    private T t;
     private String message;
     private Boolean status;
 
@@ -11,6 +12,20 @@ public class MessageDto{
     public MessageDto(String message, Boolean status) {
         this.message = message;
         this.status = status;
+    }
+
+    public MessageDto(T t, String message, Boolean status) {
+        this.t = t;
+        this.message = message;
+        this.status = status;
+    }
+
+    public T getT() {
+        return t;
+    }
+
+    public void setT(T t) {
+        this.t = t;
     }
 
     public String getMessage() {

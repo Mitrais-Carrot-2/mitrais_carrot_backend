@@ -1,12 +1,10 @@
 package com.team.two.mitrais_carrot.controller.exchange;
 
-import com.team.two.mitrais_carrot.entity.auth.UserEntity;
+import com.team.two.mitrais_carrot.entity.exchange.EExchangeStatus;
 import com.team.two.mitrais_carrot.entity.exchange.ExchangeEntity;
-import com.team.two.mitrais_carrot.service.basket.BasketService;
-import com.team.two.mitrais_carrot.service.basket.EBasket;
 import com.team.two.mitrais_carrot.service.exchange.ExchangeService;
-import com.team.two.mitrais_carrot.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,4 +25,9 @@ public class ExchangeController {
         return exchangeService.getAll();
     }
 
+    @PutMapping("{id}")
+    public ResponseEntity<?> setExchangeStatus(@RequestParam(value = "Exchange ID") long exchangeId, @RequestParam(value = "Status") EExchangeStatus status){
+        ExchangeEntity exchange = exchangeService.getById(exchangeId);
+        return exchangeService.setExchangeStatus(exchange, status);
+    }
 }

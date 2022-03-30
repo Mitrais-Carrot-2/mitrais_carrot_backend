@@ -58,6 +58,18 @@ public class UserEntity {
     @Column(name = "address")
     private String address;
 
+    @Column(name = "phone")
+    private String phone;
+
+    @Column(name = "joinDate")
+    private LocalDate joinDate;
+
+    @Column(name = "gender")
+    private String gender;
+
+    @Column(name="enableNotif",nullable = false)
+    private boolean enableNotif;
+
    @Column(name = "birthDate", nullable = false)
     private LocalDate birthDate;
     private Long supervisorId;

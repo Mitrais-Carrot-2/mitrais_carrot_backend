@@ -8,34 +8,46 @@ import com.team.two.mitrais_carrot.entity.admin.BarnRewardEntity;
 import com.team.two.mitrais_carrot.service.admin.BarnRewardService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-
 // TODO : Buat authentikasi agar admin access only
-//@RestController
-//@RequestMapping("/api/admin/barn_reward")
+// @RestController
+// @RequestMapping("/api/admin/barn_reward")
 public class BarnRewardController {
     @Autowired
     BarnRewardService barnRewardService;
 
     @GetMapping("/")
-    public List<BarnRewardEntity> fetchBarnReward(){
+    public List<BarnRewardEntity> fetchBarnReward() {
         return barnRewardService.fetchAllBarnRewards();
     }
 
     @PostMapping("/")
-    public BarnRewardEntity postBarnReward(@RequestBody BarnRewardDto request){
+    public ResponseEntity<?> postBarnReward(@RequestBody BarnRewardDto request) {
         return barnRewardService.createBarnReward(request);
     }
 
-    @PutMapping("/")
-    public BarnRewardEntity editBarnReward(@RequestBody EditBarnRewardDto request){
-        return barnRewardService.editBarnRewardEntity(request);
+    // @PutMapping("/")
+    // public BarnRewardEntity editBarnReward(@RequestBody EditBarnRewardDto request) {
+    //     return barnRewardService.editBarnRewardEntity(request);
+    // }
+
+    @GetMapping("/{id}")
+    public List<BarnRewardEntity> fetchBarnRewardById(@PathVariable int id) {
+        return barnRewardService.fetchBarnRewardById(id);
     }
-    
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteBarnReward(@PathVariable int id) {
+        return barnRewardService.deleteBarnReward(id);
+    }
+
 }

@@ -3,6 +3,7 @@ package com.team.two.mitrais_carrot.service.basket;
 import com.team.two.mitrais_carrot.dto.basket.ShowCarrotDto;
 import com.team.two.mitrais_carrot.entity.auth.UserEntity;
 import com.team.two.mitrais_carrot.entity.basket.BasketEntity;
+import com.team.two.mitrais_carrot.entity.basket.EBasket;
 import com.team.two.mitrais_carrot.entity.farmer.BarnEntity;
 import com.team.two.mitrais_carrot.repository.BasketRepository;
 import com.team.two.mitrais_carrot.repository.farmer.BarnRepository;

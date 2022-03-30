@@ -59,6 +59,17 @@ public class StaffGroupService {
         return userDto;
     }
 
+    public StaffGroupDto getGroupDetail(Integer id){
+        GroupEntity rawGroup = groupRepository.getById(id);
+        StaffGroupDto result = new StaffGroupDto();
+        result.setId(rawGroup.getId());
+        result.setName(rawGroup.getName());
+        result.setManagerId(Math.toIntExact(rawGroup.getManagerId()));
+        result.setAllocation(rawGroup.getAllocation());
+        result.setNote(rawGroup.getNote());
+        return result;
+    }
+
     public ResponseEntity<?> updateStaffGroup(StaffGroupDto request, Integer id){
         GroupEntity group = groupRepository.getById(id);
         group.setName(request.getName());

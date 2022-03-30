@@ -10,4 +10,7 @@ public class UpdateProfileDto {
     private String lastName;
     private String address;
     private String email;
+    private String phone;
+    private boolean enableNotif;
+    private String gender;
 }

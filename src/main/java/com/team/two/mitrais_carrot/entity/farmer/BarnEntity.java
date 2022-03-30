@@ -5,16 +5,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.*;
-// import javax.validation.constraints.NotBlank;
 
+import com.team.two.mitrais_carrot.entity.admin.BarnRewardEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.team.two.mitrais_carrot.entity.auth.UserEntity;
 import com.team.two.mitrais_carrot.entity.basket.BasketEntity;
 import com.team.two.mitrais_carrot.entity.freezer.FreezerEntity;
 import lombok.*;
-import org.apache.tomcat.util.http.fileupload.IOUtils;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 import org.springframework.beans.factory.annotation.Value;
 
 @Entity
@@ -28,8 +25,8 @@ public class BarnEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
-//	@Column(name = "user_id")
-//	private Long userId;
+	@Column(name = "user_id")
+	private Long userId;
 
 	@Column(name = "barn_name")
 	private String barnName;
@@ -50,6 +47,7 @@ public class BarnEntity {
 	@Value("${cp.barns.distributed_carrot: 0}")
 	private Long distributedCarrot = 0L;
 
+
 //	@OneToMany(targetEntity = BasketEntity.class, mappedBy = "basketId", fetch = FetchType.EAGER,cascade = CascadeType.ALL)
 //	@Fetch(value = FetchMode.SUBSELECT)
 //	private List<BasketEntity> basketId;
@@ -65,7 +63,10 @@ public class BarnEntity {
 	@OneToMany(mappedBy = "barn", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<FreezerEntity> freezers = new ArrayList<>();
 
-//	@JsonIgnore
+
+	@OneToMany(mappedBy = "barn", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private List<BarnRewardEntity> barnReward = new ArrayList<>();
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")
 	private UserEntity userId;

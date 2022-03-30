@@ -1,6 +1,6 @@
 package com.team.two.mitrais_carrot.dto.basket;
 
-import com.team.two.mitrais_carrot.service.basket.EBasket;
+import com.team.two.mitrais_carrot.entity.basket.EBasket;
 import lombok.Getter;
 import lombok.Setter;
 
