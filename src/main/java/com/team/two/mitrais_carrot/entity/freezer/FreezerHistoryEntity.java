@@ -19,7 +19,6 @@ import java.util.List;
 @Table(name = "freezerHistories")
 public class FreezerHistoryEntity {
     @Id
-//    @Column(name = "id")
     @GeneratedValue
     private int freezerHistoryId;
 

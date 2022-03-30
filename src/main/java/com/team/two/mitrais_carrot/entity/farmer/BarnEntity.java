@@ -7,6 +7,8 @@ import java.util.List;
 import javax.persistence.*;
 
 import com.team.two.mitrais_carrot.entity.admin.BarnRewardEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.team.two.mitrais_carrot.entity.auth.UserEntity;
 import com.team.two.mitrais_carrot.entity.basket.BasketEntity;
 import com.team.two.mitrais_carrot.entity.freezer.FreezerEntity;
 import lombok.*;
@@ -45,13 +47,27 @@ public class BarnEntity {
 	@Value("${cp.barns.distributed_carrot: 0}")
 	private Long distributedCarrot = 0L;
 
+
+//	@OneToMany(targetEntity = BasketEntity.class, mappedBy = "basketId", fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+//	@Fetch(value = FetchMode.SUBSELECT)
+//	private List<BasketEntity> basketId;
+//
+//	@OneToMany(targetEntity = FreezerEntity.class, mappedBy = "freezerId", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+//	private List<FreezerEntity> freezerId;
+
+	@JsonIgnore
 	@OneToMany(mappedBy = "barn", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<BasketEntity> baskets = new ArrayList<>();
 
+	@JsonIgnore
 	@OneToMany(mappedBy = "barn", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<FreezerEntity> freezers = new ArrayList<>();
 
+
 	@OneToMany(mappedBy = "barn", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<BarnRewardEntity> barnReward = new ArrayList<>();
-	
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "user_id")
+	private UserEntity userId;
 }

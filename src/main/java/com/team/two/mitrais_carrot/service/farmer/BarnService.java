@@ -4,28 +4,46 @@ import com.team.two.mitrais_carrot.dto.MessageDto;
 import com.team.two.mitrais_carrot.dto.farmer.BarnDto;
 import com.team.two.mitrais_carrot.dto.farmer.BarnEditDto;
 import com.team.two.mitrais_carrot.entity.admin.BarnRewardEntity;
+import com.team.two.mitrais_carrot.entity.auth.UserEntity;
 import com.team.two.mitrais_carrot.entity.farmer.BarnEntity;
+import com.team.two.mitrais_carrot.repository.UserRepository;
 import com.team.two.mitrais_carrot.repository.farmer.BarnRepository;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.team.two.mitrais_carrot.security.services.UserDetailsImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class BarnService {
+    @Autowired
+    UserRepository userRepository;
+
   private final BarnRepository barnRepository;
 
   public BarnService(BarnRepository barnRepository) {
     this.barnRepository = barnRepository;
   }
 
+
   public List<BarnEntity> fetchAllBarn() {
     return barnRepository.findAll();
+
+//   public List<BarnDto> fetchAllBarn(){
+//       List<BarnEntity> barns = barnRepository.findAll();
+//       List<BarnDto> barnDto = new ArrayList<>();
+
+//       barns.forEach(b -> {
+//           barnDto.add(new BarnDto(b.getId(), b.getBarnName(), b.getCarrotAmount(), b.getStartDate(), b.getEndDate()));
+//       });
+//       return barnDto;
+
   }
 
   public BarnEntity getBarnById(int id) {
@@ -63,6 +81,19 @@ public class BarnService {
 
     barnRepository.save(barnEntity);
     return ResponseEntity.ok(new MessageDto(String.format("Successfully created %s Barn!", req.getBarnName()), true));
+
+//   public BarnEntity createBarn(BarnDto req) {
+//       BarnEntity barnEntity = new BarnEntity();
+
+//       barnEntity.setUserId(getFarmerId());
+//       barnEntity.setBarnName(req.getBarnName());
+//       barnEntity.setStartDate(req.getStartDate());
+//       barnEntity.setEndDate(req.getEndDate());
+//       barnEntity.setCarrotAmount(req.getCarrotAmount());
+//       barnEntity.setIsActive(this.checkActive(req.getStartDate(), req.getEndDate()));
+
+//       return barnRepository.save(barnEntity);
+
   }
 
   public BarnEntity isActiveBarn(boolean active) {
@@ -91,6 +122,18 @@ public class BarnService {
     BarnEntity barnEntity = this.getBarnById(id);
     if (barnEntity == null) {
       return ResponseEntity.badRequest().body(new MessageDto("Barn not found", false));
+
+//     public UserEntity getFarmerId() {
+//         String username = "";
+//         try {
+//             UserDetailsImpl user = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//             username = user.getUsername();
+//         } catch (ClassCastException err) {
+//             username = "";
+//         }
+
+//         return userRepository.findByUsername(username);
+
     }
     barnEntity.setBarnName(req.getBarnName());
     barnEntity.setStartDate(req.getStartDate());

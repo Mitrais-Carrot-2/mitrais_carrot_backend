@@ -49,12 +49,6 @@ public class AuthService {
     RoleRepository roleRepository;
 
     @Autowired
-    BasketRepository basketRepository;
-
-    @Autowired
-    BarnRepository barnRepository;
-
-    @Autowired
     PasswordEncoder encoder;
 
     @Autowired

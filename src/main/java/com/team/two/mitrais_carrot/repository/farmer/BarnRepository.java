@@ -15,4 +15,5 @@ public interface BarnRepository extends JpaRepository <BarnEntity, Integer> {
     List<BarnEntity> findByIsActiveTrue();
 
     boolean existsByBarnName(String barnName);
+
 }
