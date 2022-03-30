@@ -1,36 +1,32 @@
 package com.team.two.mitrais_carrot.entity.transfer;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-
-// import com.team.two.mitrais_carrot.entity.transfer.ETransferType;
 
 import com.team.two.mitrais_carrot.entity.auth.UserEntity;
-import com.team.two.mitrais_carrot.entity.farmer.BarnEntity;
+import com.team.two.mitrais_carrot.entity.freezer.FreezerEntity;
 import lombok.*;
+
+import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "transferHistories")
+@Table(name = "FreezerTransferHistory")
 @ToString
-public class TransferEntity {
+public class FreezerTransferHistoryEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int transferId;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "receiver_id")
-    @Column(name = "receiver_id")
-    private Long receiverId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "freezer")
+    private FreezerEntity freezer;
 
-    @Column(name = "sender_id")
-    private Long senderId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user")
+    private UserEntity user;
 
     @Column(name = "shareAt")
     private LocalDateTime shareAt;

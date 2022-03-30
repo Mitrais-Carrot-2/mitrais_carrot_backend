@@ -6,9 +6,15 @@ import com.team.two.mitrais_carrot.dto.MessageDto;
 import com.team.two.mitrais_carrot.dto.auth.JwtDto;
 import com.team.two.mitrais_carrot.dto.auth.LoginDto;
 import com.team.two.mitrais_carrot.dto.auth.SignUpDto;
+import com.team.two.mitrais_carrot.repository.RoleRepository;
+import com.team.two.mitrais_carrot.repository.UserRepository;
+import com.team.two.mitrais_carrot.repository.UserRoleRepository;
+import com.team.two.mitrais_carrot.security.jwt.JwtUtils;
 import com.team.two.mitrais_carrot.service.auth.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -18,10 +24,10 @@ public class AuthController {
     @Autowired
     AuthService authService;
 
-    @GetMapping("/test")
-    public ResponseEntity test() {
-        return ResponseEntity.ok(new MessageDto("Berhasil"));
-    }
+//    @GetMapping("/test")
+//    public ResponseEntity test() {
+//        return ResponseEntity.ok(new MessageDto("Berhasil"));
+//    }
 
     @PostMapping("/login")
     public JwtDto authenticateUser(@Valid @RequestBody LoginDto loginRequest) {

@@ -4,10 +4,10 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
-@Data
+//@Data
+@Setter
+@Getter
 public class LoginDto {
-    @Setter @Getter
     private String username;
-    @Setter @Getter
     private String password;
 }

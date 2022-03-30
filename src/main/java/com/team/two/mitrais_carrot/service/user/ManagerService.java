@@ -1,6 +1,7 @@
 package com.team.two.mitrais_carrot.service.user;
 
 import com.team.two.mitrais_carrot.dto.manager.FreezerDto;
+import com.team.two.mitrais_carrot.dto.manager.FreezerHistoryDto;
 import com.team.two.mitrais_carrot.dto.manager.TransferToGroupDto;
 import com.team.two.mitrais_carrot.dto.manager.TransferToStaffDto;
 import com.team.two.mitrais_carrot.dto.user.GroupDto;
@@ -71,6 +72,7 @@ public class ManagerService {
         try {
             UserDetailsImpl user = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             supervisorId = user.getId();
+            logger.info("MANAGER ID: "+supervisorId);
         } catch (ClassCastException err) {
             logger.error("No Authorization / Supervisor not exist!");
         }
@@ -99,22 +101,22 @@ public class ManagerService {
     public Boolean transferToStaff(TransferToStaffDto req){
         BarnEntity barn = barnRepository.findByIsActive(true);
         FreezerEntity freezer = freezerRepository.findByManagerIdAndBarn_Id(1L, barn.getId());
-        
-        BasketEntity oldBasket = basketService.getActiveBasket(req.getStaffId(), true);
 
+        logger.error("Staff ID "+req);
+        BasketEntity oldBasket = basketService.getActiveBasket(req.getStaffId(), true);
         if(freezer.getCarrotAmount() - req.getCarrotAmount()>=0) {
             basketService.updateCarrot(oldBasket.getUser(), req.getCarrotAmount(), EBasket.SHARE);
 
             freezer.setCarrotAmount(freezer.getCarrotAmount() - req.getCarrotAmount());
             freezer.setDistributedCarrot(freezer.getDistributedCarrot() + req.getCarrotAmount());
             freezerRepository.save(freezer);
-            
+
             TransferToStaffDto result = new TransferToStaffDto();
 
             result.setStaffId(oldBasket.getUser().getId());
             result.setCarrotAmount(oldBasket.getCarrotAmount());
             result.setNote(req.getNote());
-            
+
             TransferEntity history = new TransferEntity();
             history.setSenderId(getManagerId());
             history.setReceiverId(req.getStaffId());
@@ -214,9 +216,27 @@ public class ManagerService {
         freezer.setFreezerId(activeFreezer.getId());
         freezer.setBarnName(barn.getBarnName());
         freezer.setBarnOwner(barn.getUserId().getFirstName()+" "+barn.getUserId().getLastName());
-        freezer.setBarnPeriod(barn.getStartDate() +" / "+ barn.getEndDate());
+        freezer.setStartDate(barn.getStartDate());
+        freezer. setEndDate(barn.getEndDate());
         freezer.setCarrotAmount(activeFreezer.getCarrotAmount());
         freezer.setDistributedCarrot(activeFreezer.getDistributedCarrot());
         return freezer;
+    }
+
+    public FreezerHistoryDto getFreezerHistory(){
+//        BarnEntity barn = barnRepository.findByIsActive(true);
+//        FreezerEntity activeFreezer = freezerRepository.findByManagerIdAndBarn_Id(getManagerId(), barn.getId());
+//        List<TransferEntity> transfer = transferRepository.findBySenderIdAndType(Long.valueOf(activeFreezer.getId()), ETransferType.TYPE_SHARED);
+//        Optional<UserEntity> receiver = userRepository.findById(transfer.getReceiverId()).stream().findFirst();
+//        UserEntity user = receiver.get();
+//        return new FreezerHistoryDto(
+//            user.getFirstName()+" "+user.getFirstName(),
+//            user.getJobFamily(),
+//                user.getJobGrade(),
+//                transfer.getCarrotAmount(),
+//                transfer.getNote(),
+//                transfer.getShareAt()
+//        );
+        return new FreezerHistoryDto();
     }
 }

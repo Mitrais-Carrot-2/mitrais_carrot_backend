@@ -51,10 +51,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {
-    http.authorizeRequests()
-            .antMatchers("/api/auth/**").permitAll()
-            .antMatchers("/api/swagger-ui/**").permitAll()
+//    http.authorizeRequests()
+//            .antMatchers("/api/auth/**").permitAll()
+//            .antMatchers("/api/swagger-ui/**").permitAll()
 //            .antMatchers("/api/user/**").permitAll()
-            .and().httpBasic().and().csrf().disable();
+//            .and().httpBasic().and().csrf().disable();
+    http.authorizeRequests().anyRequest().permitAll()
+            .and().cors()
+            .and().httpBasic().and().csrf().disable();;
   }
 }

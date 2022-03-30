@@ -3,8 +3,8 @@ package com.team.two.mitrais_carrot.entity.auth;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.team.two.mitrais_carrot.entity.basket.BasketEntity;
 import com.team.two.mitrais_carrot.entity.farmer.BarnEntity;
-import com.team.two.mitrais_carrot.entity.freezer.FreezerEntity;
 import com.team.two.mitrais_carrot.entity.group.UserGroupEntity;
+import com.team.two.mitrais_carrot.entity.transfer.FreezerTransferHistoryEntity;
 import lombok.*;
 
 import org.hibernate.annotations.Type;
@@ -97,6 +97,9 @@ public class UserEntity {
 
     @OneToMany(mappedBy = "userId", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<BarnEntity> barn = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<FreezerTransferHistoryEntity> freezerTransferHistories = new ArrayList<>();
 
     @Column(name = "dayOfYearBirthDay")
     private int dayOfYearBirthDay;

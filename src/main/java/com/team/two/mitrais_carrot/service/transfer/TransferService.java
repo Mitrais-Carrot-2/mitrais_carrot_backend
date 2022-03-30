@@ -57,6 +57,7 @@ public class TransferService {
             TransferEntity transfer = new TransferEntity();
             transfer.setReceiverId(userId);
             transfer.setSenderId(adminId);
+//            transfer.setSenderId(user);
             transfer.setCarrotAmount(carrotAmount);
             transfer.setType(type);
             transfer.setShareAt(LocalDateTime.now());

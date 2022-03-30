@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -18,8 +20,10 @@ public class FreezerDto {
     private String barnName;
     @JsonProperty("barn_owner")
     private String barnOwner;
-    @JsonProperty("barn_period")
-    private String barnPeriod;
+    @JsonProperty("start_date")
+    private LocalDate startDate;
+    @JsonProperty("end_date")
+    private LocalDate endDate;
     @JsonProperty("carrot_amount")
     private Long carrotAmount;
     @JsonProperty("distributed_carrot")

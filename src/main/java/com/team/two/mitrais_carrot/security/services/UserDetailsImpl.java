@@ -1,15 +1,16 @@
 package com.team.two.mitrais_carrot.security.services;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.util.Collection;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+
 import com.team.two.mitrais_carrot.entity.auth.UserEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class UserDetailsImpl implements UserDetails {
   private static final long serialVersionUID = 1L;
@@ -26,7 +27,7 @@ public class UserDetailsImpl implements UserDetails {
   private Collection<? extends GrantedAuthority> authorities;
 
   public UserDetailsImpl(Long id, String username, String email, String password,
-      Collection<? extends GrantedAuthority> authorities) {
+                         Collection<? extends GrantedAuthority> authorities) {
     this.id = id;
     this.username = username;
     this.email = email;
@@ -36,15 +37,15 @@ public class UserDetailsImpl implements UserDetails {
 
   public static UserDetailsImpl build(UserEntity user) {
     List<GrantedAuthority> authorities = user.getRoles().stream()
-        .map(role -> new SimpleGrantedAuthority(role.getName().name()))
-        .collect(Collectors.toList());
+            .map(role -> new SimpleGrantedAuthority(role.getName().name()))
+            .collect(Collectors.toList());
 
     return new UserDetailsImpl(
-        user.getId(), 
-        user.getUsername(), 
-        user.getEmail(),
-        user.getPassword(), 
-        authorities);
+            user.getId(),
+            user.getUsername(),
+            user.getEmail(),
+            user.getPassword(),
+            authorities);
   }
 
   @Override
