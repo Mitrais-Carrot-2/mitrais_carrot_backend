@@ -25,6 +25,15 @@ public class BazaarService {
         return (List<BazaarEntity>) bazaarRepository.findAll();
     }
 
+    public ResponseEntity<?> updateBazaar(CreateBazaarDto request, Integer id){
+        BazaarEntity bazaar = bazaarRepository.getById(id);
+        bazaar.setBazaarName(request.getBazaarName());
+        bazaar.setStartDate(request.getStartDate());
+        bazaar.setEndDate(request.getEndDate());
+        bazaarRepository.save(bazaar);
+        return ResponseEntity.ok(new MessageDto("Success Create New Bazaar", true));
+    }
+
     public ResponseEntity<?> createBazaar(CreateBazaarDto request){
         BazaarEntity bazaar = new BazaarEntity();
         bazaar.setBazaarName(request.getBazaarName());
