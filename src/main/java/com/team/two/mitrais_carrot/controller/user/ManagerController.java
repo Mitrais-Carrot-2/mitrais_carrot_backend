@@ -39,9 +39,11 @@ public class ManagerController {
         return managerService.getActiveFreezer();
     }
 
-    @GetMapping("/{managerId}/staff")
-    public List<StaffDto> fetchMyStaff(@PathVariable("managerId") Long managerId){
-        return managerService.fetchMyStaff(managerId);
+//    @GetMapping("/{managerId}/staff")
+//    public List<StaffDto> fetchMyStaff(@PathVariable("managerId") Long managerId){
+    @GetMapping("/staff")
+    public List<StaffDto> fetchMyStaff(){
+        return managerService.fetchMyStaff();
     }
 
     @PostMapping("/transfer/staff")
@@ -60,7 +62,7 @@ public class ManagerController {
         return managerService.fetchMyGroup();
     }
 
-    @GetMapping("/group/staff/{groupId}")
+    @GetMapping("/group/{groupId}/staff/")
     public List<UserGroupDto> fetchMyStaffGroup(@PathVariable("groupId") Integer groupId){
         return managerService.fetchMyStaffGroup(groupId);
     }
@@ -76,7 +78,7 @@ public class ManagerController {
     }
 
     @GetMapping("/freezer/history")
-    public FreezerHistoryDto freezerHistory(){
+    public List<FreezerHistoryDto> freezerHistory(){
         return managerService.getFreezerHistory();
     }
 }

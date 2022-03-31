@@ -25,8 +25,8 @@ public class BarnEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
-	@Column(name = "user_id")
-	private Long userId;
+//	@Column(name = "user_id")
+//	private Long userId;
 
 	@Column(name = "barn_name")
 	private String barnName;
@@ -62,7 +62,6 @@ public class BarnEntity {
 	@JsonIgnore
 	@OneToMany(mappedBy = "barn", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<FreezerEntity> freezers = new ArrayList<>();
-
 
 	@OneToMany(mappedBy = "barn", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<BarnRewardEntity> barnReward = new ArrayList<>();

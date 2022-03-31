@@ -1,6 +1,7 @@
 package com.team.two.mitrais_carrot.service.merchant;
 
 import com.team.two.mitrais_carrot.dto.MessageDto;
+import com.team.two.mitrais_carrot.dto.merchant.GroupDto;
 import com.team.two.mitrais_carrot.dto.merchant.NewGroupMemberDto;
 import com.team.two.mitrais_carrot.dto.merchant.StaffGroupDto;
 import com.team.two.mitrais_carrot.dto.merchant.StaffListInGroupDto;
@@ -31,8 +32,24 @@ public class StaffGroupService {
         this.userRepository = userRepository;
     }
 
-    public List<GroupEntity> getAllGroups(){
-        return (List<GroupEntity>) groupRepository.findAll();
+    public List<GroupDto> getAllGroups(){
+        List<GroupEntity> groups = groupRepository.findAll();
+        List<GroupDto> result = new ArrayList<>();
+        groups.forEach(g -> {
+            Integer member = userGroupRepository.findByGroup_Id(g.getId()).size();
+            result.add(
+                new GroupDto(
+                    g.getId(),
+                    g.getName(),
+                    g.getAllocation(),
+                    member,
+                    member*g.getAllocation(),
+                    g.getNote()
+                )
+            );
+        });
+
+        return result;
     }
 
     public GroupEntity getGroupById(Integer id){

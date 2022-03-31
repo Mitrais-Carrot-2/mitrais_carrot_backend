@@ -58,4 +58,3 @@ public class BarnController {
 //             return ResponseEntity.badRequest().body(new MessageDto("Not enough carrot in Barn!", false));
         }
     }
-}

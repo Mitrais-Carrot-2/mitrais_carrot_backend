@@ -1,6 +1,7 @@
 package com.team.two.mitrais_carrot.controller.merchant;
 
 
+import com.team.two.mitrais_carrot.dto.merchant.GroupDto;
 import com.team.two.mitrais_carrot.dto.merchant.NewGroupMemberDto;
 import com.team.two.mitrais_carrot.dto.merchant.StaffGroupDto;
 import com.team.two.mitrais_carrot.dto.merchant.StaffListInGroupDto;
@@ -23,12 +24,12 @@ public class StaffGroupController {
         this.staffGroupService = staffGroupService;
     }
 
-    @GetMapping("")
-    public List<GroupEntity> getAllStaffGroup(){
+    @GetMapping("/")
+    public List<GroupDto> getAllStaffGroup(){
         return staffGroupService.getAllGroups();
     }
 
-    @PostMapping("")
+    @PostMapping("/")
     public ResponseEntity<?> createStaffGroup(@RequestBody StaffGroupDto request){
         return staffGroupService.createStaffGroup(request);
     }

@@ -71,8 +71,8 @@ public class BarnService {
           .body(new MessageDto(String.format("Already created Barn with %s name", req.getBarnName()), false));
     }
     BarnEntity barnEntity = new BarnEntity();
-
-    barnEntity.setUserId(getFarmerId());
+    UserEntity user = userRepository.getById(getFarmerId());
+    barnEntity.setUserId(user);
     barnEntity.setBarnName(req.getBarnName());
     barnEntity.setStartDate(req.getStartDate());
     barnEntity.setEndDate(req.getEndDate());

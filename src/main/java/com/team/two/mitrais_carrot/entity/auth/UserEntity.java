@@ -110,7 +110,7 @@ public class UserEntity {
     @OneToMany(mappedBy = "userId", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<BarnEntity> barn = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "receiverId", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<FreezerTransferHistoryEntity> freezerTransferHistories = new ArrayList<>();
 
     @Column(name = "dayOfYearBirthDay")
