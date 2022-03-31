@@ -68,7 +68,7 @@ public class ManagerController {
     }
 
     @PostMapping("/transfer/group")
-    public ResponseEntity<MessageDto> transferToGroup(TransferToGroupDto req){
+    public ResponseEntity<MessageDto> transferToGroup(@Valid @RequestBody TransferToGroupDto req){
         Boolean status = managerService.transferToGroup(req);
         if (status){
             return ResponseEntity.ok(new MessageDto("Transfer from Manager to Group success!", true));

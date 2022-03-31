@@ -106,7 +106,7 @@ public class ManagerService {
         BarnEntity barn = barnRepository.findByIsActive(true);
         FreezerEntity freezer = freezerRepository.findByManagerIdAndBarn_Id(1L, barn.getId());
 
-        logger.error("Staff ID "+req);
+//        logger.error("Staff ID "+req);
         BasketEntity oldBasket = basketService.getActiveBasket(req.getStaffId(), true);
         if(freezer.getCarrotAmount() - req.getCarrotAmount()>=0) {
             basketService.updateCarrot(oldBasket.getUser(), req.getCarrotAmount(), EBasket.SHARE);
@@ -137,7 +137,7 @@ public class ManagerService {
             freezerHistory.setReceiverId(user);
             freezerHistory.setManagerId(manager);
             freezerHistory.setShareAt(LocalDateTime.now());
-            freezerHistory.setType(ETransferType.TYPE_SHARED);
+            freezerHistory.setType(ETransferType.TYPE_SHARED_GROUP);
             freezerHistory.setNote(req.getNote());
             freezerHistory.setCarrotAmount(req.getCarrotAmount());
             freezerTransferHistoryRepository.save(freezerHistory);
@@ -156,7 +156,7 @@ public class ManagerService {
         FreezerEntity freezer = freezerRepository.findByManagerIdAndBarn_Id(getManagerId(), barn.getId());
 
         BasketEntity oldBasket = basketRepository.findByUser_IdAndBarn_Id(userId, barn.getId());
-
+//        logger.error(""+oldBasket.getUser().getUsername());
 //        if(freezer.getCarrotAmount() - carrot>=0) {
 
             basketService.updateCarrot(oldBasket.getUser(), carrot, EBasket.SHARE);
@@ -199,14 +199,20 @@ public class ManagerService {
     }
 
     public Boolean transferToGroup(TransferToGroupDto req){
+        // logger.error("Group ID "+req.getGroupId());
+        // logger.error("Carrot "+req.getCarrotAmount());
+        // logger.error("Note "+req.getNote());
         Integer groupId = req.getGroupId();
 
-
+//        logger.error(req.getGroupId()+" Group ID");
         List<UserGroupEntity> members = userGroupRepository.findByGroup_Id(groupId);
 
         Long totalCarrot = members.size() * req.getCarrotAmount();
-        if(totalCarrot - req.getCarrotAmount()>=0) {
+        if(totalCarrot - (req.getCarrotAmount()* members.size())>=0) {
             members.forEach(m -> {
+//                logger.error("User ID "+m.getUser().getId());
+//                logger.error("Carrot Amount "+req.getCarrotAmount());
+//                logger.error("Note "+req.getNote());
                 transferToStaff(m.getUser().getId(), req.getCarrotAmount(), req.getNote());
             });
             return true;
