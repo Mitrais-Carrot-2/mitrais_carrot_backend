@@ -30,4 +30,8 @@ public class BazaarController {
         return bazaarService.createBazaar(request);
     }
 
+    @PutMapping("{id}")
+    public ResponseEntity<?> updateBazaar(@PathVariable("id") int id, @RequestBody CreateBazaarDto request){
+        return bazaarService.createBazaar(request);
+    }
 }
