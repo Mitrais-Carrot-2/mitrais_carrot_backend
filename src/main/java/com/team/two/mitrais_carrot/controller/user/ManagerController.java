@@ -25,7 +25,7 @@ import java.util.Optional;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-//@PreAuthorize("hasAnyRole('MANAGER')")
+@PreAuthorize("hasAnyRole('MANAGER')")
 @RequestMapping("/api/manager")
 public class ManagerController {
     @Autowired
@@ -33,7 +33,7 @@ public class ManagerController {
 
     Logger logger = LoggerFactory.getLogger(ManagerService.class);
 
-    @PreAuthorize("hasRole('MANAGER')")
+//    @PreAuthorize("hasRole('MANAGER')")
     @GetMapping("/freezer")
     public FreezerDto myFreezer(){
         return managerService.getActiveFreezer();
