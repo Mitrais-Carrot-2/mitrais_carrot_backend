@@ -80,7 +80,7 @@ public class BarnService {
     barnEntity.setIsActive(this.checkActive(req.getStartDate(), req.getEndDate()));
 
     barnRepository.save(barnEntity);
-    return ResponseEntity.ok(new MessageDto(String.format("Successfully created %s Barn!", req.getBarnName()), true));
+    return ResponseEntity.ok(new MessageDto(barnEntity, String.format("Successfully created %s Barn!", req.getBarnName()), true));
 
 //   public BarnEntity createBarn(BarnDto req) {
 //       BarnEntity barnEntity = new BarnEntity();
@@ -141,7 +141,7 @@ public class BarnService {
     barnEntity.setCarrotAmount(req.getCarrotAmount());
     barnEntity.setIsActive(this.checkActive(req.getStartDate(), req.getEndDate()));
     barnRepository.save(barnEntity);
-    return ResponseEntity.ok(new MessageDto(String.format("Successfully updated %s Barn!", req.getBarnName()), true));
+    return ResponseEntity.ok(new MessageDto(barnEntity, String.format("Successfully updated %s Barn!", req.getBarnName()), true));
 
   }
   

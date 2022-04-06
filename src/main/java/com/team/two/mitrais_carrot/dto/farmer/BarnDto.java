@@ -13,8 +13,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BarnDto {
-    @JsonProperty("barn_id")
-    private Integer barnId;
+    // @JsonProperty("barn_id")
+    // private Integer barnId;
     @JsonProperty("barn_name")
     private String barnName;
 //    @JsonProperty("barn_owner")
@@ -29,10 +29,10 @@ public class BarnDto {
     private LocalDate endDate;
 //    private Boolean isActive;
 
-    public BarnDto(String barnName, Long carrotAmount, LocalDate startDate, LocalDate endDate) {
-        this.barnName = barnName;
-        this.carrotAmount = carrotAmount;
-        this.startDate = startDate;
-        this.endDate = endDate;
-    }
+    // public BarnDto(String barnName, Long carrotAmount, LocalDate startDate, LocalDate endDate) {
+    //     this.barnName = barnName;
+    //     this.carrotAmount = carrotAmount;
+    //     this.startDate = startDate;
+    //     this.endDate = endDate;
+    // }
 }
