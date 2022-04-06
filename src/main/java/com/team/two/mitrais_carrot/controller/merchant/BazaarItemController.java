@@ -54,6 +54,11 @@ public class BazaarItemController {
         return ResponseEntity.notFound().build();
     }
 
+    @PutMapping("/item/{itemId}")
+    public ResponseEntity<?> updateDetail(@PathVariable int itemId, @RequestBody BazaarItemDto request) {
+        return bazaarItemService.updateItem(itemId, request);
+    }
+
     @PutMapping("/uploadImage/{itemId}")
     public ResponseEntity<?> uploadImage(@PathVariable int itemId, @RequestParam("file") MultipartFile file) {
         try{

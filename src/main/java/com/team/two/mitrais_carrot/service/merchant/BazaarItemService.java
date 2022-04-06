@@ -82,6 +82,16 @@ public class BazaarItemService{
         return ResponseEntity.ok(new MessageDto("Success Update Item Quantity!", true));
     }
 
+    public ResponseEntity<?> updateItem(int itemId, BazaarItemDto request){
+        BazaarItemEntity item = getById(itemId);
+        item.setName(request.getName());
+        item.setPrice(request.getPrice());
+        item.setQuantity(request.getQuantity());
+        item.setDescription(request.getDescription());
+        bazaarItemRepository.save(item);
+        return ResponseEntity.ok(new MessageDto("Success Update Item!", true));
+    }
+
     public List<BazaarItemEntity> getAllItemsInBazaar(int bazaarId){
         List<BazaarItemEntity> itemBazaar = new ArrayList<>();
         itemBazaar = bazaarItemRepository.findByBazaar_Id(bazaarId);

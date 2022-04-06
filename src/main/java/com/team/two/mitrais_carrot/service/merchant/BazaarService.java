@@ -26,12 +26,23 @@ public class BazaarService {
     }
 
     public ResponseEntity<?> updateBazaar(CreateBazaarDto request, Integer id){
+//        try {
+//            BazaarEntity bazaar = bazaarRepository.getById(id);
+//            bazaar.setBazaarName(request.getBazaarName());
+//            bazaar.setStartDate(request.getStartDate());
+//            bazaar.setEndDate(request.getEndDate());
+//            bazaarRepository.save(bazaar);
+//            return ResponseEntity.ok(new MessageDto("Success Create New Bazaar", true));
+//        } catch (Exception e){
+//            return ResponseEntity.ok(new MessageDto("Failed", false));
+//        }
         BazaarEntity bazaar = bazaarRepository.getById(id);
         bazaar.setBazaarName(request.getBazaarName());
         bazaar.setStartDate(request.getStartDate());
         bazaar.setEndDate(request.getEndDate());
         bazaarRepository.save(bazaar);
         return ResponseEntity.ok(new MessageDto("Success Create New Bazaar", true));
+
     }
 
     public ResponseEntity<?> createBazaar(CreateBazaarDto request){
