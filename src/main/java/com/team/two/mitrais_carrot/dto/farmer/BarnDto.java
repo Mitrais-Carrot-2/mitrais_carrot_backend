@@ -30,10 +30,10 @@ public class BarnDto {
     private LocalDate endDate;
 //    private Boolean isActive;
 
-//    public BarnDto(String barnName, Long carrotAmount, LocalDate startDate, LocalDate endDate) {
-//        this.barnName = barnName;
-//        this.carrotAmount = carrotAmount;
-//        this.startDate = startDate;
-//        this.endDate = endDate;
-//    }
+    // public BarnDto(String barnName, Long carrotAmount, LocalDate startDate, LocalDate endDate) {
+    //     this.barnName = barnName;
+    //     this.carrotAmount = carrotAmount;
+    //     this.startDate = startDate;
+    //     this.endDate = endDate;
+    // }
 }
