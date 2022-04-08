@@ -1,10 +1,7 @@
 package com.team.two.mitrais_carrot.service.merchant;
 
 import com.team.two.mitrais_carrot.dto.MessageDto;
-import com.team.two.mitrais_carrot.dto.merchant.GroupDto;
-import com.team.two.mitrais_carrot.dto.merchant.NewGroupMemberDto;
-import com.team.two.mitrais_carrot.dto.merchant.StaffGroupDto;
-import com.team.two.mitrais_carrot.dto.merchant.StaffListInGroupDto;
+import com.team.two.mitrais_carrot.dto.merchant.*;
 import com.team.two.mitrais_carrot.entity.auth.UserEntity;
 import com.team.two.mitrais_carrot.entity.group.GroupEntity;
 import com.team.two.mitrais_carrot.entity.group.UserGroupEntity;
@@ -59,10 +56,11 @@ public class StaffGroupService {
     Logger logger = LoggerFactory.getLogger(StaffGroupService.class);
     public ResponseEntity<?> createStaffGroup(StaffGroupDto request){
         GroupEntity group = new GroupEntity();
+        UserEntity manager = userRepository.getById(Long.valueOf(request.getManagerId()));
         group.setName(request.getName());
         group.setAllocation(request.getAllocation());
         group.setNote(request.getNote());
-        group.setManagerId((long) request.getManagerId());
+        group.setManagerId(manager);
         groupRepository.save(group);
         return ResponseEntity.ok(new MessageDto("Staff Group Created!", true));
     }
@@ -76,12 +74,13 @@ public class StaffGroupService {
         return userDto;
     }
 
-    public StaffGroupDto getGroupDetail(Integer id){
+    public StaffGroupDetailDto getGroupDetail(Integer id){
         GroupEntity rawGroup = groupRepository.getById(id);
-        StaffGroupDto result = new StaffGroupDto();
+        StaffGroupDetailDto result = new StaffGroupDetailDto();
         result.setId(rawGroup.getId());
         result.setName(rawGroup.getName());
-        result.setManagerId(Math.toIntExact(rawGroup.getManagerId()));
+//        result.setManagerId(Math.toIntExact(rawGroup.getManagerId()));
+        result.setManagerName(rawGroup.getManagerId().getFirstName()+" "+rawGroup.getManagerId().getLastName());
         result.setAllocation(rawGroup.getAllocation());
         result.setNote(rawGroup.getNote());
         return result;
@@ -89,10 +88,11 @@ public class StaffGroupService {
 
     public ResponseEntity<?> updateStaffGroup(StaffGroupDto request, Integer id){
         GroupEntity group = groupRepository.getById(id);
+        UserEntity manager = userRepository.getById(Long.valueOf(request.getManagerId()));
         group.setName(request.getName());
         group.setNote(request.getNote());
         group.setAllocation(request.getAllocation());
-        group.setManagerId((long) request.getManagerId());
+        group.setManagerId(manager);
         groupRepository.save(group);
         return ResponseEntity.ok(new MessageDto("Group Details Updated!", true));
     }
