@@ -142,7 +142,7 @@ public class ManagerService {
             freezerHistory.setCarrotAmount(req.getCarrotAmount());
             freezerTransferHistoryRepository.save(freezerHistory);
 
-            logger.info("test "+history.toString());
+//            logger.info("test "+history.toString());
             transferRepository.save(history);
 
             return true;

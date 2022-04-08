@@ -35,8 +35,13 @@ public class BazaarItemController {
     }
 
     @GetMapping("{bazaarId}/{itemId}")
-    public BazaarItemEntity getBazaarItem(@RequestParam(value = "Bazaar ID") int bazaarId, @RequestParam(value = "Item ID") int itemId){
+    public BazaarItemEntity getBazaarItem(@PathVariable int bazaarId, @PathVariable int itemId){
         return bazaarItemService.getByIdInBazaar(itemId, bazaarId);
+    }
+
+    @GetMapping("{bazaarId}/items")
+    public List<BazaarItemEntity> getAllItemsInBazaar(@PathVariable int bazaarId){
+        return bazaarItemService.getAllItemsInBazaar(bazaarId);
     }
 
     @GetMapping("/getImage/{itemId}")
@@ -52,6 +57,11 @@ public class BazaarItemController {
             }
         }
         return ResponseEntity.notFound().build();
+    }
+
+    @PutMapping("/item/{itemId}")
+    public ResponseEntity<?> updateDetail(@PathVariable int itemId, @RequestBody BazaarItemDto request) {
+        return bazaarItemService.updateItem(itemId, request);
     }
 
     @PutMapping("/uploadImage/{itemId}")

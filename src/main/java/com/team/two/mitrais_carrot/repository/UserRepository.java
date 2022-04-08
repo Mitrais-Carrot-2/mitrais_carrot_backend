@@ -1,5 +1,6 @@
 package com.team.two.mitrais_carrot.repository;
 
+import com.team.two.mitrais_carrot.entity.auth.ERole;
 import com.team.two.mitrais_carrot.entity.auth.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -17,4 +18,6 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
     Boolean existsByEmail(String email);
 
     List<UserEntity> findAllByDayOfYearBirthDay(int dayOfYear);
+
+    List<UserEntity> findByRoles_Name(ERole name);
 }
