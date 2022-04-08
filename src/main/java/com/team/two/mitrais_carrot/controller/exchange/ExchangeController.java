@@ -1,5 +1,6 @@
 package com.team.two.mitrais_carrot.controller.exchange;
 
+import com.team.two.mitrais_carrot.dto.exchange.ExchangeDataDto;
 import com.team.two.mitrais_carrot.entity.exchange.EExchangeStatus;
 import com.team.two.mitrais_carrot.entity.exchange.ExchangeEntity;
 import com.team.two.mitrais_carrot.service.exchange.ExchangeService;
@@ -20,12 +21,18 @@ public class ExchangeController {
         return exchangeService.buyBazaarItem(userId, itemId);
     }
 
+//    @GetMapping("")
+//    public List<ExchangeEntity> getAllExchanges(){
+//        return exchangeService.getAll();
+//    }
+
     @GetMapping("")
-    public List<ExchangeEntity> getAllExchanges(){
-        return exchangeService.getAll();
+    public List<ExchangeDataDto> getAllExchanges(){
+        return exchangeService.getAllExchange();
     }
 
-    @PutMapping("{id}")
+
+    @PutMapping("")
     public ResponseEntity<?> setExchangeStatus(@RequestParam(value = "Exchange ID") long exchangeId, @RequestParam(value = "Status") EExchangeStatus status){
         ExchangeEntity exchange = exchangeService.getById(exchangeId);
         return exchangeService.setExchangeStatus(exchange, status);

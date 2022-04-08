@@ -34,6 +34,11 @@ public class BazaarItemController {
         return bazaarItemService.getAll();
     }
 
+    @GetMapping("item/{itemId}")
+    public BazaarItemEntity getItem(@PathVariable int itemId){
+        return bazaarItemService.getById(itemId);
+    }
+
     @GetMapping("{bazaarId}/{itemId}")
     public BazaarItemEntity getBazaarItem(@PathVariable int bazaarId, @PathVariable int itemId){
         return bazaarItemService.getByIdInBazaar(itemId, bazaarId);
