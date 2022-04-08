@@ -29,6 +29,7 @@ public class BarnRewardService {
     @Autowired
     private TransferService transferService;
 
+
     public BarnRewardService(BarnRewardRepository barnRewardRepository, BarnRepository barnRepository) {
         this.barnRewardRepository = barnRewardRepository;
         this.barnRepository = barnRepository;
@@ -67,7 +68,7 @@ public class BarnRewardService {
         barn.getBarnReward().add(barnReward);
         barnRepository.save(barn);
         return ResponseEntity
-                .ok(new MessageDto(String.format("Successfully created reward: %s", req.getRewardDescription()), true));
+                .ok(new MessageDto(barnReward, String.format("Successfully created reward: %s", req.getRewardDescription()), true));
 
     }
 

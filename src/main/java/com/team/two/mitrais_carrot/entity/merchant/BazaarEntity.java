@@ -17,12 +17,13 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(name = "BazaarEntity")
-@Table(name = "bazaars")
+@Table(name = "bazaars", uniqueConstraints = {@UniqueConstraint(columnNames = "bazaarName")})
 public class BazaarEntity {
     @Id
     @Column(name = "id")
     @GeneratedValue
     private Integer id;
+
 
     @Column(name = "bazaarName")
     private String bazaarName;

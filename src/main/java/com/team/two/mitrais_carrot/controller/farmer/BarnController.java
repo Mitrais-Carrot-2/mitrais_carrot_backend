@@ -4,6 +4,7 @@ import com.team.two.mitrais_carrot.dto.MessageDto;
 import com.team.two.mitrais_carrot.dto.farmer.BarnDto;
 import com.team.two.mitrais_carrot.dto.farmer.BarnEditDto;
 import com.team.two.mitrais_carrot.dto.farmer.BarnToFreezerDto;
+import com.team.two.mitrais_carrot.dto.user.StaffDto;
 import com.team.two.mitrais_carrot.entity.farmer.BarnEntity;
 import com.team.two.mitrais_carrot.service.farmer.BarnService;
 import com.team.two.mitrais_carrot.service.farmer.BarnToFreezerService;
@@ -56,5 +57,5 @@ public class BarnController {
 //             return ResponseEntity.ok(new MessageDto("Transfer from Barn to Freezer success!", true));
 //         } else {
 //             return ResponseEntity.badRequest().body(new MessageDto("Not enough carrot in Barn!", false));
-        }
     }
+}
