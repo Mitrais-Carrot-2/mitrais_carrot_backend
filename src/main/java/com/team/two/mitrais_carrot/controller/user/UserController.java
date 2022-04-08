@@ -28,10 +28,10 @@ public class UserController {
     @Autowired
     PasswordEncoder encoder;
 
-    @PostMapping("")
-    public UserEntity addUser(@RequestBody UserDto userDto) {
-        return userService.add(userDto);
-    }
+//    @PostMapping("")
+//    public UserEntity addUser(@RequestBody UserDto userDto) {
+//        return userService.add(userDto);
+//    }
 
     public UserController(UserService userService) {
         this.userService = userService;
