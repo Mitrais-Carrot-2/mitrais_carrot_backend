@@ -21,26 +21,28 @@ public class BazaarItemController {
     @Autowired
     BazaarItemService bazaarItemService;
 
-    public BazaarItemController(BazaarItemService bazaarItemService) { this.bazaarItemService = bazaarItemService; }
+    public BazaarItemController(BazaarItemService bazaarItemService) {
+        this.bazaarItemService = bazaarItemService;
+    }
 
     @PostMapping("{id}/item")
-    public ResponseEntity<?> addBazaarItem(@PathVariable("id") int id, @RequestBody BazaarItemDto request){
+    public ResponseEntity<?> addBazaarItem(@PathVariable("id") int id, @RequestBody BazaarItemDto request) {
 //        return bazaarItemService.add(request);
-        return bazaarItemService.addNewItem(request,id);
+        return bazaarItemService.addNewItem(request, id);
     }
 
     @GetMapping("item")
-    public List<BazaarItemEntity> getAllBazaarItems(){
+    public List<BazaarItemEntity> getAllBazaarItems() {
         return bazaarItemService.getAll();
     }
 
     @GetMapping("{bazaarId}/{itemId}")
-    public BazaarItemEntity getBazaarItem(@PathVariable int bazaarId, @PathVariable int itemId){
+    public BazaarItemEntity getBazaarItem(@PathVariable int bazaarId, @PathVariable int itemId) {
         return bazaarItemService.getByIdInBazaar(itemId, bazaarId);
     }
 
     @GetMapping("{bazaarId}/items")
-    public List<BazaarItemEntity> getAllItemsInBazaar(@PathVariable int bazaarId){
+    public List<BazaarItemEntity> getAllItemsInBazaar(@PathVariable int bazaarId) {
         return bazaarItemService.getAllItemsInBazaar(bazaarId);
     }
 
@@ -66,8 +68,8 @@ public class BazaarItemController {
 
     @PutMapping("/uploadImage/{itemId}")
     public ResponseEntity<?> uploadImage(@PathVariable int itemId, @RequestParam("file") MultipartFile file) {
-        try{
-            bazaarItemService.saveImage(itemId,file);
+        try {
+            bazaarItemService.saveImage(itemId, file);
 
             return ResponseEntity.status(HttpStatus.OK)
                     .body(String.format("File uploaded successfully: %s", file.getOriginalFilename()));
@@ -75,5 +77,10 @@ public class BazaarItemController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(String.format("Could not upload the file: %s!", file.getOriginalFilename()));
         }
+    }
+
+    @DeleteMapping("{bazaarId}/{itemId}")
+    public ResponseEntity<?> deleteBazaarItem(@PathVariable int bazaarId, @PathVariable int itemId) {
+        return bazaarItemService.deleteById(itemId, bazaarId);
     }
 }

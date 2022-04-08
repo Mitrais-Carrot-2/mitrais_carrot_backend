@@ -11,6 +11,7 @@ import com.team.two.mitrais_carrot.repository.BazaarItemRepository;
 
 import com.team.two.mitrais_carrot.repository.BazaarRepository;
 import com.team.two.mitrais_carrot.service.user.UserService;
+import org.apache.commons.lang3.ObjectUtils;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 
 @Service
@@ -115,4 +117,14 @@ public class BazaarItemService{
         }
         bazaarItemRepository.save(item);
     }
+
+    public ResponseEntity<?> deleteById(int itemId, int bazaarId){
+        BazaarItemEntity entity = bazaarItemRepository.findByIdAndBazaar_Id(itemId, bazaarId);
+        if (!Objects.isNull(entity)) {
+            bazaarItemRepository.deleteById(itemId);
+            return ResponseEntity.ok(new MessageDto("[SUCCESS] Deleting item from bazaar", true));
+        }
+        return ResponseEntity.ok(new MessageDto("[FAILED] Item not found", false));
+    }
+
 }
