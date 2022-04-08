@@ -1,10 +1,7 @@
 package com.team.two.mitrais_carrot.controller.merchant;
 
 
-import com.team.two.mitrais_carrot.dto.merchant.GroupDto;
-import com.team.two.mitrais_carrot.dto.merchant.NewGroupMemberDto;
-import com.team.two.mitrais_carrot.dto.merchant.StaffGroupDto;
-import com.team.two.mitrais_carrot.dto.merchant.StaffListInGroupDto;
+import com.team.two.mitrais_carrot.dto.merchant.*;
 import com.team.two.mitrais_carrot.entity.group.GroupEntity;
 //import com.team.two.mitrais_carrot.entity.merchant.StaffGroupEntity;
 import com.team.two.mitrais_carrot.entity.group.UserGroupEntity;
@@ -40,7 +37,7 @@ public class StaffGroupController {
     }
 
     @GetMapping("/details/{id}")
-    public StaffGroupDto getGroupDetail(@PathVariable("id")int id){
+    public StaffGroupDetailDto getGroupDetail(@PathVariable("id")int id){
         return staffGroupService.getGroupDetail(id);
     }
 

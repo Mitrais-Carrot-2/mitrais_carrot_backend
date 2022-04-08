@@ -24,8 +24,10 @@ public class GroupEntity {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "manager_id")
-    private Long managerId;
+//    @Column(name = "manager_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private UserEntity managerId;
 
     @Column(name = "allocation")
     private long allocation;
