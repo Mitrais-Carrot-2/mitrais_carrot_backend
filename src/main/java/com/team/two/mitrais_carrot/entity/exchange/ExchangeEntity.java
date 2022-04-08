@@ -1,5 +1,6 @@
 package com.team.two.mitrais_carrot.entity.exchange;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.team.two.mitrais_carrot.entity.merchant.BazaarItemEntity;
 import lombok.*;
 
@@ -32,11 +33,19 @@ public class ExchangeEntity {
     @Column(name = "exchange_date")
     private LocalDateTime exchangeDate;
 
-    @Column(name="user_id")
-    private long userId;
+//    @Column(name="user_id")
+//    private long userId;
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private UserEntity userId;
 
-    @Column(name="bazaarItem_id")
-    private int bazaarItemId;
+//    @Column(name="bazaarItem_id")
+//    private int bazaarItemId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "item_id")
+    private BazaarItemEntity bazaarItemId;
 
     @Column(name="status")
     private EExchangeStatus status;
