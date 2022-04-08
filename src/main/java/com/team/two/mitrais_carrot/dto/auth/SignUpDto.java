@@ -18,6 +18,8 @@ public class SignUpDto {
     private String firstName;
     private String lastName;
     private String address;
+    private String phone;
+    private String gender;
     private LocalDate birthDate;
     private long supervisorId;
     private String jobFamily;
