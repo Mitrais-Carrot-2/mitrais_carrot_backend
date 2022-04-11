@@ -31,7 +31,7 @@ public class BazaarItemEntity {
     @Column(name = "quantity")
     private int quantity;
 
-    @Column(name = "description")
+    @Column(name = "description", length = 1024)
     private String description;
 
     @Lob
