@@ -17,7 +17,7 @@ public class ExchangeController {
     ExchangeService exchangeService;
 
     @PostMapping("")
-    public ExchangeService.ExchangeStatus buyItem(@RequestParam(value = "User ID") long userId, @RequestParam(value = "Item ID") int itemId){
+    public ExchangeService.ExchangeStatus buyItem(@RequestParam(value = "userId") long userId, @RequestParam(value = "itemId") int itemId){
         return exchangeService.buyBazaarItem(userId, itemId);
     }
 
@@ -33,7 +33,7 @@ public class ExchangeController {
 
 
     @PutMapping("")
-    public ResponseEntity<?> setExchangeStatus(@RequestParam(value = "Exchange ID") long exchangeId, @RequestParam(value = "Status") EExchangeStatus status){
+    public ResponseEntity<?> setExchangeStatus(@RequestParam(value = "exchangeId") long exchangeId, @RequestParam(value = "status") EExchangeStatus status){
         ExchangeEntity exchange = exchangeService.getById(exchangeId);
         return exchangeService.setExchangeStatus(exchange, status);
     }

@@ -38,7 +38,7 @@ public class BasketController {
     }
 
     @GetMapping("{userId}")
-    public ShowCarrotDto getBasket(long userId){
+    public ShowCarrotDto getBasket(@PathVariable long userId){
         UserEntity user = userService.getById(userId);
         return basketService.showUserActiveBasket(user, true);
     }

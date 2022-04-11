@@ -177,6 +177,7 @@ public class ExchangeService {
             transfer.setSenderId(userId);
             transfer.setReceiverId(bazaarId);
             transfer.setNote("[REQUEST SUCCESS] Buy Item " + itemName);
+            carrot = -carrot;
         }
         else {
             transfer.setSenderId(bazaarId);
@@ -214,7 +215,7 @@ public class ExchangeService {
                         exchange.getUserId().getFirstName() + " " + exchange.getUserId().getLastName(),
                         exchange.getBazaarItemId().getName()))
                 .collect(Collectors.toList());
-        modifiedExchange.forEach((data) -> System.out.println(data.getBuyer() + data.getItem()));
+//        modifiedExchange.forEach((data) -> System.out.println(data.getBuyer() + data.getItem()));
         return modifiedExchange;
     }
 

@@ -1,10 +1,12 @@
 package com.team.two.mitrais_carrot.service.transfer;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.team.two.mitrais_carrot.dto.farmer.BarnToFreezerDto;
 import com.team.two.mitrais_carrot.dto.farmer.DistributeDto;
+import com.team.two.mitrais_carrot.dto.transfer.TransferHistoryDto;
 import com.team.two.mitrais_carrot.entity.auth.UserEntity;
 import com.team.two.mitrais_carrot.entity.farmer.BarnEntity;
 import com.team.two.mitrais_carrot.entity.transfer.TransferEntity;
@@ -15,6 +17,7 @@ import com.team.two.mitrais_carrot.entity.basket.EBasket;
 import com.team.two.mitrais_carrot.service.farmer.BarnService;
 import com.team.two.mitrais_carrot.service.farmer.BarnToFreezerService;
 
+import com.team.two.mitrais_carrot.service.user.UserService;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,6 +31,10 @@ public class TransferService {
     private BarnService barnService;
     @Autowired
     private BarnToFreezerService barnToFreezerService;
+    @Autowired
+    private UserService userService;
+
+    private int bazaarId = 999;
 
     public TransferService(TransferRepository transferRepository) {
         this.transferRepository = transferRepository;
@@ -43,9 +50,41 @@ public class TransferService {
         return (List<TransferEntity>) transferRepository.findAll();
     }
 
+    public List<TransferHistoryDto> getAllById(Long userId){
+        List<TransferHistoryDto> listTransferHistoryDto = new ArrayList<>();
+        List<TransferEntity> transfers = (List<TransferEntity>) transferRepository.findBySenderIdOrReceiverId(userId, userId);
+
+        transfers.stream()
+                .forEach(t -> {
+                    String receiverName = "";
+                    String senderName = "";
+                    String userName = "";
+                    if (t.getReceiverId() == 999) receiverName = "BAZAAR";
+                    else receiverName = userService.getById(t.getReceiverId()).getUsername();
+
+                    if (t.getSenderId() == 999) senderName = "BAZAAR";
+                    else senderName = userService.getById(t.getSenderId()).getUsername();
+
+                    if (userService.getById(userId).getUsername() != receiverName) userName = receiverName;
+                    else if (userService.getById(userId).getUsername() != senderName) userName = senderName;
+
+                    TransferHistoryDto transferHistoryDto = new TransferHistoryDto(
+                            t.getTransferId(),
+                            t.getReceiverId(),
+                            t.getSenderId(),
+                            userName,
+                            t.getShareAt(),
+                            t.getType(),
+                            t.getNote(),
+                            t.getCarrotAmount()
+                    );
+                    listTransferHistoryDto.add(transferHistoryDto);
+                });
+        return listTransferHistoryDto;
+    }
+
     // Transfer Rewards -> Admin to user
     public TransferEntity transferBarnReward(UserEntity user, Long carrotAmount, ETransferType type) {
-        
         BarnEntity activeBarn = barnService.isActiveBarn(true);
         
         if (activeBarn.getCarrotAmount() >= carrotAmount) {
