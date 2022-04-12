@@ -10,6 +10,8 @@ public interface GroupRepository extends JpaRepository<GroupEntity, Integer> {
 
     List<GroupEntity> findByManagerId(Long managerId);
 
+    List<GroupEntity> findByManagerId_Id(Long id);
+
     List<GroupEntity> findByManagerIdIsGreaterThan(int managerId);
 
 }

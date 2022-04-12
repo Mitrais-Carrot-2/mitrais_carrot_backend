@@ -188,8 +188,10 @@ public class ManagerService {
     }
 
     public List<GroupDto> fetchMyGroup(){
-        List<GroupEntity> groups = groupRepository.findByManagerId(getManagerId());
+        // logger.info("Fetch My Group "+getManagerId());
+        List<GroupEntity> groups = groupRepository.findByManagerId_Id(getManagerId());
 
+        // logger.error("Fetch My Group "+groups.size());
         List<GroupDto> groupDto = new ArrayList<>();
         groups.forEach(g -> {
             List<UserGroupEntity> staff = userGroupRepository.findByGroup_Id(g.getId());
