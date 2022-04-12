@@ -53,6 +53,7 @@ public class BazaarItemEntity {
 //    @Column(name = "bazaar_id")
 //    private Long bazaarId;
 
+//    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "bazaar_id")
     private BazaarEntity bazaar;

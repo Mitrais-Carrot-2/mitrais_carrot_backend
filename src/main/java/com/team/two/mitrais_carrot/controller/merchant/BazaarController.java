@@ -1,6 +1,7 @@
 package com.team.two.mitrais_carrot.controller.merchant;
 
 
+import com.team.two.mitrais_carrot.dto.merchant.BazaarResponseDto;
 import com.team.two.mitrais_carrot.dto.merchant.CreateBazaarDto;
 import com.team.two.mitrais_carrot.entity.merchant.BazaarEntity;
 import com.team.two.mitrais_carrot.service.merchant.BazaarService;
@@ -21,8 +22,8 @@ public class BazaarController {
     }
 
     @GetMapping("")
-    public List<BazaarEntity> getBazaar(){
-        return bazaarService.getBazaar();
+    public List<BazaarResponseDto> getAllBazaar(){
+        return bazaarService.getAllBazaarDto();
     }
 
     @PostMapping("")

@@ -39,6 +39,6 @@ public class BazaarEntity {
     @Column(name = "endDate")
     private LocalDate endDate;
 
-//    @OneToMany(mappedBy = "bazaar", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-//    private List<BazaarItemEntity> bazaarItems = new ArrayList<>();
+    @OneToMany(mappedBy = "bazaar", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<BazaarItemEntity> items = new ArrayList<>();
 }

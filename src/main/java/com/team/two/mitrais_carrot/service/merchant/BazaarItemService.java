@@ -1,6 +1,7 @@
 package com.team.two.mitrais_carrot.service.merchant;
 
 import com.team.two.mitrais_carrot.dto.MessageDto;
+import com.team.two.mitrais_carrot.dto.merchant.BazaarItemResponseDto;
 import com.team.two.mitrais_carrot.entity.auth.UserEntity;
 import com.team.two.mitrais_carrot.entity.group.UserGroupEntity;
 import com.team.two.mitrais_carrot.entity.merchant.BazaarEntity;
@@ -22,6 +23,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -71,8 +73,40 @@ public class BazaarItemService{
         return bazaarItemRepository.findAll();
     }
 
+    public List<BazaarItemEntity> getAllItemsInBazaar(int bazaarId){
+        List<BazaarItemEntity> itemBazaar = new ArrayList<>();
+        itemBazaar = bazaarItemRepository.findByBazaar_Id(bazaarId);
+        return itemBazaar;
+    }
+
     public BazaarItemEntity getById(int id){
         return bazaarItemRepository.findById(id).orElse(null);
+    }
+
+    public BazaarItemEntity getByIdInBazaar(int itemId, int bazaarId){
+        return bazaarItemRepository.findByIdAndBazaar_Id(itemId, bazaarId);
+    }
+
+    public List<BazaarItemResponseDto> getAllDto() {
+        List<BazaarItemEntity> listBazaarItemEntity = getAll();
+        return listBazaarItemEntity.stream()
+                .map(item -> new BazaarItemResponseDto(item))
+                .collect(Collectors.toList());
+    }
+
+    public List<BazaarItemResponseDto> getAllDtoInBazaar(int bazaarId) {
+        List<BazaarItemEntity> listBazaarItemEntity = getAllItemsInBazaar(bazaarId);
+        return listBazaarItemEntity.stream()
+                .map(item -> new BazaarItemResponseDto(item))
+                .collect(Collectors.toList());
+    }
+
+    public BazaarItemResponseDto getDtoById(int itemId) {
+        return new BazaarItemResponseDto(getById(itemId));
+    }
+
+    public BazaarItemResponseDto getDtoByIdInBazaar(int itemId, int bazaarId) {
+        return new BazaarItemResponseDto(getByIdInBazaar(itemId, bazaarId));
     }
 
     public ResponseEntity<?> updateQuantity(int itemId, int addQty){
@@ -92,16 +126,6 @@ public class BazaarItemService{
         item.setDescription(request.getDescription());
         bazaarItemRepository.save(item);
         return ResponseEntity.ok(new MessageDto("Success Update Item!", true));
-    }
-
-    public List<BazaarItemEntity> getAllItemsInBazaar(int bazaarId){
-        List<BazaarItemEntity> itemBazaar = new ArrayList<>();
-        itemBazaar = bazaarItemRepository.findByBazaar_Id(bazaarId);
-        return itemBazaar;
-    }
-
-    public BazaarItemEntity getByIdInBazaar(int itemId, int bazaarId){
-        return bazaarItemRepository.findByIdAndBazaar_Id(itemId, bazaarId);
     }
 
     public void saveImage(int itemId, MultipartFile file) {
