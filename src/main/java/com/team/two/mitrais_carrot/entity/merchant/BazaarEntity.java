@@ -1,6 +1,7 @@
 package com.team.two.mitrais_carrot.entity.merchant;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.team.two.mitrais_carrot.entity.basket.BasketEntity;
@@ -26,13 +27,15 @@ public class BazaarEntity {
     @GeneratedValue
     private Integer id;
 
-
+    @NotNull
     @Column(name = "bazaarName")
     private String bazaarName;
 
+    @NotNull
     @Column(name = "startDate")
     private LocalDate startDate;
 
+    @NotNull
     @Column(name = "endDate")
     private LocalDate endDate;
 
