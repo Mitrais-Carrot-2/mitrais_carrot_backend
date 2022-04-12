@@ -15,6 +15,7 @@ import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.team.two.mitrais_carrot.entity.farmer.BarnEntity;
@@ -40,12 +41,15 @@ public class BarnRewardEntity {
     private int id;
 
     @Column(name = "reward_description")
+    @NotNull
     private String rewardDescription;
 
     @Column(name = "carrot_amount")
+    @NotNull
     private Long carrotAmount;
 
     @Column(name = "giving_conditional")
+    @NotNull
     @Enumerated(EnumType.STRING)
     private ETypeBarnReward givingConditional; //Sebagai referensi Cron job untuk memberi carrot. Referensi ada 3: Birth Day, Join Date dan end of the year
 
