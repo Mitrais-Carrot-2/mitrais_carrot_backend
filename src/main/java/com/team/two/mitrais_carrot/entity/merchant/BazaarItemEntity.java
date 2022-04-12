@@ -6,6 +6,7 @@ import lombok.*;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 @JsonIgnoreProperties({"hibernateLazyInitializer"})
@@ -22,12 +23,15 @@ public class BazaarItemEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @NotNull
     @Column(name = "name")
     private String name;
 
+    @NotNull
     @Column(name = "price")
     private long price;
 
+    @NotNull
     @Column(name = "quantity")
     private int quantity;
 
