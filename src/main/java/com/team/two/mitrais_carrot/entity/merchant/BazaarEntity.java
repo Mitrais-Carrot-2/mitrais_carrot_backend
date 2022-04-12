@@ -1,14 +1,17 @@
 package com.team.two.mitrais_carrot.entity.merchant;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.team.two.mitrais_carrot.entity.basket.BasketEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 @JsonIgnoreProperties({"hibernateLazyInitializer"})
 
@@ -24,16 +27,18 @@ public class BazaarEntity {
     @GeneratedValue
     private Integer id;
 
-
+    @NotNull
     @Column(name = "bazaarName")
     private String bazaarName;
 
+    @NotNull
     @Column(name = "startDate")
     private LocalDate startDate;
 
+    @NotNull
     @Column(name = "endDate")
     private LocalDate endDate;
 
-//    @OneToMany(targetEntity = BazaarEntity.class, mappedBy = bazaarId, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-//    private List<BazaarEntity> bazaarId;
+//    @OneToMany(mappedBy = "bazaar", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+//    private List<BazaarItemEntity> bazaarItems = new ArrayList<>();
 }

@@ -96,21 +96,26 @@ public class UserEntity {
     @Column(name = "image_size")
     private long imageSize;
 
+//    @JsonIgnore
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JoinTable(name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<RoleEntity> roles = new HashSet<>();
 
+    // @JsonIgnore
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<BasketEntity> baskets = new ArrayList<>();
 
+    // @JsonIgnore
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<UserGroupEntity> userGroups;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "userId", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<BarnEntity> barn = new ArrayList<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "receiverId", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<FreezerTransferHistoryEntity> freezerTransferHistories = new ArrayList<>();
 
