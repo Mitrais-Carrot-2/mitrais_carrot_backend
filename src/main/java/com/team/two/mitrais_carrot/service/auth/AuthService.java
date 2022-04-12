@@ -102,7 +102,7 @@ public class AuthService {
         user.setJobGrade(signUpRequest.getJobGrade());
         user.setOffice(signUpRequest.getOffice());
 
-        user.setDayOfYearBirthDay(user.getBirthDate().getDayOfYear());
+        user.setDayOfYearBirthDay(signUpRequest.getBirthDate().getDayOfYear());
         Set<String> strRoles = signUpRequest.getRole();
         Set<RoleEntity> roles = new HashSet<>();
 

@@ -54,6 +54,9 @@ public class BazaarItemService{
         BazaarItemEntity newItem = new BazaarItemEntity();
         BazaarEntity checker = bazaarRepository.getById(bazaarId);
         if(checker.getBazaarName()!=null){
+            if (request.getName() == "" || request.getPrice() == 0 || request.getQuantity()==0){
+                return ResponseEntity.badRequest().body(new MessageDto("Fail to Add Item!", false));
+            }
             newItem.setName(request.getName());
             newItem.setPrice(request.getPrice());
             newItem.setQuantity(request.getQuantity());
@@ -120,6 +123,9 @@ public class BazaarItemService{
 
     public ResponseEntity<?> updateItem(int itemId, BazaarItemDto request){
         BazaarItemEntity item = getById(itemId);
+        if (request.getName() == "" || request.getPrice() == 0 || request.getQuantity()==0){
+            return ResponseEntity.badRequest().body(new MessageDto("Fail to Add Item!", false));
+        }
         item.setName(request.getName());
         item.setPrice(request.getPrice());
         item.setQuantity(request.getQuantity());

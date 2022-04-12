@@ -49,7 +49,7 @@ public class UserController {
 
     @GetMapping("username/{username}")
     public ResponseEntity<?> getByName(@PathVariable("username") String username) {
-        if (userService.getByUsername(username) != null) {
+        if (userService.getByUsername(username).getUsername() != null) {
             return ResponseEntity.status(HttpStatus.OK).body(userService.getByUsername(username));
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
