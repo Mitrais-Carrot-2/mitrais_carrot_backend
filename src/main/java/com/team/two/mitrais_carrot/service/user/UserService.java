@@ -1,7 +1,10 @@
 package com.team.two.mitrais_carrot.service.user;
 
 import com.team.two.mitrais_carrot.dto.UpdateProfileDto;
+import com.team.two.mitrais_carrot.dto.admin.EditStaffDto;
 import com.team.two.mitrais_carrot.dto.auth.UserDto;
+import com.team.two.mitrais_carrot.entity.auth.ERole;
+import com.team.two.mitrais_carrot.entity.auth.RoleEntity;
 import com.team.two.mitrais_carrot.entity.auth.UserEntity;
 import com.team.two.mitrais_carrot.entity.basket.BasketEntity;
 import com.team.two.mitrais_carrot.repository.UserRepository;
@@ -15,7 +18,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class UserService {
@@ -81,7 +86,6 @@ public class UserService {
     public UserEntity getByUsername(String username) {
         UserEntity userEntity = userRepository.findByUsername(username);
         if (userEntity != null) {
-            logger.info("User ID: " + userEntity.getId());
             return userEntity;
         }
         return null;
@@ -113,6 +117,21 @@ public class UserService {
         user.setLastName(req.getLastName());
         user.setAddress(req.getAddress());
         user.setEmail(req.getEmail());
+
+        return userRepository.save(user);
+    }
+
+    public UserEntity editStaff(String username, EditStaffDto req) {
+        UserEntity user = getByUsername(username);
+        user.setFirstName(req.getFirstName());
+        user.setLastName(req.getLastName());
+        user.setAddress(req.getAddress());
+        user.setEmail(req.getEmail());
+        user.setPhone(req.getPhone());
+        user.setSupervisorId(req.getSupervisorId());
+        user.setJobGrade(req.getJobGrade());
+        user.setJobFamily(req.getJobFamily());
+        user.setOffice(req.getOffice());
 
         return userRepository.save(user);
     }
