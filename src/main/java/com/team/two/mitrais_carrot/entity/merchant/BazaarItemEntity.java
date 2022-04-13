@@ -1,5 +1,6 @@
 package com.team.two.mitrais_carrot.entity.merchant;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
@@ -58,6 +59,7 @@ public class BazaarItemEntity {
 //    private Long bazaarId;
 
 //    @JsonIgnore
+    @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "bazaar_id")
     private BazaarEntity bazaar;

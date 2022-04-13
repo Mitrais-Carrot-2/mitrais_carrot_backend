@@ -36,5 +36,6 @@ public class ExchangeController {
     public ResponseEntity<?> setExchangeStatus(@RequestParam(value = "exchangeId") long exchangeId, @RequestParam(value = "status") EExchangeStatus status){
         ExchangeEntity exchange = exchangeService.getById(exchangeId);
         return exchangeService.setExchangeStatus(exchange, status);
+
     }
 }
