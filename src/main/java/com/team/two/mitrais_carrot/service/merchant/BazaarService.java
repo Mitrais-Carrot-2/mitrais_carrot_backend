@@ -47,6 +47,9 @@ public class BazaarService {
 //            return ResponseEntity.ok(new MessageDto("Failed", false));
 //        }
         BazaarEntity bazaar = bazaarRepository.getById(id);
+        if (request.getBazaarName() == ""){
+            return ResponseEntity.badRequest().body(new MessageDto("Failed: Missing Data!", false));
+        }
         bazaar.setBazaarName(request.getBazaarName());
         bazaar.setStartDate(request.getStartDate());
         bazaar.setEndDate(request.getEndDate());
@@ -57,6 +60,9 @@ public class BazaarService {
 
     public ResponseEntity<?> createBazaar(CreateBazaarDto request){
         BazaarEntity bazaar = new BazaarEntity();
+        if (request.getBazaarName() == ""){
+            return ResponseEntity.badRequest().body(new MessageDto("Failed: Missing Data!", false));
+        }
         bazaar.setBazaarName(request.getBazaarName());
 //        bazaar.setActive(true);
         bazaar.setStartDate(request.getStartDate());

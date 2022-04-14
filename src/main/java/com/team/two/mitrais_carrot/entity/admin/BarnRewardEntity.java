@@ -1,6 +1,5 @@
 package com.team.two.mitrais_carrot.entity.admin;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -11,10 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.MapsId;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -37,7 +33,7 @@ public class BarnRewardEntity {
 
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY) 
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @Column(name = "reward_description")
@@ -51,8 +47,8 @@ public class BarnRewardEntity {
     @Column(name = "giving_conditional")
     @NotNull
     @Enumerated(EnumType.STRING)
-    private ETypeBarnReward givingConditional; //Sebagai referensi Cron job untuk memberi carrot. Referensi ada 3: Birth Day, Join Date dan end of the year
-
+    private ETypeBarnReward givingConditional; // Sebagai referensi Cron job untuk memberi carrot. Referensi ada 3:
+                                               // Birth Day, Join Date dan end of the year
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)

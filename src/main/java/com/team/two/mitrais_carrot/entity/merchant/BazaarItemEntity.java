@@ -8,9 +8,8 @@ import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDate;
 
-@JsonIgnoreProperties({"hibernateLazyInitializer"})
+@JsonIgnoreProperties({ "hibernateLazyInitializer" })
 
 @Entity(name = "BazaarItemEntity")
 @Getter
@@ -51,14 +50,7 @@ public class BazaarItemEntity {
     @Column(name = "image_size")
     private long imageSize;
 
-
-//    @Column(name = "expiryDate")
-//    private LocalDate expiryDate;
-
-//    @Column(name = "bazaar_id")
-//    private Long bazaarId;
-
-//    @JsonIgnore
+    // @JsonIgnore
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "bazaar_id")

@@ -1,11 +1,9 @@
 package com.team.two.mitrais_carrot.controller.merchant;
 
-
 import com.team.two.mitrais_carrot.dto.merchant.BazaarItemDto;
 import com.team.two.mitrais_carrot.dto.merchant.BazaarItemResponseDto;
 import com.team.two.mitrais_carrot.entity.merchant.BazaarItemEntity;
 import com.team.two.mitrais_carrot.service.merchant.BazaarItemService;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -14,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -29,7 +26,6 @@ public class BazaarItemController {
 
     @PostMapping("{id}/item")
     public ResponseEntity<?> addBazaarItem(@PathVariable("id") int id, @RequestBody BazaarItemDto request) {
-//        return bazaarItemService.add(request);
         return bazaarItemService.addNewItem(request, id);
     }
 
@@ -39,7 +35,7 @@ public class BazaarItemController {
     }
 
     @GetMapping("item/{itemId}")
-    public BazaarItemResponseDto getItem(@PathVariable int itemId){
+    public BazaarItemResponseDto getItem(@PathVariable int itemId) {
         return bazaarItemService.getDtoById(itemId);
     }
 
