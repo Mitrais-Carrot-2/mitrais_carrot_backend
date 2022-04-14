@@ -3,7 +3,6 @@ package com.team.two.mitrais_carrot.entity.award;
 import lombok.*;
 import javax.persistence.*;
 import java.time.LocalDate;
-// import javax.validation.constraints.NotBlank;
 
 @Entity
 @Getter

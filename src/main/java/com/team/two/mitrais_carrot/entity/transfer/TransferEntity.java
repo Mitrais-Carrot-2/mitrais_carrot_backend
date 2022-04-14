@@ -1,15 +1,9 @@
 package com.team.two.mitrais_carrot.entity.transfer;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 
-// import com.team.two.mitrais_carrot.entity.transfer.ETransferType;
-
-import com.team.two.mitrais_carrot.entity.auth.UserEntity;
-import com.team.two.mitrais_carrot.entity.farmer.BarnEntity;
 import lombok.*;
 
 @Entity
@@ -24,8 +18,6 @@ public class TransferEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int transferId;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "receiver_id")
     @Column(name = "receiver_id")
     private Long receiverId;
 

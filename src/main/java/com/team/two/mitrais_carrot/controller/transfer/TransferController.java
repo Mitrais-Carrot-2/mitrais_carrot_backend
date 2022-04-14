@@ -2,7 +2,6 @@ package com.team.two.mitrais_carrot.controller.transfer;
 
 import com.team.two.mitrais_carrot.dto.transfer.TransferHistoryDto;
 import com.team.two.mitrais_carrot.entity.transfer.TransferEntity;
-import com.team.two.mitrais_carrot.service.exchange.ExchangeService;
 import com.team.two.mitrais_carrot.service.transfer.TransferService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;

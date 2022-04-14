@@ -21,13 +21,11 @@ import com.team.two.mitrais_carrot.service.user.UserService;
 import com.team.two.mitrais_carrot.dto.exchange.ExchangeDataDto;
 
 import lombok.Getter;
-import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -100,15 +98,11 @@ public class ExchangeService {
 
     public boolean isCarrotEnough(UserEntity buyer, BazaarItemEntity item){
         BasketEntity basket = basketService.getActiveBasket(buyer, true);
-//        System.out.println("THIS IS BASKETTTT: "+basket.getCarrotAmount());
-//        System.out.println("THIS IS PRICEEEEE: " +item.getPrice());
         return (basket.getCarrotAmount() >= item.getPrice());
     }
 
     public void requestExchange(ExchangeEntity exchange){
-//        UserEntity buyer = userService.getById(exchange.getUserId().getId());
         UserEntity buyer = exchange.getUserId();
-//        BazaarItemEntity item = bazaarItemService.getById(exchange.getBazaarItemId().getId());
         BazaarItemEntity item = exchange.getBazaarItemId();
         bazaarItemService.updateQuantity(exchange.getBazaarItemId().getId(), -1);
         basketService.updateCarrot(buyer, -(item.getPrice()), EBasket.BAZAAR);
@@ -183,7 +177,7 @@ public class ExchangeService {
             transfer.setSenderId(bazaarId);
             transfer.setReceiverId(userId);
             transfer.setNote("[REQUEST DENIED] Buy Item " + itemName);
-            date = LocalDateTime.now();
+//            date = LocalDateTime.now();
         }
         transfer.setShareAt(date);
         transfer.setType(ETransferType.TYPE_BAZAAR);
@@ -194,18 +188,7 @@ public class ExchangeService {
 
     public List<ExchangeDataDto> getAllExchange(){
         List<ExchangeEntity> rawExchange = exchangeRepository.findAll();
-//        rawExchange.forEach((data) -> System.out.println(data.getUserId().getFirstName() + data.getBazaarItemId().getName()));
-//        List<ExchangeDataDto> modifiedExchange = new ArrayList<>();
-//        rawExchange.forEach((data) -> {
-//            modifiedExchange.add(new ExchangeDataDto(
-//                        data.getId(),
-//                    data.isActive(),
-//                    data.getPrice(),
-//                    data.getExchangeDate(),
-//                    data.getStatus(),
-//                    data.getUserId().getFirstName() + " " + data.getUserId().getLastName(),
-//                    data.getBazaarItemId().getName()));
-//        });
+
         List<ExchangeDataDto> modifiedExchange = rawExchange.stream()
                 .map((ExchangeEntity exchange) -> new ExchangeDataDto(
                         (int) exchange.getId(),
@@ -216,7 +199,6 @@ public class ExchangeService {
                         exchange.getUserId().getFirstName() + " " + exchange.getUserId().getLastName(),
                         exchange.getBazaarItemId().getName()))
                 .collect(Collectors.toList());
-//        modifiedExchange.forEach((data) -> System.out.println(data.getBuyer() + data.getItem()));
         return modifiedExchange;
     }
 

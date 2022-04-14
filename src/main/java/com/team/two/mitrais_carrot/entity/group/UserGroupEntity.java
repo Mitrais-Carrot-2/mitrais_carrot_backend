@@ -5,11 +5,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.team.two.mitrais_carrot.entity.auth.UserEntity;
 import lombok.*;
 import javax.persistence.*;
-import org.hibernate.annotations.Type;
 
-import java.util.List;
-
-@JsonIgnoreProperties({"hibernateLazyInitializer"})
+@JsonIgnoreProperties({ "hibernateLazyInitializer" })
 
 @Entity(name = "UserGroupEntity")
 @Getter
@@ -23,14 +20,6 @@ public class UserGroupEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-//    @Column(name = "idUser")
-//    private long idUser;
-
-    //will not included
-//    @Column(name = "group_id")
-//    private int groupId;
-
-    //newly added
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "group_id")
@@ -40,5 +29,4 @@ public class UserGroupEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private UserEntity user;
-//    private List<UserEntity> user;
 }
