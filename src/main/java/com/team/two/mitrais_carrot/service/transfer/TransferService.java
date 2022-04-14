@@ -94,11 +94,11 @@ public class TransferService {
             
             barnService.shareCarrot(carrotAmount, activeBarn.getId());
             
-            Long adminId = 0l; // Kesepakatan admin id = 0
+            Long barnIdLong = Long.valueOf(activeBarn.getId());
             
             TransferEntity transfer = new TransferEntity();
             transfer.setReceiverId(userId);
-            transfer.setSenderId(adminId);
+            transfer.setSenderId(barnIdLong);
 //            transfer.setSenderId(user);
             transfer.setCarrotAmount(carrotAmount);
             transfer.setType(type);
@@ -138,7 +138,7 @@ public class TransferService {
 
     public List<TransferEntity> getBarnToFreezerTransfer(int id) {
         Long barnId = Long.valueOf(id);
-        return transferRepository.findBySenderIdAndType(barnId, ETransferType.TYPE_BARN_TO_FREEZER);
+        return transferRepository.findBySenderIdAndTypeOrType(barnId, ETransferType.TYPE_BARN_TO_FREEZER, ETransferType.TYPE_REWARD);
     }
 
     // TODO : Transfer shared -> User to user or User to Group

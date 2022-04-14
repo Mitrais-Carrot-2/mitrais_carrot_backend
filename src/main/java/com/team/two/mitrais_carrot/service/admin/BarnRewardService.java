@@ -12,6 +12,7 @@ import com.team.two.mitrais_carrot.entity.farmer.BarnEntity;
 import com.team.two.mitrais_carrot.entity.transfer.ETransferType;
 import com.team.two.mitrais_carrot.repository.admin.BarnRewardRepository;
 import com.team.two.mitrais_carrot.repository.farmer.BarnRepository;
+import com.team.two.mitrais_carrot.service.farmer.BarnService;
 import com.team.two.mitrais_carrot.service.transfer.TransferService;
 import com.team.two.mitrais_carrot.service.user.UserService;
 
@@ -28,6 +29,8 @@ public class BarnRewardService {
     private UserService userService;
     @Autowired
     private TransferService transferService;
+    @Autowired
+    private BarnService barnService;
 
 
     public BarnRewardService(BarnRewardRepository barnRewardRepository, BarnRepository barnRepository) {
@@ -45,6 +48,10 @@ public class BarnRewardService {
 
     public BarnRewardEntity searchBarnRewardByType(ETypeBarnReward type) {
         return barnRewardRepository.findByGivingConditional(type);
+    }
+
+    public BarnRewardEntity searchBarnRewardByTypeAndeBarn(ETypeBarnReward type, BarnEntity barn) {
+        return barnRewardRepository.findByGivingConditionalAndBarn(type, barn);
     }
 
     public BarnRewardEntity searchBarnRewardByDescription(String description) {
@@ -82,7 +89,9 @@ public class BarnRewardService {
 
     public List<UserEntity> rewardByBirthDay() {
 
-        long amount = this.searchBarnRewardByType(ETypeBarnReward.USER_BIRTHDAY).getCarrotAmount();
+        BarnEntity activeBarn = barnService.isActiveBarn(true);
+
+        long amount = this.searchBarnRewardByTypeAndeBarn(ETypeBarnReward.USER_BIRTHDAY, activeBarn).getCarrotAmount();
 
         List<UserEntity> birthdayPerson = userService.getBirthdayPerson();
         for (UserEntity user : birthdayPerson) {

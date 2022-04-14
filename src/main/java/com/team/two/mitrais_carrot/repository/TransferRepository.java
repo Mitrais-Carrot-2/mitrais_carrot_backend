@@ -16,6 +16,7 @@ public interface TransferRepository extends JpaRepository<TransferEntity, Intege
 //     List<TransferEntity> findBySenderIdAndType(Long barnId, ETransferType typeBarnToFreezer);
 
     List<TransferEntity> findBySenderIdAndType(Long senderId, ETransferType type);
+    List<TransferEntity> findBySenderIdAndTypeOrType(Long senderId, ETransferType type, ETransferType type2);
 
     List<TransferEntity> findBySenderIdOrReceiverId(Long senderId, Long receiverId);
 
