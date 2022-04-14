@@ -53,7 +53,7 @@ public class ManagerController {
         if (status){
             return ResponseEntity.ok(new MessageDto("Transfer from Manager to Staff success!", true));
         } else {
-            return ResponseEntity.badRequest().body(new MessageDto("Not enough carrot in Freezer!", false));
+            return ResponseEntity.badRequest().body(new MessageDto("Invalid Data / Not enough carrot in Freezer!", false));
         }
     }
 
@@ -73,7 +73,7 @@ public class ManagerController {
         if (status){
             return ResponseEntity.ok(new MessageDto("Transfer from Manager to Group success!", true));
         } else {
-            return ResponseEntity.badRequest().body(new MessageDto("Not enough carrot in Freezer!", false));
+            return ResponseEntity.badRequest().body(new MessageDto("Invalid Data / Not enough carrot in Freezer!", false));
         }
     }
 
