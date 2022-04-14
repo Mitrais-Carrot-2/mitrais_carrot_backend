@@ -1,12 +1,12 @@
 package com.team.two.mitrais_carrot.controller.notification;
 
 
+import com.team.two.mitrais_carrot.entity.notification.NotificationEntity;
 import com.team.two.mitrais_carrot.service.notification.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -20,7 +20,13 @@ public class NotificationController {
     }
 
     @GetMapping("{userId}")
-    public Object getNotification(Long userId){
+    public List<NotificationEntity> getNotification(@PathVariable("userId") Long userId){
         return notificationService.getNotification(userId);
     }
+
+    @PutMapping("read/{notificationId}")
+    public void readNotification(@PathVariable("notificationId") Long notificationId){
+        notificationService.readNotification(notificationId);
+    }
+
 }

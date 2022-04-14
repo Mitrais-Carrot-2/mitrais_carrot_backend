@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Service
 public class NotificationService {
@@ -17,14 +18,20 @@ public class NotificationService {
     public void createNotification(NotificationDto notificationDto) {
         NotificationEntity notification = new NotificationEntity();
         notification.setDate(LocalDate.now());
+        notification.setRead(false);
         notification.setMessage(notificationDto.getMessage());
         notification.setReceiverId(notificationDto.getReceiverId());
         notificationRepository.save(notification);
     }
 
-    public String getNotification(Long userId) {
-        return notificationRepository.findByReceiverId(userId).toString();
+    public List<NotificationEntity> getNotification(Long userId) {
+        return (List<NotificationEntity>) notificationRepository.findAllByReceiverId(userId);
     }
 
+    public void readNotification(Long notificationId) {
+        NotificationEntity notification = notificationRepository.findById(notificationId).get();
+        notification.setRead(true);
+        notificationRepository.save(notification);
+    }
 
 }
