@@ -55,7 +55,7 @@ public class BazaarItemService{
         BazaarEntity checker = bazaarRepository.getById(bazaarId);
         if(checker.getBazaarName()!=null){
             if (request.getName() == "" || request.getPrice() == 0 || request.getQuantity()==0){
-                return ResponseEntity.badRequest().body(new MessageDto("Fail to Add Item!", false));
+                return ResponseEntity.badRequest().body(new MessageDto("Failed: Missing Data!", false));
             }
             newItem.setName(request.getName());
             newItem.setPrice(request.getPrice());
@@ -124,7 +124,7 @@ public class BazaarItemService{
     public ResponseEntity<?> updateItem(int itemId, BazaarItemDto request){
         BazaarItemEntity item = getById(itemId);
         if (request.getName() == "" || request.getPrice() == 0 || request.getQuantity()==0){
-            return ResponseEntity.badRequest().body(new MessageDto("Fail to Add Item!", false));
+             return ResponseEntity.badRequest().body(new MessageDto("Failed: Missing Data!", false));
         }
         item.setName(request.getName());
         item.setPrice(request.getPrice());

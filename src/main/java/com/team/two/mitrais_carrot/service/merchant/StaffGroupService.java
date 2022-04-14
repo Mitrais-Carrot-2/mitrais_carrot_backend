@@ -58,7 +58,7 @@ public class StaffGroupService {
         GroupEntity group = new GroupEntity();
         UserEntity manager = userRepository.getById(Long.valueOf(request.getManagerId()));
         if (request.getName()=="" || request.getAllocation() < 1){
-            return ResponseEntity.badRequest().body(new MessageDto("Error: Duplicate Data!", false));
+            return ResponseEntity.badRequest().body(new MessageDto("Error: Missing Data!", false));
         }
         group.setName(request.getName());
         group.setAllocation(request.getAllocation());
@@ -93,7 +93,7 @@ public class StaffGroupService {
         GroupEntity group = groupRepository.getById(id);
         UserEntity manager = userRepository.getById(Long.valueOf(request.getManagerId()));
         if (request.getName()=="" || request.getAllocation() < 1){
-            return ResponseEntity.ok(new MessageDto("Error: Missing Data!", false));
+            return ResponseEntity.badRequest().body(new MessageDto("Failed: Missing Data!", false));
         }
         group.setName(request.getName());
         group.setNote(request.getNote());
