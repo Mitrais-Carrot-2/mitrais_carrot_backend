@@ -57,6 +57,9 @@ public class StaffGroupService {
     public ResponseEntity<?> createStaffGroup(StaffGroupDto request){
         GroupEntity group = new GroupEntity();
         UserEntity manager = userRepository.getById(Long.valueOf(request.getManagerId()));
+        if (request.getName()=="" || request.getAllocation() < 1){
+            return ResponseEntity.badRequest().body(new MessageDto("Error: Duplicate Data!", false));
+        }
         group.setName(request.getName());
         group.setAllocation(request.getAllocation());
         group.setNote(request.getNote());
@@ -89,6 +92,9 @@ public class StaffGroupService {
     public ResponseEntity<?> updateStaffGroup(StaffGroupDto request, Integer id){
         GroupEntity group = groupRepository.getById(id);
         UserEntity manager = userRepository.getById(Long.valueOf(request.getManagerId()));
+        if (request.getName()=="" || request.getAllocation() < 1){
+            return ResponseEntity.ok(new MessageDto("Error: Missing Data!", false));
+        }
         group.setName(request.getName());
         group.setNote(request.getNote());
         group.setAllocation(request.getAllocation());
