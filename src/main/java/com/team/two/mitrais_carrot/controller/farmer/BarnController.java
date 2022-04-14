@@ -17,7 +17,7 @@ import java.util.List;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-// @PreAuthorize("hasAnyRole('FARMER')")
+@PreAuthorize("hasAnyRole('FARMER')")
 @RequestMapping("/api/farmer/barn")
 public class BarnController {
     @Autowired

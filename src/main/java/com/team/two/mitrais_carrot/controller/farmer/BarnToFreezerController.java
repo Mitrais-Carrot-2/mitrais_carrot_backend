@@ -13,6 +13,7 @@ import com.team.two.mitrais_carrot.service.transfer.TransferService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -24,7 +25,8 @@ public class BarnToFreezerController {
     BarnToFreezerService barnToFreezerService;
     @Autowired
     TransferService transferService;
-
+    
+    @PreAuthorize("hasAnyRole('FARMER')")
     @PostMapping("")
     public ResponseEntity<?> transfer(@RequestBody BarnToFreezerDto transferDto){
         final Boolean status = barnToFreezerService.sendToManager(transferDto);
@@ -34,12 +36,12 @@ public class BarnToFreezerController {
             return ResponseEntity.badRequest().body(new MessageDto("Not enough carrot in Barn!", false));
         }
     }
-
+    @PreAuthorize("hasAnyRole('FARMER')")
     @PostMapping("/distribute")
     public TransferEntity transfer(@RequestBody DistributeDto req){
         return transferService.transferBarnToFreezer(req);
     }
-
+    @PreAuthorize("hasAnyRole('FARMER')")
     @GetMapping("/{id}")
     public List<TransferEntity> getTransfer(@PathVariable int id){
         return transferService.getBarnToFreezerTransfer(id);
