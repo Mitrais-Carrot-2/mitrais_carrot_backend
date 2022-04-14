@@ -103,49 +103,49 @@ public class ManagerService {
     }
 
     public Boolean transferToStaff(TransferToStaffDto req){
-        BarnEntity barn = barnRepository.findByIsActive(true);
-        FreezerEntity freezer = freezerRepository.findByManagerIdAndBarn_Id(1L, barn.getId());
+        if(req.getCarrotAmount() > 0){
+            BarnEntity barn = barnRepository.findByIsActive(true);
+            FreezerEntity freezer = freezerRepository.findByManagerIdAndBarn_Id(1L, barn.getId());
 
-//        logger.error("Staff ID "+req);
-        BasketEntity oldBasket = basketService.getActiveBasket(req.getStaffId(), true);
-        if(freezer.getCarrotAmount() - req.getCarrotAmount()>=0) {
-            basketService.updateCarrot(oldBasket.getUser(), req.getCarrotAmount(), EBasket.SHARE);
+            BasketEntity oldBasket = basketService.getActiveBasket(req.getStaffId(), true);
+            if(freezer.getCarrotAmount() - req.getCarrotAmount()>=0) {
+                basketService.updateCarrot(oldBasket.getUser(), req.getCarrotAmount(), EBasket.SHARE);
 
-            freezer.setCarrotAmount(freezer.getCarrotAmount() - req.getCarrotAmount());
-            freezer.setDistributedCarrot(freezer.getDistributedCarrot() + req.getCarrotAmount());
-            freezerRepository.save(freezer);
+                freezer.setCarrotAmount(freezer.getCarrotAmount() - req.getCarrotAmount());
+                freezer.setDistributedCarrot(freezer.getDistributedCarrot() + req.getCarrotAmount());
+                freezerRepository.save(freezer);
 
-            TransferToStaffDto result = new TransferToStaffDto();
+                TransferToStaffDto result = new TransferToStaffDto();
 
-            result.setStaffId(oldBasket.getUser().getId());
-            result.setCarrotAmount(oldBasket.getCarrotAmount());
-            result.setNote(req.getNote());
+                result.setStaffId(oldBasket.getUser().getId());
+                result.setCarrotAmount(oldBasket.getCarrotAmount());
+                result.setNote(req.getNote());
 
-            TransferEntity history = new TransferEntity();
-            history.setSenderId(getManagerId());
-            history.setReceiverId(req.getStaffId());
-            history.setCarrotAmount(req.getCarrotAmount());
-            history.setNote(req.getNote());
-            history.setShareAt(LocalDateTime.now());
-            history.setType(ETransferType.TYPE_SHARED);
+                TransferEntity history = new TransferEntity();
+                history.setSenderId(getManagerId());
+                history.setReceiverId(req.getStaffId());
+                history.setCarrotAmount(req.getCarrotAmount());
+                history.setNote(req.getNote());
+                history.setShareAt(LocalDateTime.now());
+                history.setType(ETransferType.TYPE_SHARED);
 
-            UserEntity user = userRepository.findById(req.getStaffId()).get();
-            UserEntity manager = userRepository.findById(getManagerId()).get();
+                UserEntity user = userRepository.findById(req.getStaffId()).get();
+                UserEntity manager = userRepository.findById(getManagerId()).get();
 
-            FreezerTransferHistoryEntity freezerHistory = new FreezerTransferHistoryEntity();
-            freezerHistory.setFreezer(freezer);
-            freezerHistory.setReceiverId(user);
-            freezerHistory.setManagerId(manager);
-            freezerHistory.setShareAt(LocalDateTime.now());
-            freezerHistory.setType(ETransferType.TYPE_SHARED_GROUP);
-            freezerHistory.setNote(req.getNote());
-            freezerHistory.setCarrotAmount(req.getCarrotAmount());
-            freezerTransferHistoryRepository.save(freezerHistory);
+                FreezerTransferHistoryEntity freezerHistory = new FreezerTransferHistoryEntity();
+                freezerHistory.setFreezer(freezer);
+                freezerHistory.setReceiverId(user);
+                freezerHistory.setManagerId(manager);
+                freezerHistory.setShareAt(LocalDateTime.now());
+                freezerHistory.setType(ETransferType.TYPE_SHARED_GROUP);
+                freezerHistory.setNote(req.getNote());
+                freezerHistory.setCarrotAmount(req.getCarrotAmount());
+                freezerTransferHistoryRepository.save(freezerHistory);
 
-//            logger.info("test "+history.toString());
-            transferRepository.save(history);
+                transferRepository.save(history);
 
-            return true;
+                return true;
+            }
         }
 
         return false;
@@ -156,8 +156,6 @@ public class ManagerService {
         FreezerEntity freezer = freezerRepository.findByManagerIdAndBarn_Id(getManagerId(), barn.getId());
 
         BasketEntity oldBasket = basketRepository.findByUser_IdAndBarn_Id(userId, barn.getId());
-//        logger.error(""+oldBasket.getUser().getUsername());
-//        if(freezer.getCarrotAmount() - carrot>=0) {
 
             basketService.updateCarrot(oldBasket.getUser(), carrot, EBasket.SHARE);
 
@@ -201,23 +199,18 @@ public class ManagerService {
     }
 
     public Boolean transferToGroup(TransferToGroupDto req){
-        // logger.error("Group ID "+req.getGroupId());
-        // logger.error("Carrot "+req.getCarrotAmount());
-        // logger.error("Note "+req.getNote());
-        Integer groupId = req.getGroupId();
+        if(req.getCarrotAmount() > 0) {
+            Integer groupId = req.getGroupId();
 
-//        logger.error(req.getGroupId()+" Group ID");
-        List<UserGroupEntity> members = userGroupRepository.findByGroup_Id(groupId);
+            List<UserGroupEntity> members = userGroupRepository.findByGroup_Id(groupId);
 
-        Long totalCarrot = members.size() * req.getCarrotAmount();
-        if(totalCarrot - (req.getCarrotAmount()* members.size())>=0) {
-            members.forEach(m -> {
-//                logger.error("User ID "+m.getUser().getId());
-//                logger.error("Carrot Amount "+req.getCarrotAmount());
-//                logger.error("Note "+req.getNote());
-                transferToStaff(m.getUser().getId(), req.getCarrotAmount(), req.getNote());
-            });
-            return true;
+            Long totalCarrot = members.size() * req.getCarrotAmount();
+            if (totalCarrot - (req.getCarrotAmount() * members.size()) >= 0) {
+                members.forEach(m -> {
+                    transferToStaff(m.getUser().getId(), req.getCarrotAmount(), req.getNote());
+                });
+                return true;
+            }
         }
         return false;
     }

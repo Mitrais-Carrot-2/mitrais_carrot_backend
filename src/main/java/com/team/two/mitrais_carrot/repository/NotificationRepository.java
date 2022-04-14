@@ -4,7 +4,9 @@ import com.team.two.mitrais_carrot.controller.notification.NotificationControlle
 import com.team.two.mitrais_carrot.entity.notification.NotificationEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
+
 public interface NotificationRepository extends JpaRepository<NotificationEntity, Long> {
-    NotificationEntity findAllByReceiverId(Long id);
+    List<NotificationEntity> findAllByReceiverId(Long id);
 
 }

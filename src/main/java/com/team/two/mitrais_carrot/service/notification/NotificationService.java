@@ -25,13 +25,19 @@ public class NotificationService {
     }
 
     public List<NotificationEntity> getNotification(Long userId) {
-        return (List<NotificationEntity>) notificationRepository.findAllByReceiverId(userId);
+        return notificationRepository.findAllByReceiverId(userId);
     }
 
     public void readNotification(Long notificationId) {
-        NotificationEntity notification = notificationRepository.findById(notificationId).get();
-        notification.setRead(true);
-        notificationRepository.save(notification);
+        NotificationEntity notification = notificationRepository.findById(notificationId).orElse(null);
+        if(notification != null) {
+            notification.setRead(true);
+            notificationRepository.save(notification);
+        }
+        else {
+            throw new IllegalArgumentException("Notification not found");
+        }
+
     }
 
 }
