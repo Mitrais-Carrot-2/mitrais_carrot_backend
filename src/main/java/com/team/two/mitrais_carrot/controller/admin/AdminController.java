@@ -1,6 +1,5 @@
 package com.team.two.mitrais_carrot.controller.admin;
 
-import com.team.two.mitrais_carrot.dto.UpdateProfileDto;
 import com.team.two.mitrais_carrot.dto.admin.BarnRewardDto;
 import com.team.two.mitrais_carrot.dto.admin.EditBarnRewardDto;
 import com.team.two.mitrais_carrot.dto.admin.EditStaffDto;

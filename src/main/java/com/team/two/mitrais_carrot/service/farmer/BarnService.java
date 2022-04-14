@@ -3,16 +3,12 @@ package com.team.two.mitrais_carrot.service.farmer;
 import com.team.two.mitrais_carrot.dto.MessageDto;
 import com.team.two.mitrais_carrot.dto.farmer.BarnDto;
 import com.team.two.mitrais_carrot.dto.farmer.BarnEditDto;
-import com.team.two.mitrais_carrot.dto.user.StaffDto;
 import com.team.two.mitrais_carrot.entity.admin.BarnRewardEntity;
-import com.team.two.mitrais_carrot.entity.auth.ERole;
 import com.team.two.mitrais_carrot.entity.auth.UserEntity;
 import com.team.two.mitrais_carrot.entity.farmer.BarnEntity;
 import com.team.two.mitrais_carrot.repository.UserRepository;
-import com.team.two.mitrais_carrot.repository.UserRoleRepository;
 import com.team.two.mitrais_carrot.repository.farmer.BarnRepository;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 import com.team.two.mitrais_carrot.security.services.UserDetailsImpl;
@@ -37,20 +33,10 @@ public class BarnService {
   public List<BarnEntity> fetchAllBarn() {
     return barnRepository.findAll();
 
-    // public List<BarnDto> fetchAllBarn(){
-    // List<BarnEntity> barns = barnRepository.findAll();
-    // List<BarnDto> barnDto = new ArrayList<>();
-
-    // barns.forEach(b -> {
-    // barnDto.add(new BarnDto(b.getId(), b.getBarnName(), b.getCarrotAmount(),
-    // b.getStartDate(), b.getEndDate()));
-    // });
-    // return barnDto;
-
   }
 
   public BarnEntity getBarnById(int id) {
-    return barnRepository.findById(id).orElse(null); // TODO : Buat exception ketika Barn tdk ditemukan
+    return barnRepository.findById(id).orElse(null);
   }
 
   Logger logger = LoggerFactory.getLogger(BarnService.class);
@@ -64,7 +50,7 @@ public class BarnService {
       barn.setCarrotAmount(remainingCarrot - carrotAmount);
       return barnRepository.save(barn);
     }
-    return null; // TODO : handle insufficient carrot
+    return null;
 
   }
 

@@ -22,9 +22,4 @@ public interface BarnRewardRepository extends JpaRepository<BarnRewardEntity, In
 
     BarnRewardEntity findByGivingConditionalAndBarn(ETypeBarnReward type, BarnEntity barn);
 
-    // BarnRewardEntity findByGivingConditionalEqual(ETypeBarnReward type);
-
-    // BarnRewardEntity
-    // findByGivingConitionalIsEqual(ETypeBarnReward.USER_BIRTHDAY);
-
 }

@@ -69,7 +69,6 @@ public class BarnRewardService {
         barnReward.setRewardDescription(req.getRewardDescription());
         barnReward.setCarrotAmount(req.getCarrotAmount());
         barnReward.setGivingConditional(req.getGivingConditional());
-        // barnReward.setBarnId(req.getBarnId());
         barnReward.setBarn(barn);
         barnRewardRepository.save(barnReward);
         barn.getBarnReward().add(barnReward);
