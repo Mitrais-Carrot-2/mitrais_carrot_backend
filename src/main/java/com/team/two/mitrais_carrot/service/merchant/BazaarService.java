@@ -35,6 +35,16 @@ public class BazaarService {
         return listBazaarResponseDto;
     }
 
+    public List<BazaarResponseDto> getActiveBazaar(){
+        List<BazaarEntity> bazaars = getBazaar();
+        long today = LocalDate.now().toEpochDay();
+        List<BazaarResponseDto> listBazaarResponseDto = bazaars.stream()
+                .filter(bazaar -> (bazaar.getEndDate().toEpochDay() - today) > 0)
+                .map(bazaar ->  new BazaarResponseDto(bazaar))
+                .collect(Collectors.toList());
+        return listBazaarResponseDto;
+    }
+
 
     public ResponseEntity<?> updateBazaar(CreateBazaarDto request, Integer id){
 //        try {

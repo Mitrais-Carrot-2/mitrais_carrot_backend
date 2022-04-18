@@ -25,6 +25,11 @@ public class BazaarController {
         return bazaarService.getAllBazaarDto();
     }
 
+    @GetMapping("active")
+    public List<BazaarResponseDto> getActiveBazaar() {
+        return bazaarService.getActiveBazaar();
+    }
+
     @PostMapping("")
     public ResponseEntity<?> createBazaar(@RequestBody CreateBazaarDto request) {
         return bazaarService.createBazaar(request);
