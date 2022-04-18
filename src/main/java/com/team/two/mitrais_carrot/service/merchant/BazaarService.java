@@ -9,6 +9,7 @@ import org.apache.tomcat.jni.Local;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -47,7 +48,10 @@ public class BazaarService {
 //            return ResponseEntity.ok(new MessageDto("Failed", false));
 //        }
         BazaarEntity bazaar = bazaarRepository.getById(id);
-        if (request.getBazaarName() == ""){
+        long startDate = request.getStartDate().toEpochDay();
+        long endDate = request.getEndDate().toEpochDay();
+        long diff =  endDate - startDate;
+        if (request.getBazaarName() == "" || diff < 0){
             return ResponseEntity.badRequest().body(new MessageDto("Failed: Missing Data!", false));
         }
         bazaar.setBazaarName(request.getBazaarName());
@@ -60,7 +64,11 @@ public class BazaarService {
 
     public ResponseEntity<?> createBazaar(CreateBazaarDto request){
         BazaarEntity bazaar = new BazaarEntity();
-        if (request.getBazaarName() == ""){
+        long startDate = request.getStartDate().toEpochDay();
+        long endDate = request.getEndDate().toEpochDay();
+        long diff =  endDate - startDate;
+//        System.out.println("Your date selisih: " + diff);
+        if (request.getBazaarName() == "" || diff < 0){
             return ResponseEntity.badRequest().body(new MessageDto("Failed: Missing Data!", false));
         }
         bazaar.setBazaarName(request.getBazaarName());
