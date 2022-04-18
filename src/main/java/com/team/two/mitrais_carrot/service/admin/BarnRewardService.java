@@ -107,4 +107,8 @@ public class BarnRewardService {
                 .ok(new MessageDto(String.format("Successfully deleted reward: %s", selectedBarnReward.getRewardDescription()), true));
     }
 
+    public ETypeBarnReward[] fetchAllRewardType() {
+        return ETypeBarnReward.values();
+    }
+
 }

@@ -5,6 +5,7 @@ import com.team.two.mitrais_carrot.dto.admin.EditBarnRewardDto;
 import com.team.two.mitrais_carrot.dto.admin.EditStaffDto;
 import com.team.two.mitrais_carrot.dto.auth.SignUpDto;
 import com.team.two.mitrais_carrot.entity.admin.BarnRewardEntity;
+import com.team.two.mitrais_carrot.entity.admin.ETypeBarnReward;
 import com.team.two.mitrais_carrot.service.admin.BarnRewardService;
 import com.team.two.mitrais_carrot.service.auth.AuthService;
 import com.team.two.mitrais_carrot.service.transfer.TransferService;
@@ -71,5 +72,11 @@ public class AdminController {
     @DeleteMapping("/barnReward/{id}")
     public ResponseEntity<?> deleteBarnReward(@PathVariable int id) {
         return barnRewardService.deleteBarnReward(id);
+    }
+
+    @PreAuthorize("hasAnyRole('FARMER')")
+    @GetMapping("/reawardType")
+    public ETypeBarnReward[] fetchAllRewardType() {
+        return barnRewardService.fetchAllRewardType();
     }
 }
