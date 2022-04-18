@@ -2,24 +2,35 @@ package com.team.two.mitrais_carrot.service.notification;
 
 
 import com.team.two.mitrais_carrot.dto.notification.NotificationDto;
+import com.team.two.mitrais_carrot.entity.auth.UserEntity;
 import com.team.two.mitrais_carrot.entity.notification.NotificationEntity;
 import com.team.two.mitrais_carrot.repository.NotificationRepository;
 import com.team.two.mitrais_carrot.security.services.UserDetailsImpl;
 import com.team.two.mitrais_carrot.service.user.ManagerService;
+import com.team.two.mitrais_carrot.service.user.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
+import java.io.UnsupportedEncodingException;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Properties;
 import java.util.UUID;
 
 @Service
 public class NotificationService {
     @Autowired
     private NotificationRepository notificationRepository;
+
+    @Autowired
+    UserService userService;
 
     Logger logger = LoggerFactory.getLogger(NotificationService.class);
 
@@ -44,6 +55,9 @@ public class NotificationService {
         notification.setReceiverId(notificationDto.getReceiverId());
         logger.info("Notification created");
         logger.info(notification.toString());
+
+//        sendEmail(notification);
+
         return notificationRepository.save(notification);
     }
 
@@ -81,4 +95,34 @@ public class NotificationService {
         }
     }
 
+    public void sendEmail(NotificationDto notificationDto) throws MessagingException, UnsupportedEncodingException {
+        //get user by id from notificationDto.getReceiverId()
+        //get user email from user.getEmail()
+        UserEntity receiver = userService.getById(notificationDto.getReceiverId());
+        String receiverEmail = receiver.getEmail();
+
+        JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
+        mailSender.setHost("smtp.mailtrap.io");
+        mailSender.setPort(2525);
+        mailSender.setUsername("255ea3d902defc");
+        mailSender.setPassword("072531824f9fb4");
+
+        Properties mailProperties = new Properties();
+        mailProperties.put("mail.smtp.auth", true);
+        mailProperties.put("mail.smtp.starttls.enable", true);
+
+        mailSender.setJavaMailProperties(mailProperties);
+
+        MimeMessage message = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message);
+
+        helper.setFrom("carrotNotif@mitrais.com", "Carrot Notification");
+        helper.setTo(receiverEmail);
+        helper.setSubject("Carrot Notification");
+
+        String content = notificationDto.getMessage();
+        helper.setText(content, true);
+
+        mailSender.send(message);
+    }
 }
