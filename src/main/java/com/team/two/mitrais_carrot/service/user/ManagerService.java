@@ -80,7 +80,7 @@ public class ManagerService {
         try {
             UserDetailsImpl user = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             supervisorId = user.getId();
-            logger.info("MANAGER ID: "+supervisorId);
+//            logger.info("MANAGER ID: "+supervisorId);
         } catch (ClassCastException err) {
             logger.error("No Authorization / Supervisor not exist!");
         }
