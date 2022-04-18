@@ -54,7 +54,7 @@ public class BazaarService {
         bazaar.setStartDate(request.getStartDate());
         bazaar.setEndDate(request.getEndDate());
         bazaarRepository.save(bazaar);
-        return ResponseEntity.ok(new MessageDto("Success Create New Bazaar", true));
+        return ResponseEntity.ok(new MessageDto("Success Update New Bazaar", true));
 
     }
 
