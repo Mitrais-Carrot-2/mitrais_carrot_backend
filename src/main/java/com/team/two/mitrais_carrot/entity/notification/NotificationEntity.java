@@ -7,10 +7,8 @@ import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.time.LocalDateTime;
+import java.util.*;
 
 @Entity
 @Getter
@@ -20,17 +18,17 @@ import java.util.Set;
 @Table(name = "notifications")
 public class NotificationEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Type(type="org.hibernate.type.UUIDCharType")
+    private UUID id = UUID.randomUUID();
 
     @Column(name = "is_read")
-    private boolean isRead;
+    private boolean isRead = false;
 
     @Column(name = "receiver_id")
-    private String receiverId;
+    private Long receiverId;
 
     @Column(name = "date")
-    private LocalDate date;
+    private LocalDateTime date = LocalDateTime.now();
 
     @Column(name = "message")
     private String message;

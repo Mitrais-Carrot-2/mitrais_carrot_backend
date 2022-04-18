@@ -4,6 +4,7 @@ import com.team.two.mitrais_carrot.dto.manager.FreezerDto;
 import com.team.two.mitrais_carrot.dto.manager.FreezerHistoryDto;
 import com.team.two.mitrais_carrot.dto.manager.TransferToGroupDto;
 import com.team.two.mitrais_carrot.dto.manager.TransferToStaffDto;
+import com.team.two.mitrais_carrot.dto.notification.NotificationDto;
 import com.team.two.mitrais_carrot.dto.user.GroupDto;
 import com.team.two.mitrais_carrot.dto.user.StaffDto;
 import com.team.two.mitrais_carrot.dto.user.UserGroupDto;
@@ -25,6 +26,7 @@ import com.team.two.mitrais_carrot.service.basket.BasketService;
 import com.team.two.mitrais_carrot.security.services.UserDetailsImpl;
 
 import com.team.two.mitrais_carrot.entity.basket.EBasket;
+import com.team.two.mitrais_carrot.service.notification.NotificationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,6 +69,9 @@ public class ManagerService {
 
     @Autowired
     FreezerTransferHistoryRepository freezerTransferHistoryRepository;
+
+    @Autowired
+    NotificationService notificationService;
 
     Logger logger = LoggerFactory.getLogger(ManagerService.class);
 
@@ -144,6 +149,11 @@ public class ManagerService {
 
                 transferRepository.save(history);
 
+                notificationService.createNotification(
+                        new NotificationDto(
+                                user.getId(),
+                                "You just received "+req.getCarrotAmount()+" carrots from "+manager.getFirstName()+" "+manager.getLastName())
+                );
                 return true;
             }
         }
@@ -151,7 +161,7 @@ public class ManagerService {
         return false;
     }
 
-    public void transferToStaff(Long userId, Long carrot, String note){
+    public void transferToStaff(Long userId, Long carrot, String note, String managerName){
         BarnEntity barn = barnRepository.findByIsActive(true);
         FreezerEntity freezer = freezerRepository.findByManagerIdAndBarn_Id(getManagerId(), barn.getId());
 
@@ -179,6 +189,9 @@ public class ManagerService {
             history.setType(ETransferType.TYPE_SHARED);
             transferRepository.save(history);
 
+            notificationService.createNotification(
+                    new NotificationDto(userId, "You just received "+carrot+" carrots from "+managerName)
+            );
 //            return true;
 //        }
 //
@@ -200,6 +213,8 @@ public class ManagerService {
 
     public Boolean transferToGroup(TransferToGroupDto req){
         if(req.getCarrotAmount() > 0) {
+            UserEntity manager = userRepository.findById(getManagerId()).get();
+            String managerName = manager.getFirstName() + " " + manager.getLastName();
             Integer groupId = req.getGroupId();
 
             List<UserGroupEntity> members = userGroupRepository.findByGroup_Id(groupId);
@@ -207,7 +222,7 @@ public class ManagerService {
             Long totalCarrot = members.size() * req.getCarrotAmount();
             if (totalCarrot - (req.getCarrotAmount() * members.size()) >= 0) {
                 members.forEach(m -> {
-                    transferToStaff(m.getUser().getId(), req.getCarrotAmount(), req.getNote());
+                    transferToStaff(m.getUser().getId(), req.getCarrotAmount(), req.getNote(), managerName);
                 });
                 return true;
             }

@@ -45,7 +45,7 @@ public class ManagerController {
 
     @PostMapping("/transfer/staff")
     public ResponseEntity<MessageDto> transferToStaff(@Valid @RequestBody TransferToStaffDto req) {
-        logger.error("Request Staff ID " + req.getStaffId());
+//        logger.error("Request Staff ID " + req.getStaffId());
         Boolean status = managerService.transferToStaff(req);
         if (status) {
             return ResponseEntity.ok(new MessageDto("Transfer from Manager to Staff success!", true));

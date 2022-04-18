@@ -7,7 +7,9 @@ import java.time.LocalDate;
 
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class NotificationDto {
-    private String receiverId;
+    private Long receiverId;
     private String message;
 }
