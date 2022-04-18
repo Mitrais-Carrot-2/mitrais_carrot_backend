@@ -36,6 +36,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 @Service
 public class ManagerService {
@@ -142,8 +143,8 @@ public class ManagerService {
                 freezerHistory.setReceiverId(user);
                 freezerHistory.setManagerId(manager);
                 freezerHistory.setShareAt(LocalDateTime.now());
-                freezerHistory.setType(ETransferType.TYPE_SHARED_GROUP);
-                freezerHistory.setNote(req.getNote());
+                freezerHistory.setType(ETransferType.TYPE_SHARED);
+                freezerHistory.setNote("[STAFF] "+req.getNote());
                 freezerHistory.setCarrotAmount(req.getCarrotAmount());
                 freezerTransferHistoryRepository.save(freezerHistory);
 
@@ -161,7 +162,7 @@ public class ManagerService {
         return false;
     }
 
-    public void transferToStaff(Long userId, Long carrot, String note, String managerName){
+    public void transferToStaff(String groupName, Long userId, Long carrot, String note, String managerName){
         BarnEntity barn = barnRepository.findByIsActive(true);
         FreezerEntity freezer = freezerRepository.findByManagerIdAndBarn_Id(getManagerId(), barn.getId());
 
@@ -186,8 +187,20 @@ public class ManagerService {
             history.setCarrotAmount(carrot);
             history.setNote(note);
             history.setShareAt(LocalDateTime.now());
-            history.setType(ETransferType.TYPE_SHARED);
+            history.setType(ETransferType.TYPE_SHARED_GROUP);
             transferRepository.save(history);
+
+            UserEntity user = userRepository.findById(userId).get();
+            UserEntity manager = userRepository.findById(getManagerId()).get();
+            FreezerTransferHistoryEntity freezerHistory = new FreezerTransferHistoryEntity();
+            freezerHistory.setFreezer(freezer);
+            freezerHistory.setReceiverId(user);
+            freezerHistory.setManagerId(manager);
+            freezerHistory.setShareAt(LocalDateTime.now());
+            freezerHistory.setType(ETransferType.TYPE_SHARED);
+            freezerHistory.setNote("["+groupName.toUpperCase()+"] "+note);
+            freezerHistory.setCarrotAmount(carrot);
+            freezerTransferHistoryRepository.save(freezerHistory);
 
             notificationService.createNotification(
                     new NotificationDto(userId, "You just received "+carrot+" carrots from "+managerName)
@@ -217,12 +230,13 @@ public class ManagerService {
             String managerName = manager.getFirstName() + " " + manager.getLastName();
             Integer groupId = req.getGroupId();
 
+            GroupEntity group = groupRepository.findById(groupId).get();
             List<UserGroupEntity> members = userGroupRepository.findByGroup_Id(groupId);
 
             Long totalCarrot = members.size() * req.getCarrotAmount();
             if (totalCarrot - (req.getCarrotAmount() * members.size()) >= 0) {
                 members.forEach(m -> {
-                    transferToStaff(m.getUser().getId(), req.getCarrotAmount(), req.getNote(), managerName);
+                    transferToStaff(group.getName(), m.getUser().getId(), req.getCarrotAmount(), req.getNote(), managerName);
                 });
                 return true;
             }
