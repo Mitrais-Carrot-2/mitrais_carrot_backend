@@ -110,7 +110,7 @@ public class ManagerService {
     public Boolean transferToStaff(TransferToStaffDto req){
         if(req.getCarrotAmount() > 0){
             BarnEntity barn = barnRepository.findByIsActive(true);
-            FreezerEntity freezer = freezerRepository.findByManagerIdAndBarn_Id(1L, barn.getId());
+            FreezerEntity freezer = freezerRepository.findByManagerIdAndBarn_Id(getManagerId(), barn.getId());
 
             BasketEntity oldBasket = basketService.getActiveBasket(req.getStaffId(), true);
             if(freezer.getCarrotAmount() - req.getCarrotAmount()>=0) {
