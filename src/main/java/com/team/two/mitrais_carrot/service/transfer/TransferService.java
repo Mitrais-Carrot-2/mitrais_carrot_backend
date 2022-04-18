@@ -136,7 +136,7 @@ public class TransferService {
 
     public List<TransferEntity> getBarnToFreezerTransfer(int id) {
         Long barnId = Long.valueOf(id);
-        return transferRepository.findBySenderIdAndTypeOrType(barnId, ETransferType.TYPE_BARN_TO_FREEZER,
+        return transferRepository.findBySenderIdAndTypeOrSenderIdAndType(barnId, ETransferType.TYPE_BARN_TO_FREEZER, barnId,
                 ETransferType.TYPE_REWARD);
     }
 
