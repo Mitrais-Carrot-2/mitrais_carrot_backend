@@ -10,6 +10,7 @@ import java.util.UUID;
 
 public interface NotificationRepository extends JpaRepository<NotificationEntity, Long> {
     List<NotificationEntity> findAllByReceiverId(Long id);
-
+    List<NotificationEntity> findByReceiverIdAndIsRead(Long id, boolean isRead);
     NotificationEntity findById(UUID id);
+
 }

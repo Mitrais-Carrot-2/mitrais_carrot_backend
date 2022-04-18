@@ -15,6 +15,7 @@ import java.util.UUID;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
+@PreAuthorize("hasAnyRole('STAFF')")
 @RequestMapping("/api/notification")
 public class NotificationController {
     @Autowired
@@ -35,7 +36,18 @@ public class NotificationController {
         return notificationService.createNotification(req);
     }
 
-    @PutMapping("/read/{notificationId}")
+    @PreAuthorize("hasAnyRole('STAFF')")
+    @GetMapping("/read/all")
+    public ResponseEntity<MessageDto> readAllNotification(){
+        Boolean status = notificationService.readAllNotification();
+        if (!status){
+            return ResponseEntity.badRequest().body(new MessageDto("Notification not found!", false));
+        } else {
+            return ResponseEntity.ok().body(new MessageDto("All Notification mark as read!", true));
+        }
+    }
+
+    @GetMapping("/read/{notificationId}")
     public ResponseEntity<MessageDto> readNotification(@PathVariable("notificationId") UUID notificationId){
         Boolean status = notificationService.readNotification(notificationId);
         if (!status){

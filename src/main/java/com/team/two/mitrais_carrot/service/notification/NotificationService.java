@@ -23,6 +23,19 @@ public class NotificationService {
 
     Logger logger = LoggerFactory.getLogger(NotificationService.class);
 
+    public Long getUserIdAuth() {
+        Long userId = 1L;
+        try {
+            UserDetailsImpl user = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            userId = user.getId();
+            logger.info("User ID: "+userId);
+        } catch (ClassCastException err) {
+            logger.error("No Authorization / Supervisor not exist!");
+        }
+
+        return userId;
+    }
+
     public NotificationEntity createNotification(NotificationDto notificationDto) {
         NotificationEntity notification = new NotificationEntity();
 //        notification.setDate(LocalDate.now());
@@ -35,9 +48,8 @@ public class NotificationService {
     }
 
     public List<NotificationEntity> getNotification() {
-        UserDetailsImpl user = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Long userId = user.getId();
-        return notificationRepository.findAllByReceiverId(userId);
+
+        return notificationRepository.findAllByReceiverId(getUserIdAuth());
 //        return notificationRepository.findAll();
     }
 
@@ -50,7 +62,23 @@ public class NotificationService {
         } else {
             return false;
         }
+    }
 
+    public boolean readAllNotification() {
+//        UserDetailsImpl user = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        Long userId = user.getId();
+        logger.error("User ID read ALL: "+getUserIdAuth());
+        List<NotificationEntity> notification = notificationRepository.findByReceiverIdAndIsRead(getUserIdAuth(), false);
+        if(notification != null) {
+            notification.forEach(notificationEntity -> {
+                logger.error("Notification id: " + notificationEntity.getId());
+                notificationEntity.setRead(true);
+                notificationRepository.save(notificationEntity);
+            });
+            return true;
+        } else {
+            return false;
+        }
     }
 
 }
