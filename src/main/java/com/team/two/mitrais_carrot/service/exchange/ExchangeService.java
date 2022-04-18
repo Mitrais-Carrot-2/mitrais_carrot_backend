@@ -2,6 +2,7 @@ package com.team.two.mitrais_carrot.service.exchange;
 
 import com.team.two.mitrais_carrot.dto.MessageDto;
 
+import com.team.two.mitrais_carrot.dto.notification.NotificationDto;
 import com.team.two.mitrais_carrot.entity.auth.UserEntity;
 import com.team.two.mitrais_carrot.entity.basket.BasketEntity;
 import com.team.two.mitrais_carrot.entity.exchange.EExchangeStatus;
@@ -15,6 +16,7 @@ import com.team.two.mitrais_carrot.repository.UserRepository;
 import com.team.two.mitrais_carrot.service.basket.BasketService;
 import com.team.two.mitrais_carrot.entity.basket.EBasket;
 import com.team.two.mitrais_carrot.service.merchant.BazaarItemService;
+import com.team.two.mitrais_carrot.service.notification.NotificationService;
 import com.team.two.mitrais_carrot.service.transfer.TransferService;
 import com.team.two.mitrais_carrot.service.user.UserService;
 
@@ -51,6 +53,9 @@ public class ExchangeService {
 
     @Autowired
     private TransferService transferService;
+
+    @Autowired
+    NotificationService notificationService;
 
     @Getter
     public enum ExchangeStatus{
@@ -151,8 +156,13 @@ public class ExchangeService {
     }
 
     public ResponseEntity<?> setExchangeStatus(ExchangeEntity exchange, EExchangeStatus newStatus){
+        String itemName = bazaarItemService.getById(exchange.getBazaarItemId().getId()).getName();
+        long userId = exchange.getUserId().getId();
         if (newStatus == EExchangeStatus.DENIED){
             denyRequest(exchange);
+            notificationService.createNotification(new NotificationDto(userId, "[FAIL] Your " + itemName + " request has been denied!" ));
+        } else if (newStatus == EExchangeStatus.APPROVED){
+            notificationService.createNotification(new NotificationDto(userId, "[SUCCESS] Your " + itemName + " request has been approved!" ));
         }
         exchange.setStatus(newStatus);
         add(exchange);
@@ -172,12 +182,14 @@ public class ExchangeService {
             transfer.setReceiverId(bazaarId);
             transfer.setNote("[REQUEST SUCCESS] Buy Item " + itemName);
             carrot = -carrot;
+
         }
         else {
             transfer.setSenderId(bazaarId);
             transfer.setReceiverId(userId);
             transfer.setNote("[REQUEST DENIED] Buy Item " + itemName);
 //            date = LocalDateTime.now();
+
         }
         transfer.setShareAt(date);
         transfer.setType(ETransferType.TYPE_BAZAAR);

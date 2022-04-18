@@ -2,14 +2,17 @@ package com.team.two.mitrais_carrot.service.merchant;
 
 import com.team.two.mitrais_carrot.dto.MessageDto;
 import com.team.two.mitrais_carrot.dto.merchant.*;
+import com.team.two.mitrais_carrot.dto.notification.NotificationDto;
 import com.team.two.mitrais_carrot.entity.auth.UserEntity;
 import com.team.two.mitrais_carrot.entity.group.GroupEntity;
 import com.team.two.mitrais_carrot.entity.group.UserGroupEntity;
 import com.team.two.mitrais_carrot.repository.UserRepository;
 import com.team.two.mitrais_carrot.repository.user.GroupRepository;
 import com.team.two.mitrais_carrot.repository.user.UserGroupRepository;
+import com.team.two.mitrais_carrot.service.notification.NotificationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +25,9 @@ public class StaffGroupService {
     GroupRepository groupRepository;
     UserGroupRepository userGroupRepository;
     UserRepository userRepository;
+
+    @Autowired
+    NotificationService notificationService;
 
     public StaffGroupService(GroupRepository groupRepository, UserGroupRepository userGroupRepository, UserRepository userRepository){
         this.groupRepository = groupRepository;
@@ -56,6 +62,7 @@ public class StaffGroupService {
     Logger logger = LoggerFactory.getLogger(StaffGroupService.class);
     public ResponseEntity<?> createStaffGroup(StaffGroupDto request){
         GroupEntity group = new GroupEntity();
+        long managerId = request.getManagerId();
         UserEntity manager = userRepository.getById(Long.valueOf(request.getManagerId()));
         if (request.getName()=="" || request.getAllocation() < 1){
             return ResponseEntity.badRequest().body(new MessageDto("Error: Missing Data!", false));
@@ -65,6 +72,7 @@ public class StaffGroupService {
         group.setNote(request.getNote());
         group.setManagerId(manager);
         groupRepository.save(group);
+        notificationService.createNotification(new NotificationDto(managerId, "You have been added to manage group: " + request.getName()));
         return ResponseEntity.ok(new MessageDto("Staff Group Created!", true));
     }
 
@@ -116,6 +124,8 @@ public class StaffGroupService {
             userGroup.setUser(userChecker);
 //            System.out.println(userGroup.getGroup().getId() + " " + userGroup.getUser());
             userGroupRepository.save(userGroup);
+            String groupName = userGroup.getGroup().getName();
+            notificationService.createNotification(new NotificationDto(userChecker.getId(), "You have been added to a new group: " + groupName));
             return ResponseEntity.ok(new MessageDto("Success Add Staff to Group!", true));
         }else{
             return ResponseEntity.badRequest().body(new MessageDto("Error: Staff has already added!", false));
