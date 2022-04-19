@@ -47,41 +47,61 @@ public class TransferService {
     }
 
     public List<TransferHistoryDto> getAllById(Long userId) {
+        int userBasketId = basketService.getActiveBasketId(userService.getById(userId), true);
+
         List<TransferHistoryDto> listTransferHistoryDto = new ArrayList<>();
-        List<TransferEntity> transfers = (List<TransferEntity>) transferRepository.findBySenderIdOrReceiverId(userId,
-                userId);
+        List<TransferEntity> transfers = (List<TransferEntity>) transferRepository.findBySenderIdOrReceiverId(userId, userId);
 
         transfers.stream()
                 .forEach(t -> {
                     String receiverName = "";
                     String senderName = "";
-                    String userName = "";
-                    if (t.getReceiverId() == 999)
-                        receiverName = "BAZAAR";
-                    else
-                        receiverName = userService.getById(t.getReceiverId()).getUsername();
+                    String name;
 
-                    if (t.getSenderId() == 999)
-                        senderName = "BAZAAR";
-                    else
-                        senderName = userService.getById(t.getSenderId()).getUsername();
+                    UserEntity sender = userService.getById(t.getSenderId());
+                    UserEntity receiver = userService.getById(t.getReceiverId());
 
-                    if (userService.getById(userId).getUsername() != receiverName)
-                        userName = receiverName;
-                    else if (userService.getById(userId).getUsername() != senderName)
-                        userName = senderName;
+                    if (t.getType() != ETransferType.TYPE_BARN_TO_FREEZER) {
+                        if (t.getType() == ETransferType.TYPE_BAZAAR) {
+                            if (t.getReceiverId() == -2)
+                                receiverName = "BAZAAR";
+
+                            if (t.getSenderId() == -2)
+                                senderName = "BAZAAR";
+                        }
+                        else {
+                            if (userBasketId == t.getBasketId()) {
+                                receiverName = receiver.getFirstName() + " " + receiver.getLastName();
+                                senderName = sender.getFirstName() + " " + sender.getLastName();
+                            }
+                            else return;
+                        }
+                    }
+                    else {
+                        receiverName = receiver.getFirstName() + " " + receiver.getLastName();
+                        senderName = receiver.getUsername();
+                    }
+
+                    if (userId != t.getReceiverId())
+                        name = receiverName;
+                    else if (userId != t.getSenderId())
+                        name = senderName;
+                    else
+                        name = senderName;
 
                     TransferHistoryDto transferHistoryDto = new TransferHistoryDto(
                             t.getTransferId(),
+                            t.getBasketId(),
                             t.getReceiverId(),
                             t.getSenderId(),
-                            userName,
+                            name,
                             t.getShareAt(),
                             t.getType(),
                             t.getNote(),
                             t.getCarrotAmount());
                     listTransferHistoryDto.add(transferHistoryDto);
                 });
+
         return listTransferHistoryDto;
     }
 

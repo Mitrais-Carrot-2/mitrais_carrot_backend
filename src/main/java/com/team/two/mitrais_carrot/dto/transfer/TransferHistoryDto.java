@@ -15,9 +15,10 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class TransferHistoryDto {
     private int transferId;
+    private int basketId;
     private Long receiverId;
     private Long senderId;
-    private String username;
+    private String name;
     private LocalDateTime shareAt;
     private ETransferType type;
     private String note;

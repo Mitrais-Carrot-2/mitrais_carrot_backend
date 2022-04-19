@@ -171,7 +171,7 @@ public class ExchangeService {
 
     public TransferEntity saveExchangeToTransferHistory(ExchangeEntity exchange, boolean success){
         TransferEntity transfer = new TransferEntity();
-        long bazaarId = 999L;
+        long bazaarId = -2L;
         long userId = exchange.getUserId().getId();
         long carrot = exchange.getPrice();
         LocalDateTime date = exchange.getExchangeDate();

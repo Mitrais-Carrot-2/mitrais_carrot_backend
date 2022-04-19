@@ -18,6 +18,9 @@ public class TransferEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int transferId;
 
+    @Column(name = "basket_id")
+    private int basketId = -1;
+
     @Column(name = "receiver_id")
     private Long receiverId;
 

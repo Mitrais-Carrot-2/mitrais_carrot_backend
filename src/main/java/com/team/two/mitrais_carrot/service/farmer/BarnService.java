@@ -5,13 +5,16 @@ import com.team.two.mitrais_carrot.dto.farmer.BarnDto;
 import com.team.two.mitrais_carrot.dto.farmer.BarnEditDto;
 import com.team.two.mitrais_carrot.entity.admin.BarnRewardEntity;
 import com.team.two.mitrais_carrot.entity.auth.UserEntity;
+import com.team.two.mitrais_carrot.entity.basket.BasketEntity;
 import com.team.two.mitrais_carrot.entity.farmer.BarnEntity;
+import com.team.two.mitrais_carrot.repository.BasketRepository;
 import com.team.two.mitrais_carrot.repository.UserRepository;
 import com.team.two.mitrais_carrot.repository.farmer.BarnRepository;
 import java.time.LocalDate;
 import java.util.List;
 
 import com.team.two.mitrais_carrot.security.services.UserDetailsImpl;
+import com.team.two.mitrais_carrot.service.user.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -69,6 +72,7 @@ public class BarnService {
     barnEntity.setIsActive(this.checkActive(req.getStartDate(), req.getEndDate()));
 
     barnRepository.save(barnEntity);
+
     return ResponseEntity
         .ok(new MessageDto(barnEntity, String.format("Successfully created %s Barn!", req.getBarnName()), true));
 

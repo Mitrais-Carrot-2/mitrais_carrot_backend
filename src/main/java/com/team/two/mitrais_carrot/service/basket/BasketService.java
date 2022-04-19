@@ -100,6 +100,11 @@ public class BasketService {
 
     public ShowCarrotDto showUserActiveBasket(UserEntity user, boolean isActive){
         BasketEntity basket = getActiveBasket(user, isActive);
+
+        if (basket == null) {
+            basket = add(user);
+        }
+
         return new ShowCarrotDto(user.getId(), basket);
     }
 
