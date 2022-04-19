@@ -6,6 +6,7 @@ import java.util.List;
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.team.two.mitrais_carrot.entity.auth.UserEntity;
 import com.team.two.mitrais_carrot.entity.farmer.BarnEntity;
 import com.team.two.mitrais_carrot.entity.transfer.FreezerTransferHistoryEntity;
 import lombok.*;
@@ -28,6 +29,9 @@ public class FreezerEntity {
 
     @Column(name = "manager_id")
     private Long managerId;
+    // @ManyToOne
+    // @JoinColumn(name = "manager_id")
+    // private UserEntity managerId;
 
     @Column(name = "carrot_amount")
     private Long carrotAmount;

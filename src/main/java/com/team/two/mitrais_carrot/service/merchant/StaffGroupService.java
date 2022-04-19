@@ -1,17 +1,18 @@
 package com.team.two.mitrais_carrot.service.merchant;
 
 import com.team.two.mitrais_carrot.dto.MessageDto;
-import com.team.two.mitrais_carrot.dto.merchant.NewGroupMemberDto;
-import com.team.two.mitrais_carrot.dto.merchant.StaffGroupDto;
-import com.team.two.mitrais_carrot.dto.merchant.StaffListInGroupDto;
+import com.team.two.mitrais_carrot.dto.merchant.*;
+import com.team.two.mitrais_carrot.dto.notification.NotificationDto;
 import com.team.two.mitrais_carrot.entity.auth.UserEntity;
 import com.team.two.mitrais_carrot.entity.group.GroupEntity;
 import com.team.two.mitrais_carrot.entity.group.UserGroupEntity;
 import com.team.two.mitrais_carrot.repository.UserRepository;
 import com.team.two.mitrais_carrot.repository.user.GroupRepository;
 import com.team.two.mitrais_carrot.repository.user.UserGroupRepository;
+import com.team.two.mitrais_carrot.service.notification.NotificationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -25,14 +26,33 @@ public class StaffGroupService {
     UserGroupRepository userGroupRepository;
     UserRepository userRepository;
 
+    @Autowired
+    NotificationService notificationService;
+
     public StaffGroupService(GroupRepository groupRepository, UserGroupRepository userGroupRepository, UserRepository userRepository){
         this.groupRepository = groupRepository;
         this.userGroupRepository = userGroupRepository;
         this.userRepository = userRepository;
     }
 
-    public List<GroupEntity> getAllGroups(){
-        return (List<GroupEntity>) groupRepository.findAll();
+    public List<GroupDto> getAllGroups(){
+        List<GroupEntity> groups = groupRepository.findAll();
+        List<GroupDto> result = new ArrayList<>();
+        groups.forEach(g -> {
+            Integer member = userGroupRepository.findByGroup_Id(g.getId()).size();
+            result.add(
+                new GroupDto(
+                    g.getId(),
+                    g.getName(),
+                    g.getAllocation(),
+                    member,
+                    member*g.getAllocation(),
+                    g.getNote()
+                )
+            );
+        });
+
+        return result;
     }
 
     public GroupEntity getGroupById(Integer id){
@@ -42,29 +62,36 @@ public class StaffGroupService {
     Logger logger = LoggerFactory.getLogger(StaffGroupService.class);
     public ResponseEntity<?> createStaffGroup(StaffGroupDto request){
         GroupEntity group = new GroupEntity();
+        long managerId = request.getManagerId();
+        UserEntity manager = userRepository.getById(Long.valueOf(request.getManagerId()));
+        if (request.getName()=="" || request.getAllocation() < 1){
+            return ResponseEntity.badRequest().body(new MessageDto("Error: Missing Data!", false));
+        }
         group.setName(request.getName());
         group.setAllocation(request.getAllocation());
         group.setNote(request.getNote());
-        group.setManagerId((long) request.getManagerId());
+        group.setManagerId(manager);
         groupRepository.save(group);
+        notificationService.createNotification(new NotificationDto(managerId, "You have been added to manage group: " + request.getName()));
         return ResponseEntity.ok(new MessageDto("Staff Group Created!", true));
     }
 
     public List<StaffListInGroupDto> getStaffListInGroup(Integer id){
         List<UserGroupEntity> userGroup = userGroupRepository.findByGroup_Id(id);
         List<StaffListInGroupDto> userDto = userGroup.stream()
-                .map((UserGroupEntity user) -> new StaffListInGroupDto(user.getUser().getUsername(), user.getUser().getFirstName() + user.getUser().getLastName(), user.getUser().getJobFamily(), user.getUser().getJobGrade(), user.getUser().getOffice()))
+                .map((UserGroupEntity user) -> new StaffListInGroupDto(user.getUser().getUsername(), user.getUser().getFirstName() + " " + user.getUser().getLastName(), user.getUser().getJobFamily(), user.getUser().getJobGrade(), user.getUser().getOffice()))
                 .collect(Collectors.toList());
 
         return userDto;
     }
 
-    public StaffGroupDto getGroupDetail(Integer id){
+    public StaffGroupDetailDto getGroupDetail(Integer id){
         GroupEntity rawGroup = groupRepository.getById(id);
-        StaffGroupDto result = new StaffGroupDto();
+        StaffGroupDetailDto result = new StaffGroupDetailDto();
         result.setId(rawGroup.getId());
         result.setName(rawGroup.getName());
-        result.setManagerId(Math.toIntExact(rawGroup.getManagerId()));
+//        result.setManagerId(Math.toIntExact(rawGroup.getManagerId()));
+        result.setManagerName(rawGroup.getManagerId().getFirstName()+" "+rawGroup.getManagerId().getLastName());
         result.setAllocation(rawGroup.getAllocation());
         result.setNote(rawGroup.getNote());
         return result;
@@ -72,10 +99,14 @@ public class StaffGroupService {
 
     public ResponseEntity<?> updateStaffGroup(StaffGroupDto request, Integer id){
         GroupEntity group = groupRepository.getById(id);
+        UserEntity manager = userRepository.getById(Long.valueOf(request.getManagerId()));
+        if (request.getName()=="" || request.getAllocation() < 1){
+            return ResponseEntity.badRequest().body(new MessageDto("Failed: Missing Data!", false));
+        }
         group.setName(request.getName());
         group.setNote(request.getNote());
         group.setAllocation(request.getAllocation());
-        group.setManagerId((long) request.getManagerId());
+        group.setManagerId(manager);
         groupRepository.save(group);
         return ResponseEntity.ok(new MessageDto("Group Details Updated!", true));
     }
@@ -93,6 +124,8 @@ public class StaffGroupService {
             userGroup.setUser(userChecker);
 //            System.out.println(userGroup.getGroup().getId() + " " + userGroup.getUser());
             userGroupRepository.save(userGroup);
+            String groupName = userGroup.getGroup().getName();
+            notificationService.createNotification(new NotificationDto(userChecker.getId(), "You have been added to a new group: " + groupName));
             return ResponseEntity.ok(new MessageDto("Success Add Staff to Group!", true));
         }else{
             return ResponseEntity.badRequest().body(new MessageDto("Error: Staff has already added!", false));

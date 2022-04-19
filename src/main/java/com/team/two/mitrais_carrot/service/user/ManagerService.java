@@ -4,6 +4,7 @@ import com.team.two.mitrais_carrot.dto.manager.FreezerDto;
 import com.team.two.mitrais_carrot.dto.manager.FreezerHistoryDto;
 import com.team.two.mitrais_carrot.dto.manager.TransferToGroupDto;
 import com.team.two.mitrais_carrot.dto.manager.TransferToStaffDto;
+import com.team.two.mitrais_carrot.dto.notification.NotificationDto;
 import com.team.two.mitrais_carrot.dto.user.GroupDto;
 import com.team.two.mitrais_carrot.dto.user.StaffDto;
 import com.team.two.mitrais_carrot.dto.user.UserGroupDto;
@@ -14,6 +15,7 @@ import com.team.two.mitrais_carrot.entity.freezer.FreezerEntity;
 import com.team.two.mitrais_carrot.entity.group.GroupEntity;
 import com.team.two.mitrais_carrot.entity.group.UserGroupEntity;
 import com.team.two.mitrais_carrot.entity.transfer.ETransferType;
+import com.team.two.mitrais_carrot.entity.transfer.FreezerTransferHistoryEntity;
 import com.team.two.mitrais_carrot.entity.transfer.TransferEntity;
 import com.team.two.mitrais_carrot.repository.*;
 import com.team.two.mitrais_carrot.repository.farmer.BarnRepository;
@@ -24,6 +26,7 @@ import com.team.two.mitrais_carrot.service.basket.BasketService;
 import com.team.two.mitrais_carrot.security.services.UserDetailsImpl;
 
 import com.team.two.mitrais_carrot.entity.basket.EBasket;
+import com.team.two.mitrais_carrot.service.notification.NotificationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +36,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 @Service
 public class ManagerService {
@@ -64,6 +68,12 @@ public class ManagerService {
     @Autowired
     TransferRepository transferRepository;
 
+    @Autowired
+    FreezerTransferHistoryRepository freezerTransferHistoryRepository;
+
+    @Autowired
+    NotificationService notificationService;
+
     Logger logger = LoggerFactory.getLogger(ManagerService.class);
 
     public Long getManagerId() {
@@ -71,7 +81,7 @@ public class ManagerService {
         try {
             UserDetailsImpl user = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             supervisorId = user.getId();
-            logger.info("MANAGER ID: "+supervisorId);
+//            logger.info("MANAGER ID: "+supervisorId);
         } catch (ClassCastException err) {
             logger.error("No Authorization / Supervisor not exist!");
         }
@@ -79,8 +89,9 @@ public class ManagerService {
         return supervisorId;
     }
 
-    public List<StaffDto> fetchMyStaff(Long managerId){
-        List<UserEntity> staff = managerRepository.findBySupervisorId(managerId);
+//    public List<StaffDto> fetchMyStaff(Long managerId){
+    public List<StaffDto> fetchMyStaff(){
+        List<UserEntity> staff = managerRepository.findBySupervisorId(getManagerId());
 //        List<UserEntity> staff = managerRepository.findBySupervisorId(getManagerId());
         List<StaffDto> result = new ArrayList<>();
         staff.forEach(s ->
@@ -98,70 +109,114 @@ public class ManagerService {
     }
 
     public Boolean transferToStaff(TransferToStaffDto req){
-        BarnEntity barn = barnRepository.findByIsActive(true);
-        FreezerEntity freezer = freezerRepository.findByManagerIdAndBarn_Id(1L, barn.getId());
+        if(req.getCarrotAmount() > 0){
+            UserEntity user = userRepository.findById(req.getStaffId()).get();
+            UserEntity manager = userRepository.findById(getManagerId()).get();
 
-        logger.error("Staff ID "+req);
-        BasketEntity oldBasket = basketService.getActiveBasket(req.getStaffId(), true);
-        if(freezer.getCarrotAmount() - req.getCarrotAmount()>=0) {
-            basketService.updateCarrot(oldBasket.getUser(), req.getCarrotAmount(), EBasket.SHARE);
+            BarnEntity barn = barnRepository.findByIsActive(true);
+            FreezerEntity freezer = freezerRepository.findByManagerIdAndBarn_Id(getManagerId(), barn.getId());
 
-            freezer.setCarrotAmount(freezer.getCarrotAmount() - req.getCarrotAmount());
-            freezer.setDistributedCarrot(freezer.getDistributedCarrot() + req.getCarrotAmount());
-            freezerRepository.save(freezer);
+            BasketEntity oldBasket = basketService.getActiveBasket(req.getStaffId(), true);
 
-            TransferToStaffDto result = new TransferToStaffDto();
+            if (oldBasket == null) {
+                oldBasket = basketService.add(user);
+            }
 
-            result.setStaffId(oldBasket.getUser().getId());
-            result.setCarrotAmount(oldBasket.getCarrotAmount());
-            result.setNote(req.getNote());
+            if(freezer.getCarrotAmount() - req.getCarrotAmount()>=0) {
+                basketService.updateCarrot(oldBasket.getUser(), req.getCarrotAmount(), EBasket.SHARE);
 
-            TransferEntity history = new TransferEntity();
-            history.setSenderId(getManagerId());
-            history.setReceiverId(req.getStaffId());
-            history.setCarrotAmount(req.getCarrotAmount());
-            history.setNote(req.getNote());
-            history.setShareAt(LocalDateTime.now());
-            history.setType(ETransferType.TYPE_SHARED);
-            logger.info("test "+history.toString());
-            transferRepository.save(history);
+                freezer.setCarrotAmount(freezer.getCarrotAmount() - req.getCarrotAmount());
+                freezer.setDistributedCarrot(freezer.getDistributedCarrot() + req.getCarrotAmount());
+                freezerRepository.save(freezer);
 
-            return true;
+                TransferToStaffDto result = new TransferToStaffDto();
+
+                result.setStaffId(oldBasket.getUser().getId());
+                result.setCarrotAmount(oldBasket.getCarrotAmount());
+                result.setNote(req.getNote());
+
+                TransferEntity history = new TransferEntity();
+                history.setBasketId(oldBasket.getId());
+                history.setSenderId(getManagerId());
+                history.setReceiverId(user.getId());
+                history.setCarrotAmount(req.getCarrotAmount());
+                history.setNote(req.getNote());
+                history.setShareAt(LocalDateTime.now());
+                history.setType(ETransferType.TYPE_SHARED);
+
+                FreezerTransferHistoryEntity freezerHistory = new FreezerTransferHistoryEntity();
+                freezerHistory.setFreezer(freezer);
+                freezerHistory.setReceiverId(user);
+                freezerHistory.setManagerId(manager);
+                freezerHistory.setShareAt(LocalDateTime.now());
+                freezerHistory.setType(ETransferType.TYPE_SHARED);
+                freezerHistory.setNote("[STAFF] "+req.getNote());
+                freezerHistory.setCarrotAmount(req.getCarrotAmount());
+                freezerTransferHistoryRepository.save(freezerHistory);
+
+                transferRepository.save(history);
+
+                notificationService.createNotification(
+                        new NotificationDto(
+                                user.getId(),
+                                "You just received "+req.getCarrotAmount()+" carrots from "+manager.getFirstName()+" "+manager.getLastName())
+                );
+                return true;
+            }
         }
 
         return false;
     }
 
-    public void transferToStaff(Long userId, Long carrot, String note){
+    public void transferToStaff(String groupName, Long userId, Long carrot, String note, String managerName){
+        UserEntity user = userRepository.findById(userId).get();
+        UserEntity manager = userRepository.findById(getManagerId()).get();
+
         BarnEntity barn = barnRepository.findByIsActive(true);
         FreezerEntity freezer = freezerRepository.findByManagerIdAndBarn_Id(getManagerId(), barn.getId());
 
         BasketEntity oldBasket = basketRepository.findByUser_IdAndBarn_Id(userId, barn.getId());
 
-//        if(freezer.getCarrotAmount() - carrot>=0) {
+        if (oldBasket == null) {
+            oldBasket = basketService.add(user);
+        }
 
-            basketService.updateCarrot(oldBasket.getUser(), carrot, EBasket.SHARE);
+        basketService.updateCarrot(oldBasket.getUser(), carrot, EBasket.SHARE);
 
-            freezer.setCarrotAmount(freezer.getCarrotAmount() - carrot);
-            freezer.setDistributedCarrot(freezer.getDistributedCarrot() + carrot);
-            freezerRepository.save(freezer);
+        freezer.setCarrotAmount(freezer.getCarrotAmount() - carrot);
+        freezer.setDistributedCarrot(freezer.getDistributedCarrot() + carrot);
+        freezerRepository.save(freezer);
 
-            TransferToStaffDto result = new TransferToStaffDto();
+        TransferToStaffDto result = new TransferToStaffDto();
 
-            result.setStaffId(oldBasket.getUser().getId());
-            result.setCarrotAmount(oldBasket.getCarrotAmount());
-            result.setNote(note);
+        result.setStaffId(oldBasket.getUser().getId());
+        result.setCarrotAmount(oldBasket.getCarrotAmount());
+        result.setNote(note);
 
-            TransferEntity history = new TransferEntity();
-            history.setSenderId(Long.valueOf(freezer.getId()));
-//            history.setSenderId(getManagerId());
-            history.setReceiverId(userId);
-            history.setCarrotAmount(carrot);
-            history.setNote(note);
-            history.setShareAt(LocalDateTime.now());
-            history.setType(ETransferType.TYPE_SHARED);
-            transferRepository.save(history);
+        TransferEntity history = new TransferEntity();
+//            history.setSenderId(Long.valueOf(freezer.getId()));
+        history.setBasketId(oldBasket.getId());
+        history.setSenderId(getManagerId());
+        history.setReceiverId(user.getId());
+        history.setCarrotAmount(carrot);
+        history.setNote(note);
+        history.setShareAt(LocalDateTime.now());
+        history.setType(ETransferType.TYPE_SHARED_GROUP);
+        transferRepository.save(history);
 
+        FreezerTransferHistoryEntity freezerHistory = new FreezerTransferHistoryEntity();
+        freezerHistory.setFreezer(freezer);
+        freezerHistory.setReceiverId(user);
+        freezerHistory.setManagerId(manager);
+        freezerHistory.setShareAt(LocalDateTime.now());
+        freezerHistory.setType(ETransferType.TYPE_SHARED);
+        freezerHistory.setNote("["+groupName.toUpperCase()+"] "+note);
+        freezerHistory.setCarrotAmount(carrot);
+        freezerTransferHistoryRepository.save(freezerHistory);
+
+        notificationService.createNotification(
+                new NotificationDto(userId, "You just received "+carrot+" carrots from "+managerName)
+        );
 //            return true;
 //        }
 //
@@ -169,8 +224,10 @@ public class ManagerService {
     }
 
     public List<GroupDto> fetchMyGroup(){
-        List<GroupEntity> groups = groupRepository.findByManagerId(getManagerId());
+        // logger.info("Fetch My Group "+getManagerId());
+        List<GroupEntity> groups = groupRepository.findByManagerId_Id(getManagerId());
 
+        // logger.error("Fetch My Group "+groups.size());
         List<GroupDto> groupDto = new ArrayList<>();
         groups.forEach(g -> {
             List<UserGroupEntity> staff = userGroupRepository.findByGroup_Id(g.getId());
@@ -180,17 +237,21 @@ public class ManagerService {
     }
 
     public Boolean transferToGroup(TransferToGroupDto req){
-        Integer groupId = req.getGroupId();
+        if(req.getCarrotAmount() > 0) {
+            UserEntity manager = userRepository.findById(getManagerId()).get();
+            String managerName = manager.getFirstName() + " " + manager.getLastName();
+            Integer groupId = req.getGroupId();
 
+            GroupEntity group = groupRepository.findById(groupId).get();
+            List<UserGroupEntity> members = userGroupRepository.findByGroup_Id(groupId);
 
-        List<UserGroupEntity> members = userGroupRepository.findByGroup_Id(groupId);
-
-        Long totalCarrot = members.size() * req.getCarrotAmount();
-        if(totalCarrot - req.getCarrotAmount()>=0) {
-            members.forEach(m -> {
-                transferToStaff(m.getUser().getId(), req.getCarrotAmount(), req.getNote());
-            });
-            return true;
+            Long totalCarrot = members.size() * req.getCarrotAmount();
+            if (totalCarrot - (req.getCarrotAmount() * members.size()) >= 0) {
+                members.forEach(m -> {
+                    transferToStaff(group.getName(), m.getUser().getId(), req.getCarrotAmount(), req.getNote(), managerName);
+                });
+                return true;
+            }
         }
         return false;
     }
@@ -200,7 +261,7 @@ public class ManagerService {
         List<UserGroupDto> users = new ArrayList<>();
         members.forEach(m -> {
             UserEntity user = userRepository.findByUsername(m.getUser().getUsername());
-            users.add(new UserGroupDto(user.getUsername(), user.getFirstName(), user.getLastName(), user.getJobFamily(), user.getJobGrade(), user.getOffice()));
+            users.add(new UserGroupDto(user.getUsername(), user.getFirstName()+" "+user.getLastName(), user.getJobFamily(), user.getJobGrade(), user.getOffice()));
         });
         return users;
     }
@@ -219,20 +280,25 @@ public class ManagerService {
         return freezer;
     }
 
-    public FreezerHistoryDto getFreezerHistory(){
-//        BarnEntity barn = barnRepository.findByIsActive(true);
-//        FreezerEntity activeFreezer = freezerRepository.findByManagerIdAndBarn_Id(getManagerId(), barn.getId());
-//        List<TransferEntity> transfer = transferRepository.findBySenderIdAndType(Long.valueOf(activeFreezer.getId()), ETransferType.TYPE_SHARED);
-//        Optional<UserEntity> receiver = userRepository.findById(transfer.getReceiverId()).stream().findFirst();
-//        UserEntity user = receiver.get();
-//        return new FreezerHistoryDto(
-//            user.getFirstName()+" "+user.getFirstName(),
-//            user.getJobFamily(),
-//                user.getJobGrade(),
-//                transfer.getCarrotAmount(),
-//                transfer.getNote(),
-//                transfer.getShareAt()
-//        );
-        return new FreezerHistoryDto();
+    public List<FreezerHistoryDto> getFreezerHistory(){
+        BarnEntity barn = barnRepository.findByIsActive(true);
+        FreezerEntity activeFreezer = freezerRepository.findByManagerIdAndBarn_Id(getManagerId(), barn.getId());
+
+        List<FreezerTransferHistoryEntity> transferHistory = freezerTransferHistoryRepository.findByFreezer_Id(activeFreezer.getId());
+        List<FreezerHistoryDto> freezerHistory = new ArrayList<>();
+
+        transferHistory.forEach(t -> {
+            freezerHistory.add(
+                new FreezerHistoryDto(
+                        t.getReceiverId().getFirstName()+" "+t.getReceiverId().getLastName(),
+                        t.getReceiverId().getJobFamily(),
+                        t.getReceiverId().getJobGrade(),
+                        t.getCarrotAmount(),
+                        t.getNote(),
+                        t.getShareAt()
+                )
+            );
+        });
+        return freezerHistory;
     }
 }

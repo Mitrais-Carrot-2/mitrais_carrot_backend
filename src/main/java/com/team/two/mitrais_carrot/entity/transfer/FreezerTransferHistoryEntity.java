@@ -1,12 +1,14 @@
 package com.team.two.mitrais_carrot.entity.transfer;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.team.two.mitrais_carrot.entity.auth.UserEntity;
 import com.team.two.mitrais_carrot.entity.freezer.FreezerEntity;
 import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Getter
@@ -17,16 +19,22 @@ import java.time.LocalDateTime;
 @ToString
 public class FreezerTransferHistoryEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int transferId;
+//    @GeneratedValue(strategy = GenerationType.TABLE)
+    private UUID transferId = UUID.randomUUID();
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "freezer")
     private FreezerEntity freezer;
 
+//    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user")
-    private UserEntity user;
+    @JoinColumn(name = "receiver_id")
+    private UserEntity receiverId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "manager_id")
+    private UserEntity managerId;
 
     @Column(name = "shareAt")
     private LocalDateTime shareAt;

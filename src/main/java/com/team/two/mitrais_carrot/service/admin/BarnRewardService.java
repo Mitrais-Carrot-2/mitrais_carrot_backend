@@ -12,6 +12,7 @@ import com.team.two.mitrais_carrot.entity.farmer.BarnEntity;
 import com.team.two.mitrais_carrot.entity.transfer.ETransferType;
 import com.team.two.mitrais_carrot.repository.admin.BarnRewardRepository;
 import com.team.two.mitrais_carrot.repository.farmer.BarnRepository;
+import com.team.two.mitrais_carrot.service.farmer.BarnService;
 import com.team.two.mitrais_carrot.service.transfer.TransferService;
 import com.team.two.mitrais_carrot.service.user.UserService;
 
@@ -28,6 +29,9 @@ public class BarnRewardService {
     private UserService userService;
     @Autowired
     private TransferService transferService;
+    @Autowired
+    private BarnService barnService;
+
 
     public BarnRewardService(BarnRewardRepository barnRewardRepository, BarnRepository barnRepository) {
         this.barnRewardRepository = barnRewardRepository;
@@ -46,6 +50,10 @@ public class BarnRewardService {
         return barnRewardRepository.findByGivingConditional(type);
     }
 
+    public BarnRewardEntity searchBarnRewardByTypeAndeBarn(ETypeBarnReward type, BarnEntity barn) {
+        return barnRewardRepository.findByGivingConditionalAndBarn(type, barn);
+    }
+
     public BarnRewardEntity searchBarnRewardByDescription(String description) {
         return barnRewardRepository.findByRewardDescription(description);
     }
@@ -61,13 +69,12 @@ public class BarnRewardService {
         barnReward.setRewardDescription(req.getRewardDescription());
         barnReward.setCarrotAmount(req.getCarrotAmount());
         barnReward.setGivingConditional(req.getGivingConditional());
-        // barnReward.setBarnId(req.getBarnId());
         barnReward.setBarn(barn);
         barnRewardRepository.save(barnReward);
         barn.getBarnReward().add(barnReward);
         barnRepository.save(barn);
         return ResponseEntity
-                .ok(new MessageDto(String.format("Successfully created reward: %s", req.getRewardDescription()), true));
+                .ok(new MessageDto(barnReward, String.format("Successfully created reward: %s", req.getRewardDescription()), true));
 
     }
 
@@ -81,7 +88,9 @@ public class BarnRewardService {
 
     public List<UserEntity> rewardByBirthDay() {
 
-        long amount = this.searchBarnRewardByType(ETypeBarnReward.USER_BIRTHDAY).getCarrotAmount();
+        BarnEntity activeBarn = barnService.isActiveBarn(true);
+
+        long amount = this.searchBarnRewardByTypeAndeBarn(ETypeBarnReward.USER_BIRTHDAY, activeBarn).getCarrotAmount();
 
         List<UserEntity> birthdayPerson = userService.getBirthdayPerson();
         for (UserEntity user : birthdayPerson) {
@@ -96,6 +105,10 @@ public class BarnRewardService {
         barnRewardRepository.delete(selectedBarnReward);
         return ResponseEntity
                 .ok(new MessageDto(String.format("Successfully deleted reward: %s", selectedBarnReward.getRewardDescription()), true));
+    }
+
+    public ETypeBarnReward[] fetchAllRewardType() {
+        return ETypeBarnReward.values();
     }
 
 }

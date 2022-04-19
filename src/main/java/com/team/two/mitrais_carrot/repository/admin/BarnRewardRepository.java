@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.team.two.mitrais_carrot.entity.admin.BarnRewardEntity;
 import com.team.two.mitrais_carrot.entity.admin.ETypeBarnReward;
+import com.team.two.mitrais_carrot.entity.farmer.BarnEntity;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -19,9 +20,6 @@ public interface BarnRewardRepository extends JpaRepository<BarnRewardEntity, In
 
     List<BarnRewardEntity> findByBarnId(int id);
 
-    // BarnRewardEntity findByGivingConditionalEqual(ETypeBarnReward type);
-
-    // BarnRewardEntity
-    // findByGivingConitionalIsEqual(ETypeBarnReward.USER_BIRTHDAY);
+    BarnRewardEntity findByGivingConditionalAndBarn(ETypeBarnReward type, BarnEntity barn);
 
 }

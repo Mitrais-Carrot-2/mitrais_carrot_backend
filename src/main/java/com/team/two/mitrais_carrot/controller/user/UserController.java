@@ -3,9 +3,7 @@ package com.team.two.mitrais_carrot.controller.user;
 import com.team.two.mitrais_carrot.dto.MessageDto;
 import com.team.two.mitrais_carrot.dto.UpdatePasswordDto;
 import com.team.two.mitrais_carrot.dto.UpdateProfileDto;
-import com.team.two.mitrais_carrot.dto.auth.UserDto;
 import com.team.two.mitrais_carrot.entity.auth.UserEntity;
-import com.team.two.mitrais_carrot.entity.basket.BasketEntity;
 import com.team.two.mitrais_carrot.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -28,11 +26,6 @@ public class UserController {
     @Autowired
     PasswordEncoder encoder;
 
-    @PostMapping("")
-    public UserEntity addUser(@RequestBody UserDto userDto) {
-        return userService.add(userDto);
-    }
-
     public UserController(UserService userService) {
         this.userService = userService;
     }
@@ -49,7 +42,7 @@ public class UserController {
 
     @GetMapping("username/{username}")
     public ResponseEntity<?> getByName(@PathVariable("username") String username) {
-        if (userService.getByUsername(username) != null) {
+        if (userService.getByUsername(username).getUsername() != null) {
             return ResponseEntity.status(HttpStatus.OK).body(userService.getByUsername(username));
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)

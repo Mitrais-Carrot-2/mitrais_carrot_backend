@@ -1,7 +1,5 @@
 package com.team.two.mitrais_carrot.entity.basket;
 
-import java.time.LocalDate;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.team.two.mitrais_carrot.entity.farmer.BarnEntity;
 import lombok.AllArgsConstructor;
@@ -24,7 +22,8 @@ public class BasketEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    public BasketEntity(UserEntity user, BarnEntity barn, long carrotAmount, long rewardCarrot, long shareCarrot, long bazaarCarrot) {
+    public BasketEntity(UserEntity user, BarnEntity barn, long carrotAmount, long rewardCarrot, long shareCarrot,
+            long bazaarCarrot) {
         this.user = user;
         this.barn = barn;
         this.carrotAmount = carrotAmount;

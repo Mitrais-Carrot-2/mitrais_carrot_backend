@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class FreezerHistoryDto {
-    private String rewardedTo;
+    private String name;
     private String jf;
     private String grade;
     private Long carrot;

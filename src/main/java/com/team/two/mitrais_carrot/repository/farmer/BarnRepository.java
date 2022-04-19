@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface BarnRepository extends JpaRepository <BarnEntity, Integer> {
+public interface BarnRepository extends JpaRepository<BarnEntity, Integer> {
     BarnEntity findByIsActive(Boolean isActive);
 
     List<BarnEntity> findByIsActiveFalse();

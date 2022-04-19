@@ -3,6 +3,7 @@ package com.team.two.mitrais_carrot.entity.auth;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.team.two.mitrais_carrot.entity.basket.BasketEntity;
 import com.team.two.mitrais_carrot.entity.farmer.BarnEntity;
+import com.team.two.mitrais_carrot.entity.freezer.FreezerEntity;
 import com.team.two.mitrais_carrot.entity.group.UserGroupEntity;
 import com.team.two.mitrais_carrot.entity.transfer.FreezerTransferHistoryEntity;
 import lombok.*;
@@ -43,6 +44,7 @@ public class UserEntity {
     @Column(name = "username", nullable = false)
     private String username;
 
+    @JsonIgnore
     @Column(name = "password", nullable = false)
     private String password;
 
@@ -95,22 +97,31 @@ public class UserEntity {
     @Column(name = "image_size")
     private long imageSize;
 
+//    @JsonIgnore
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JoinTable(name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<RoleEntity> roles = new HashSet<>();
 
+    // @JsonIgnore
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<BasketEntity> baskets = new ArrayList<>();
 
+    // @JsonIgnore
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<UserGroupEntity> userGroups;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "userId", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<BarnEntity> barn = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    // @JsonIgnore
+    // @OneToMany(mappedBy = "managerId", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    // private List<FreezerEntity> freezer = new ArrayList<>();
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "receiverId", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<FreezerTransferHistoryEntity> freezerTransferHistories = new ArrayList<>();
 
     @Column(name = "dayOfYearBirthDay")

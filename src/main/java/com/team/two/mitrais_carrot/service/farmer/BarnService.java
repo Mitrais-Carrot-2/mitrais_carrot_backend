@@ -5,14 +5,16 @@ import com.team.two.mitrais_carrot.dto.farmer.BarnDto;
 import com.team.two.mitrais_carrot.dto.farmer.BarnEditDto;
 import com.team.two.mitrais_carrot.entity.admin.BarnRewardEntity;
 import com.team.two.mitrais_carrot.entity.auth.UserEntity;
+import com.team.two.mitrais_carrot.entity.basket.BasketEntity;
 import com.team.two.mitrais_carrot.entity.farmer.BarnEntity;
+import com.team.two.mitrais_carrot.repository.BasketRepository;
 import com.team.two.mitrais_carrot.repository.UserRepository;
 import com.team.two.mitrais_carrot.repository.farmer.BarnRepository;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 import com.team.two.mitrais_carrot.security.services.UserDetailsImpl;
+import com.team.two.mitrais_carrot.service.user.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -22,8 +24,8 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class BarnService {
-    @Autowired
-    UserRepository userRepository;
+  @Autowired
+  UserRepository userRepository;
 
   private final BarnRepository barnRepository;
 
@@ -31,23 +33,13 @@ public class BarnService {
     this.barnRepository = barnRepository;
   }
 
-
   public List<BarnEntity> fetchAllBarn() {
     return barnRepository.findAll();
-
-//   public List<BarnDto> fetchAllBarn(){
-//       List<BarnEntity> barns = barnRepository.findAll();
-//       List<BarnDto> barnDto = new ArrayList<>();
-
-//       barns.forEach(b -> {
-//           barnDto.add(new BarnDto(b.getId(), b.getBarnName(), b.getCarrotAmount(), b.getStartDate(), b.getEndDate()));
-//       });
-//       return barnDto;
 
   }
 
   public BarnEntity getBarnById(int id) {
-    return barnRepository.findById(id).orElse(null); // TODO : Buat exception ketika Barn tdk ditemukan
+    return barnRepository.findById(id).orElse(null);
   }
 
   Logger logger = LoggerFactory.getLogger(BarnService.class);
@@ -61,7 +53,7 @@ public class BarnService {
       barn.setCarrotAmount(remainingCarrot - carrotAmount);
       return barnRepository.save(barn);
     }
-    return null; // TODO : handle insufficient carrot
+    return null;
 
   }
 
@@ -71,8 +63,8 @@ public class BarnService {
           .body(new MessageDto(String.format("Already created Barn with %s name", req.getBarnName()), false));
     }
     BarnEntity barnEntity = new BarnEntity();
-
-    barnEntity.setUserId(getFarmerId());
+    UserEntity user = userRepository.getById(getFarmerId());
+    barnEntity.setUserId(user);
     barnEntity.setBarnName(req.getBarnName());
     barnEntity.setStartDate(req.getStartDate());
     barnEntity.setEndDate(req.getEndDate());
@@ -80,19 +72,9 @@ public class BarnService {
     barnEntity.setIsActive(this.checkActive(req.getStartDate(), req.getEndDate()));
 
     barnRepository.save(barnEntity);
-    return ResponseEntity.ok(new MessageDto(String.format("Successfully created %s Barn!", req.getBarnName()), true));
 
-//   public BarnEntity createBarn(BarnDto req) {
-//       BarnEntity barnEntity = new BarnEntity();
-
-//       barnEntity.setUserId(getFarmerId());
-//       barnEntity.setBarnName(req.getBarnName());
-//       barnEntity.setStartDate(req.getStartDate());
-//       barnEntity.setEndDate(req.getEndDate());
-//       barnEntity.setCarrotAmount(req.getCarrotAmount());
-//       barnEntity.setIsActive(this.checkActive(req.getStartDate(), req.getEndDate()));
-
-//       return barnRepository.save(barnEntity);
+    return ResponseEntity
+        .ok(new MessageDto(barnEntity, String.format("Successfully created %s Barn!", req.getBarnName()), true));
 
   }
 
@@ -123,17 +105,6 @@ public class BarnService {
     if (barnEntity == null) {
       return ResponseEntity.badRequest().body(new MessageDto("Barn not found", false));
 
-//     public UserEntity getFarmerId() {
-//         String username = "";
-//         try {
-//             UserDetailsImpl user = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//             username = user.getUsername();
-//         } catch (ClassCastException err) {
-//             username = "";
-//         }
-
-//         return userRepository.findByUsername(username);
-
     }
     barnEntity.setBarnName(req.getBarnName());
     barnEntity.setStartDate(req.getStartDate());
@@ -141,19 +112,20 @@ public class BarnService {
     barnEntity.setCarrotAmount(req.getCarrotAmount());
     barnEntity.setIsActive(this.checkActive(req.getStartDate(), req.getEndDate()));
     barnRepository.save(barnEntity);
-    return ResponseEntity.ok(new MessageDto(String.format("Successfully updated %s Barn!", req.getBarnName()), true));
+    return ResponseEntity
+        .ok(new MessageDto(barnEntity, String.format("Successfully updated %s Barn!", req.getBarnName()), true));
 
   }
-  
-  public ResponseEntity<?> addBarnReward (int id, BarnRewardEntity reward) {
+
+  public ResponseEntity<?> addBarnReward(int id, BarnRewardEntity reward) {
     BarnEntity barnEntity = this.getBarnById(id);
     if (barnEntity == null) {
       return ResponseEntity.badRequest().body(new MessageDto("Barn not found", false));
     }
     barnEntity.getBarnReward().add(reward);
     barnRepository.save(barnEntity);
-    return ResponseEntity.ok(new MessageDto(String.format("Successfully added reward to %s Barn!", barnEntity.getBarnName()), true));
+    return ResponseEntity
+        .ok(new MessageDto(String.format("Successfully added reward to %s Barn!", barnEntity.getBarnName()), true));
 
   }
-
-  }
+}

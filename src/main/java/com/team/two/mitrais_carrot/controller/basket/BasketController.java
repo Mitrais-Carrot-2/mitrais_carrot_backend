@@ -21,24 +21,23 @@ public class BasketController {
     UserService userService;
 
     @PostMapping("")
-    public BasketEntity addBasket(UserEntity userId){
-        UserEntity user = userService.getById(userId.getId());
+    public BasketEntity addBasket(UserEntity userId) {
         return basketService.add(userId);
     }
 
     @PutMapping("carrot")
-    public BasketEntity updateCarrot(@RequestBody UpdateCarrotDto req){
+    public BasketEntity updateCarrot(@RequestBody UpdateCarrotDto req) {
         UserEntity user = userService.getById(req.getUserId());
         return basketService.updateCarrot(user, req.getAddCarrot(), req.getTransferType());
     }
 
     @GetMapping("")
-    public List<ShowCarrotDto> getBaskets(){
+    public List<ShowCarrotDto> getBaskets() {
         return basketService.showAllUserBaskets();
     }
 
     @GetMapping("{userId}")
-    public ShowCarrotDto getBasket(long userId){
+    public ShowCarrotDto getBasket(@PathVariable long userId) {
         UserEntity user = userService.getById(userId);
         return basketService.showUserActiveBasket(user, true);
     }

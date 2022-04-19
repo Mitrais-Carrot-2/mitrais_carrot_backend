@@ -1,6 +1,7 @@
 package com.team.two.mitrais_carrot.service.merchant;
 
 import com.team.two.mitrais_carrot.dto.MessageDto;
+import com.team.two.mitrais_carrot.dto.merchant.BazaarItemResponseDto;
 import com.team.two.mitrais_carrot.entity.auth.UserEntity;
 import com.team.two.mitrais_carrot.entity.group.UserGroupEntity;
 import com.team.two.mitrais_carrot.entity.merchant.BazaarEntity;
@@ -11,6 +12,7 @@ import com.team.two.mitrais_carrot.repository.BazaarItemRepository;
 
 import com.team.two.mitrais_carrot.repository.BazaarRepository;
 import com.team.two.mitrais_carrot.service.user.UserService;
+import org.apache.commons.lang3.ObjectUtils;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +22,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -50,6 +54,9 @@ public class BazaarItemService{
         BazaarItemEntity newItem = new BazaarItemEntity();
         BazaarEntity checker = bazaarRepository.getById(bazaarId);
         if(checker.getBazaarName()!=null){
+            if (request.getName() == "" || request.getPrice() == 0 || request.getQuantity()==0){
+                return ResponseEntity.badRequest().body(new MessageDto("Failed: Missing Data!", false));
+            }
             newItem.setName(request.getName());
             newItem.setPrice(request.getPrice());
             newItem.setQuantity(request.getQuantity());
@@ -69,8 +76,40 @@ public class BazaarItemService{
         return bazaarItemRepository.findAll();
     }
 
+    public List<BazaarItemEntity> getAllItemsInBazaar(int bazaarId){
+        List<BazaarItemEntity> itemBazaar = new ArrayList<>();
+        itemBazaar = bazaarItemRepository.findByBazaar_Id(bazaarId);
+        return itemBazaar;
+    }
+
     public BazaarItemEntity getById(int id){
         return bazaarItemRepository.findById(id).orElse(null);
+    }
+
+    public BazaarItemEntity getByIdInBazaar(int itemId, int bazaarId){
+        return bazaarItemRepository.findByIdAndBazaar_Id(itemId, bazaarId);
+    }
+
+    public List<BazaarItemResponseDto> getAllDto() {
+        List<BazaarItemEntity> listBazaarItemEntity = getAll();
+        return listBazaarItemEntity.stream()
+                .map(item -> new BazaarItemResponseDto(item))
+                .collect(Collectors.toList());
+    }
+
+    public List<BazaarItemResponseDto> getAllDtoInBazaar(int bazaarId) {
+        List<BazaarItemEntity> listBazaarItemEntity = getAllItemsInBazaar(bazaarId);
+        return listBazaarItemEntity.stream()
+                .map(item -> new BazaarItemResponseDto(item))
+                .collect(Collectors.toList());
+    }
+
+    public BazaarItemResponseDto getDtoById(int itemId) {
+        return new BazaarItemResponseDto(getById(itemId));
+    }
+
+    public BazaarItemResponseDto getDtoByIdInBazaar(int itemId, int bazaarId) {
+        return new BazaarItemResponseDto(getByIdInBazaar(itemId, bazaarId));
     }
 
     public ResponseEntity<?> updateQuantity(int itemId, int addQty){
@@ -82,14 +121,17 @@ public class BazaarItemService{
         return ResponseEntity.ok(new MessageDto("Success Update Item Quantity!", true));
     }
 
-    public List<BazaarItemEntity> getAllItemsInBazaar(int bazaarId){
-        List<BazaarItemEntity> itemBazaar = new ArrayList<>();
-        itemBazaar = bazaarItemRepository.findByBazaar_Id(bazaarId);
-        return itemBazaar;
-    }
-
-    public BazaarItemEntity getByIdInBazaar(int itemId, int bazaarId){
-        return bazaarItemRepository.findByIdAndBazaar_Id(itemId, bazaarId);
+    public ResponseEntity<?> updateItem(int itemId, BazaarItemDto request){
+        BazaarItemEntity item = getById(itemId);
+        if (request.getName() == "" || request.getPrice() == 0 || request.getQuantity()==0){
+             return ResponseEntity.badRequest().body(new MessageDto("Failed: Missing Data!", false));
+        }
+        item.setName(request.getName());
+        item.setPrice(request.getPrice());
+        item.setQuantity(request.getQuantity());
+        item.setDescription(request.getDescription());
+        bazaarItemRepository.save(item);
+        return ResponseEntity.ok(new MessageDto("Success Update Item!", true));
     }
 
     public void saveImage(int itemId, MultipartFile file) {
@@ -105,4 +147,14 @@ public class BazaarItemService{
         }
         bazaarItemRepository.save(item);
     }
+
+    public ResponseEntity<?> deleteById(int itemId, int bazaarId){
+        BazaarItemEntity entity = bazaarItemRepository.findByIdAndBazaar_Id(itemId, bazaarId);
+        if (!Objects.isNull(entity)) {
+            bazaarItemRepository.deleteById(itemId);
+            return ResponseEntity.ok(new MessageDto("[SUCCESS] Deleting item from bazaar", true));
+        }
+        return ResponseEntity.ok(new MessageDto("[FAILED] Item not found", false));
+    }
+
 }

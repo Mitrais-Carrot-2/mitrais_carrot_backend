@@ -1,10 +1,9 @@
 package com.team.two.mitrais_carrot.controller.merchant;
 
-
 import com.team.two.mitrais_carrot.dto.merchant.BazaarItemDto;
+import com.team.two.mitrais_carrot.dto.merchant.BazaarItemResponseDto;
 import com.team.two.mitrais_carrot.entity.merchant.BazaarItemEntity;
 import com.team.two.mitrais_carrot.service.merchant.BazaarItemService;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -21,22 +20,33 @@ public class BazaarItemController {
     @Autowired
     BazaarItemService bazaarItemService;
 
-    public BazaarItemController(BazaarItemService bazaarItemService) { this.bazaarItemService = bazaarItemService; }
+    public BazaarItemController(BazaarItemService bazaarItemService) {
+        this.bazaarItemService = bazaarItemService;
+    }
 
     @PostMapping("{id}/item")
-    public ResponseEntity<?> addBazaarItem(@PathVariable("id") int id, @RequestBody BazaarItemDto request){
-//        return bazaarItemService.add(request);
-        return bazaarItemService.addNewItem(request,id);
+    public ResponseEntity<?> addBazaarItem(@PathVariable("id") int id, @RequestBody BazaarItemDto request) {
+        return bazaarItemService.addNewItem(request, id);
     }
 
     @GetMapping("item")
-    public List<BazaarItemEntity> getAllBazaarItems(){
-        return bazaarItemService.getAll();
+    public List<BazaarItemResponseDto> getAllBazaarItems() {
+        return bazaarItemService.getAllDto();
+    }
+
+    @GetMapping("item/{itemId}")
+    public BazaarItemResponseDto getItem(@PathVariable int itemId) {
+        return bazaarItemService.getDtoById(itemId);
     }
 
     @GetMapping("{bazaarId}/{itemId}")
-    public BazaarItemEntity getBazaarItem(@RequestParam(value = "Bazaar ID") int bazaarId, @RequestParam(value = "Item ID") int itemId){
-        return bazaarItemService.getByIdInBazaar(itemId, bazaarId);
+    public BazaarItemResponseDto getBazaarItem(@PathVariable int bazaarId, @PathVariable int itemId) {
+        return bazaarItemService.getDtoByIdInBazaar(itemId, bazaarId);
+    }
+
+    @GetMapping("{bazaarId}/items")
+    public List<BazaarItemResponseDto> getAllItemsInBazaar(@PathVariable int bazaarId) {
+        return bazaarItemService.getAllDtoInBazaar(bazaarId);
     }
 
     @GetMapping("/getImage/{itemId}")
@@ -54,10 +64,15 @@ public class BazaarItemController {
         return ResponseEntity.notFound().build();
     }
 
+    @PutMapping("/item/{itemId}")
+    public ResponseEntity<?> updateDetail(@PathVariable int itemId, @RequestBody BazaarItemDto request) {
+        return bazaarItemService.updateItem(itemId, request);
+    }
+
     @PutMapping("/uploadImage/{itemId}")
     public ResponseEntity<?> uploadImage(@PathVariable int itemId, @RequestParam("file") MultipartFile file) {
-        try{
-            bazaarItemService.saveImage(itemId,file);
+        try {
+            bazaarItemService.saveImage(itemId, file);
 
             return ResponseEntity.status(HttpStatus.OK)
                     .body(String.format("File uploaded successfully: %s", file.getOriginalFilename()));
@@ -65,5 +80,10 @@ public class BazaarItemController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(String.format("Could not upload the file: %s!", file.getOriginalFilename()));
         }
+    }
+
+    @DeleteMapping("{bazaarId}/{itemId}")
+    public ResponseEntity<?> deleteBazaarItem(@PathVariable int bazaarId, @PathVariable int itemId) {
+        return bazaarItemService.deleteById(itemId, bazaarId);
     }
 }

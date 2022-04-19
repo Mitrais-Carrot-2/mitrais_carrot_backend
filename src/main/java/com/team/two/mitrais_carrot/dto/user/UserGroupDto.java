@@ -11,9 +11,8 @@ import lombok.Setter;
 @AllArgsConstructor
 public class UserGroupDto {
     private String username;
-    private String firstName;
-    private String lastName;
-    private String jobFamily;
-    private String jobGrade;
+    private String name;
+    private String jf;
+    private String grade;
     private String office;
 }

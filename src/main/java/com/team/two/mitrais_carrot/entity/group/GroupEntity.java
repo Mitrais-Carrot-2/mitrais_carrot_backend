@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.team.two.mitrais_carrot.entity.auth.UserEntity;
 import lombok.*;
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @JsonIgnoreProperties({"hibernateLazyInitializer"})
@@ -14,19 +15,23 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "groups")
+@Table(name = "groups", uniqueConstraints = {@UniqueConstraint(columnNames = "name")})
 public class GroupEntity {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @NotNull
     @Column(name = "name")
     private String name;
 
-    @Column(name = "manager_id")
-    private Long managerId;
+//    @Column(name = "manager_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private UserEntity managerId;
 
+    @NotNull
     @Column(name = "allocation")
     private long allocation;
 
