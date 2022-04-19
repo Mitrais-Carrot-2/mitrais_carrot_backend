@@ -56,7 +56,13 @@ public class NotificationService {
         logger.info("Notification created");
         logger.info(notification.toString());
 
-//        sendEmail(notification);
+        try {
+            sendEmail(notification);
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
 
         return notificationRepository.save(notification);
     }
@@ -95,7 +101,7 @@ public class NotificationService {
         }
     }
 
-    public void sendEmail(NotificationDto notificationDto) throws MessagingException, UnsupportedEncodingException {
+    public void sendEmail(NotificationEntity notificationDto) throws MessagingException, UnsupportedEncodingException {
         //get user by id from notificationDto.getReceiverId()
         //get user email from user.getEmail()
         UserEntity receiver = userService.getById(notificationDto.getReceiverId());

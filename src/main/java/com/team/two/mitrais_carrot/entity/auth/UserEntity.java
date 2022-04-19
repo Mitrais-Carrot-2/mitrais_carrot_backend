@@ -3,6 +3,7 @@ package com.team.two.mitrais_carrot.entity.auth;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.team.two.mitrais_carrot.entity.basket.BasketEntity;
 import com.team.two.mitrais_carrot.entity.farmer.BarnEntity;
+import com.team.two.mitrais_carrot.entity.freezer.FreezerEntity;
 import com.team.two.mitrais_carrot.entity.group.UserGroupEntity;
 import com.team.two.mitrais_carrot.entity.transfer.FreezerTransferHistoryEntity;
 import lombok.*;
@@ -114,6 +115,10 @@ public class UserEntity {
     @JsonIgnore
     @OneToMany(mappedBy = "userId", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<BarnEntity> barn = new ArrayList<>();
+
+    // @JsonIgnore
+    // @OneToMany(mappedBy = "managerId", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    // private List<FreezerEntity> freezer = new ArrayList<>();
 
     @JsonIgnore
     @OneToMany(mappedBy = "receiverId", fetch = FetchType.LAZY, cascade = CascadeType.ALL)

@@ -55,11 +55,14 @@ public class BarnToFreezerService {
         logger.info("Barn ID: "+barn.getId());
         logger.info("Manager ID: "+req.getManagerId());
         FreezerEntity freezerEntity = freezerRepository.findByManagerIdAndBarn_Id(req.getManagerId(), barn.getId());
+
+        // UserEntity manager = userRepository.findById(req.getManagerId()).get();
         logger.error("Freezer: "+freezerEntity);
         if (freezerEntity==null){
             logger.info("----------------- Create New Freezer -----------------");
             freezerEntity = new FreezerEntity();
             freezerEntity.setDistributedCarrot(0L);
+            // freezerEntity.setManagerId(manager);
             freezerEntity.setManagerId(req.getManagerId());
             freezerEntity.setBarn(barn);
         } else {
