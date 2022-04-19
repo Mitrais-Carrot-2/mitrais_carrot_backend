@@ -188,9 +188,9 @@ public class ExchangeService {
             transfer.setSenderId(bazaarId);
             transfer.setReceiverId(userId);
             transfer.setNote("[REQUEST DENIED] Buy Item " + itemName);
-//            date = LocalDateTime.now();
 
         }
+        date = LocalDateTime.now();
         transfer.setShareAt(date);
         transfer.setType(ETransferType.TYPE_BAZAAR);
         transfer.setCarrotAmount(carrot);

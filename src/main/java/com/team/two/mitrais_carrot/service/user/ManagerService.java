@@ -181,8 +181,8 @@ public class ManagerService {
             result.setNote(note);
 
             TransferEntity history = new TransferEntity();
-            history.setSenderId(Long.valueOf(freezer.getId()));
-//            history.setSenderId(getManagerId());
+//            history.setSenderId(Long.valueOf(freezer.getId()));
+            history.setSenderId(getManagerId());
             history.setReceiverId(userId);
             history.setCarrotAmount(carrot);
             history.setNote(note);
