@@ -79,7 +79,7 @@ public class StaffGroupService {
     public List<StaffListInGroupDto> getStaffListInGroup(Integer id){
         List<UserGroupEntity> userGroup = userGroupRepository.findByGroup_Id(id);
         List<StaffListInGroupDto> userDto = userGroup.stream()
-                .map((UserGroupEntity user) -> new StaffListInGroupDto(user.getUser().getUsername(), user.getUser().getFirstName() + user.getUser().getLastName(), user.getUser().getJobFamily(), user.getUser().getJobGrade(), user.getUser().getOffice()))
+                .map((UserGroupEntity user) -> new StaffListInGroupDto(user.getUser().getUsername(), user.getUser().getFirstName() + " " + user.getUser().getLastName(), user.getUser().getJobFamily(), user.getUser().getJobGrade(), user.getUser().getOffice()))
                 .collect(Collectors.toList());
 
         return userDto;
